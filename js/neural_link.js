@@ -9,7 +9,7 @@ class NeuralLink {
         this.localStream = null;
         this.peerConnection = null;
         this.metricsChannel = null;
-        this.userId = 'USER-' + Math.floor(Math.random() * 1000000); // Temporary ID
+        this.userId = localStorage.getItem('demon_user_id') || 'ANON';
         document.getElementById('local-id').innerText = this.userId;
         
         this.signalingUrl = '/api/neural/signal';
@@ -36,7 +36,16 @@ class NeuralLink {
         this.log('Initializing Neural Link System...', 'info');
         
         // Event Listeners
-        document.getElementById('startBtn').addEventListener('click', () => this.startCamera());
+        const startBtn = document.getElementById('startBtn');
+        const neuralBtn = document.getElementById('neuralBtn');
+        if (this.isPaywallUnlocked()) {
+            startBtn.addEventListener('click', () => this.startCamera());
+        } else {
+            startBtn.disabled = true;
+            startBtn.innerHTML = '<i class="fas fa-lock"></i> Unlock to Start';
+            if (neuralBtn) neuralBtn.disabled = true;
+            this.log('Camera locked behind paywall', 'warn');
+        }
         document.getElementById('refreshPeersBtn').addEventListener('click', () => this.fetchPeers());
         document.getElementById('neuralBtn').addEventListener('click', () => this.toggleNeural());
         
@@ -61,7 +70,16 @@ class NeuralLink {
         this.logContainer.scrollTop = this.logContainer.scrollHeight;
     }
 
+    isPaywallUnlocked() {
+        const uid = localStorage.getItem('demon_user_id') || '';
+        return typeof uid === 'string' && uid.startsWith('SUB-');
+    }
+
     async startCamera() {
+        if (!this.isPaywallUnlocked()) {
+            this.log('Paywall required to start camera', 'error');
+            return;
+        }
         try {
             this.localStream = await navigator.mediaDevices.getUserMedia({
                 video: {
