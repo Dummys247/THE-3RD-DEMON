@@ -67,7 +67,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://the3rddemon.com/forum.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://the3rddemon.com/hive_integration.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://the3rddemon.com/hive_mind_network.html</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -109,6 +121,12 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://the3rddemon.com/neural_link_system.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://the3rddemon.com/neural_overview.html</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
@@ -145,7 +163,19 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://the3rddemon.com/vision_system_tech.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://the3rddemon.com/voice_command.html</loc>
+    <lastmod>2026-03-01</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://the3rddemon.com/voice_command_protocol.html</loc>
     <lastmod>2026-03-01</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
