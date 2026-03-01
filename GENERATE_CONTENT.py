@@ -139,6 +139,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             document.getElementById('data-consent-banner').style.display = 'none';
         }}
     </script>
+    <!-- Security Protocol Injection -->
+    <script src="assets/security_protocol.js" async></script>
 </body>
 </html>
 """
