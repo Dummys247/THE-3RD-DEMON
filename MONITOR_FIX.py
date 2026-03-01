@@ -5,8 +5,8 @@ import webbrowser
 import os
 
 URL = "https://the3rddemon.com"
-# We expect the "DEMON AI" version, so let's look for a unique string from that version
-EXPECTED_STRING = "DEMON AI"
+# For Version A, we expect the generic title
+EXPECTED_STRING = "The 3rd demon"
 
 print(f"[*] Monitoring {URL} for '{EXPECTED_STRING}'...")
 
@@ -20,12 +20,10 @@ while True:
         if r.status_code == 200:
             content = r.text
             if EXPECTED_STRING in content:
-                print("\n[SUCCESS] The 'DEMON AI' version is LIVE!")
-                print("   Found 'DEMON AI' in page title/content.")
+                print("\n[SUCCESS] The 'Generic' version is LIVE!")
                 webbrowser.open(URL)
                 break
             else:
-                # Extract current title for debugging
                 import re
                 title_match = re.search(r'<title>(.*?)</title>', content, re.IGNORECASE)
                 current_title = title_match.group(1) if title_match else "Unknown"
