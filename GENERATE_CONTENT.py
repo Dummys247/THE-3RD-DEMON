@@ -193,6 +193,9 @@ PAGES = [
                 <li><strong>Spectral Analysis:</strong> Visualizes data streams (WiFi, Radio, Bluetooth) as visible light spectrums.</li>
                 <li><strong>Predictive Pathing:</strong> Anticipates the movement of objects in your environment.</li>
             </ul>
+            <div style="text-align: center; margin: 2rem 0;">
+                <img src="assets/cyber_eye.jpg" alt="Cybernetic Sci-Fi Computer Eyeball" style="max-width: 100%; border: 2px solid #ff0000; box-shadow: 0 0 15px #ff0000;">
+            </div>
             <p>Upgrade your eyes. See the code behind the curtain.</p>
         """
     },
