@@ -17,8 +17,14 @@ self.addEventListener('install', (event) => {
   );
 });
 
-// Fetch Event - Serve from Cache if available
+// Fetch Event - Serve from Cache if available, except status.json
 self.addEventListener('fetch', (event) => {
+  // Network-only for status.json
+  if (event.request.url.includes('status.json')) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then((response) => {

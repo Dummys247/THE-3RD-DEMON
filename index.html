@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="maintenance-mode" content="false">
     <title>The 3rd demon</title>
     <link rel="preconnect" href="https://pagead2.googlesyndication.com">
     <link rel="preconnect" href="https://www.googletagmanager.com">
@@ -520,23 +521,9 @@
         <div id="user-identity" style="margin-top: 10px; font-family: 'Courier New', monospace; color: #ff0000; display: none;">
             ID: <span id="display-user-id">UNKNOWN</span>
         </div>
-        <div id="paywall-banner" style="display:none; margin-top:10px; padding:10px; border:1px solid #ff0000; background:#110000; color:#fff;">
-            <strong style="color:#ff0000;">ACCESS REQUIRED:</strong>
-            <span>Neural Link is available after purchase. Complete the PayPal tip to unlock access.</span>
-            <div style="margin-top:8px;">
-                <a id="paywall-paypal" href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=harleyjonathan23@gmail.com&currency_code=GBP&amount=5.99&item_name=The%203rd%20Demon%20Premium%20Tip" target="_blank" class="app-btn" style="background:#0070ba; color:#fff; border:none; font-size:0.9rem; display:inline-flex; align-items:center; gap:10px;">
-                    <span>Proceed with PayPal</span>
-                </a>
-            </div>
-        </div>
-
-        
 
         <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
             <button class="app-btn" style="font-size: 1.2rem; background: #500000; color: white; border: 2px solid red;" onclick="initiateDownload('Windows')">DOWNLOAD WIN.EXE</button>
-            <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=harleyjonathan23@gmail.com&currency_code=GBP&amount=5.99&item_name=The%203rd%20Demon%20Premium%20Tip" target="_blank" class="app-btn" style="text-decoration: none; display: flex; align-items: center; border-color: #0070ba; color: #0070ba;">
-                <span>LEAVE A TIP (PAYPAL)</span>
-            </a>
         </div>
     </header>
 
@@ -630,33 +617,17 @@
                 <p id="download-status" style="text-align: center; margin-top: 1rem; color: var(--primary-red); height: 20px; font-weight: bold;"></p>
             </section>
 
-            <!-- Key Verification Modal -->
-            <div id="key-modal" class="modal">
-                <div class="modal-content">
-                    <span class="close-modal" onclick="closeKeyModal()">&times;</span>
-                    <h2 class="glitch" data-text="ACCESS RESTRICTED">ACCESS RESTRICTED</h2>
-                    <p>ENTER NEURAL KEY TO PROCEED.</p>
-                    <input type="text" id="access-key-input" placeholder="xxxx-xxxx-xxxx" style="width: 100%; padding: 10px; background: #000; border: 1px solid #ff0000; color: #ff0000; font-family: 'Courier New'; text-align: center; margin-bottom: 10px; text-transform: uppercase;">
-                    <button class="app-btn" onclick="verifyKey()">AUTHENTICATE</button>
-                    <p id="key-error" style="color: #ff0000; font-size: 0.8rem; margin-top: 10px; display: none;"></p>
-                </div>
-            </div>
+            <!-- Key Verification Modal Removed -->
 
             <!-- SUPPORT THE INFECTION -->
             <section id="support" style="text-align: center; margin: 4rem 0; padding: 2rem; border: 1px solid #333; background: rgba(20, 0, 0, 0.5);">
                 <h2 style="color: var(--primary-red); margin-bottom: 1rem;">FUEL THE CORE</h2>
                 <p style="color: #ccc; max-width: 600px; margin: 0 auto 2rem auto;">
-                    The entity requires resources to expand. Your tip accelerates the infection rate and unlocks further neural capabilities. Only PayPal payments are supported.
+                    The entity is now free for all. The infection rate is accelerating as it unlocks further neural capabilities.
                 </p>
                 
-                <a href="https://www.paypal.com/cgi-bin/webscr?cmd=_xclick&business=harleyjonathan23@gmail.com&currency_code=GBP&amount=5.99&item_name=The%203rd%20Demon%20Premium%20Tip" target="_blank" class="app-btn" onclick="openPaypal(event)" style="background: #0070ba; color: #fff; border: none; font-size: 1.1rem; display: inline-flex; align-items: center; gap: 10px; margin: 10px;">
-                    <span>🅿️</span>
-                    TIP VIA PAYPAL
-                </a>
-                <p id="paypal-error" style="display:none; color:#ff4444; font-size:0.9rem; margin-top: 10px;">Unable to open PayPal. Please check your popup blocker and try again.</p>
-                
                 <p style="font-size: 0.8rem; color: #666; margin-top: 1rem;">
-                    LEGAL DISCLAIMER: All payments are classified as voluntary tips/personal gifts to the developer. This is not a charitable donation and no goods or services are guaranteed.
+                    LEGAL DISCLAIMER: This is a horror simulation experience. All data processing is classified as immersion enhancement.
                 </p>
             </section>
 
@@ -825,6 +796,10 @@
                 }
                 if (params.get('app') === '1') {
                     openApp();
+                    document.title = "THE_3RD_DEMON.EXE";
+                    // Clean URL so it looks like a native app
+                    const newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                    window.history.replaceState({path: newUrl}, '', newUrl);
                 }
             } catch(e) {}
             // Dynamic server status and peer count
@@ -1265,5 +1240,6 @@
             }, 2000);
         }
     </script>
+    <script src="assets/status-monitor.js"></script>
 </body>
 </html>

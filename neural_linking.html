@@ -60,7 +60,6 @@
     <div class="layout">
         <main class="content">
             <h1>Secure Connections with Clear Guardrails</h1>
-            <p><a href="#" id="open-app" style="display:inline-block; padding:8px 12px; border:1px solid #ff0000; color:#ff0000; text-decoration:none;">Open Neural Link in Demon App</a></p>
             <p>Neural linking connects devices and interfaces so they can share structured information securely. It uses encrypted channels and strict host policies to protect users from unintended exposure. Instead of broadcasting raw content, the system shares events and parameters that allow collaboration without risking private data. This page explains how neural linking works, what benefits it provides, and how it is integrated with other application capabilities.</p>
             <p>Connections begin with signaling, where endpoints exchange offers and candidates that help establish a route. Once linked, encryption wraps each stream to prevent interception. Policies determine which features are active based on host and environment. For example, interactive previews remain disabled for external hosts by default, requiring explicit configuration before enabling any public-facing interaction. Logs record metadata about events and outcomes, giving visibility into what was shared and when, while avoiding the storage of sensitive content.</p>
             <p>Neural linking complements voice and vision by carrying high-level control messages. A voice command can trigger a state change, which is then communicated to peers in concise form. A vision event can signal an object recognition result, allowing collaborators to respond without seeing raw video. The approach keeps coordination efficient and privacy-preserving. Users maintain control over the session at all times, with simple toggles and clear indicators of link state.</p>
@@ -100,22 +99,5 @@
     </div>
     <footer>© 2025 Hyperinversion LTD. All rights reserved.</footer>
     <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
-    <script>
-        function openDeepLink() {
-            var started = false
-            try {
-                started = true
-                window.location.href = 'demon://neural_link/start'
-            } catch(e) {}
-            setTimeout(function(){
-                if (started) return
-                window.location.href = 'neural_link.html'
-            }, 1200)
-        }
-        document.getElementById('open-app').addEventListener('click', function(e){
-            e.preventDefault()
-            openDeepLink()
-        })
-    </script>
 </body>
 </html>

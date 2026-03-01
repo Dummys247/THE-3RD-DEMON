@@ -1,1 +1,6 @@
-{"terms_accepted": true}
+{
+  "terms_accepted": true,
+  "maintenance": false,
+  "maintenance_message": "Scheduled maintenance in progress",
+  "contact": "support@the3rddemon.app"
+}

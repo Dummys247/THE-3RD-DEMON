@@ -1,10 +1,12 @@
 {
     "windows": {
-        "file": "win.exe",
-        "checksum": "c5c731308a8f313761c2989ff7fc7d9c3de8141e1696fce4b1bcd8528440846c",
-        "version": "3.0.0",
-        "build_date": "2025-12-14T08:23:10.728958",
-        "size": 144259716
+        "version": "3.1.1",
+        "url": "assets/APP.exe",
+        "file": "APP.exe",
+        "size": "164.6 MB",
+        "checksum": "51e92013c54809cf63fa5816dacd34cd",
+        "release_date": "2025-12-16",
+        "changelog": "Reconfigured to use Groq Unlimited Free API by default."
     },
     "mac": {
         "file": "THE_3RD_DEMON_MAC.zip",
