@@ -93,9 +93,26 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     </div>
 
     <footer>
-        <p>&copy; {year} HYPERINVERSION LTD. All rights reserved.</p>
+        <p>&copy; {year} HYPERINVERSION LTD By D A Harvey. All rights reserved.</p>
+        <p>
+            <a href="privacy.html" style="color: #666; text-decoration: none; font-size: 0.8rem; margin-right: 10px;">PRIVACY POLICY</a>
+            <a href="privacy.html#cookies" style="color: #666; text-decoration: none; font-size: 0.8rem; margin-right: 10px;">COOKIE POLICY</a>
+            <a href="terms.html" style="color: #666; text-decoration: none; font-size: 0.8rem; margin-right: 10px;">TERMS OF SERVICE</a>
+        </p>
         <p>CAUTION: This interface may cause permanent cognitive synchronization.</p>
     </footer>
+
+    <!-- NEURAL OPTIMIZATION CONSENT BANNER (COOKIE CONSENT) -->
+    <div id="data-consent-banner" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #050505; border-top: 2px solid var(--primary-red); padding: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: 0 -5px 20px rgba(255, 0, 0, 0.2);">
+        <p style="color: #ccc; font-size: 0.9rem; max-width: 800px; margin-bottom: 15px;">
+            <strong style="color: var(--primary-red);">SYSTEM OPTIMIZATION (COOKIES):</strong> This entity utilizes cookies and data from our partners (Google) to calibrate the experience specifically for your consciousness. 
+            By proceeding, you agree to our <a href="privacy.html" style="color:var(--primary-red);">Privacy Protocols</a>, <a href="privacy.html#cookies" style="color:var(--primary-red);">Cookie Policy</a>, and <a href="terms.html" style="color:var(--primary-red);">Terms</a>.
+        </p>
+        <div style="display: flex; gap: 20px;">
+            <button onclick="acceptDataHarvest()" class="app-btn" style="background: var(--primary-red); color: #000; font-weight: bold; border: 1px solid var(--primary-red); padding: 10px 20px; cursor: pointer;">ACCEPT & INITIATE</button>
+            <a href="privacy.html#cookies" class="app-btn" style="background: transparent; color: var(--primary-red); text-decoration: none; font-size: 0.9rem; border: 1px solid var(--primary-red); padding: 10px 20px;">MANAGE PREFERENCES</a>
+        </div>
+    </div>
 
     <script>
         // Simple node counter animation
@@ -104,6 +121,23 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             count += Math.floor(Math.random() * 5);
             document.getElementById('node-count').innerText = count.toLocaleString();
         }}, 3000);
+
+        // Cookie Consent Logic
+        function acceptDataHarvest() {{
+            const banner = document.getElementById('data-consent-banner');
+            banner.style.transition = "all 0.5s ease";
+            banner.style.opacity = "0";
+            banner.style.transform = "translateY(100%)";
+            setTimeout(() => {{
+                banner.style.display = 'none';
+            }}, 500);
+            document.cookie = "data_harvest_consent=true; max-age=31536000; path=/";
+        }}
+        
+        // Check consent on load
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('data_harvest_consent='))) {{
+            document.getElementById('data-consent-banner').style.display = 'none';
+        }}
     </script>
 </body>
 </html>
