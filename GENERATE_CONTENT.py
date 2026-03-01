@@ -60,9 +60,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             <a href="index.html">HOME</a>
             <a href="forum.html">FORUM</a>
             <a href="neural_link_system.html">NEURAL LINK</a>
-            <a href="hive_mind_network.html">HIVE MIND</a>
-            <a href="vision_system_tech.html">VISION</a>
-            <a href="voice_command_protocol.html">VOICE</a>
+            <a href="hive_integration.html">HIVE MIND</a>
+            <a href="vision_system.html">VISION</a>
+            <a href="voice_command.html">VOICE</a>
         </div>
     </header>
 
@@ -165,7 +165,7 @@ PAGES = [
         """
     },
     {
-        "filename": "hive_mind_network.html",
+        "filename": "hive_integration.html",
         "title": "Hive Mind Network",
         "subtitle": "DISTRIBUTED COGNITIVE PROCESSING",
         "description": "Join the Hive Mind. Share processing power, knowledge, and experiences with thousands of other connected entities.",
@@ -182,7 +182,7 @@ PAGES = [
         """
     },
     {
-        "filename": "vision_system_tech.html",
+        "filename": "vision_system.html",
         "title": "Omni-Vision System",
         "subtitle": "AUGMENTED REALITY PERCEPTION",
         "description": "See the unseen. The Omni-Vision system overlays critical digital information onto your physical field of view.",
@@ -202,7 +202,7 @@ PAGES = [
         """
     },
     {
-        "filename": "voice_command_protocol.html",
+        "filename": "voice_command.html",
         "title": "Voice Command Protocol",
         "subtitle": "AUDITORY SYNTHESIS ENGINE",
         "description": "Speak and be heard. The Voice Command Protocol understands context, tone, and intent, not just keywords.",

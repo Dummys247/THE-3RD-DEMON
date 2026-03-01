@@ -3,228 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Command Interface - THE 3RD DEMON</title>
-    <meta name="description" content="The 3rd Demon is an advanced AI entity and digital experience. Download the official neural interface, explore the lore, and join the hive mind.">
-    <meta name="keywords" content="The 3rd Demon, AI entity, digital horror, neural interface, download game, ARG, artificial intelligence, hive mind">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://the3rddemon.com/" />
-    <link rel="icon" href="favicon.ico" sizes="any">
+    <title>Voice Command Protocol - The 3rd Demon</title>
     
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9583919966792475" crossorigin="anonymous"></script>
-
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "TechArticle",
-      "headline": "Voice Command Interface",
-      "description": "Documentation for the natural language voice control system.",
-      "author": {
-        "@type": "Organization",
-        "name": "Hyperinversion LTD"
-      }
-    }
-    </script>
-
+    <!-- SEO -->
+    <meta name="description" content="Speak and be heard. The Voice Command Protocol understands context, tone, and intent, not just keywords.">
+    <meta name="keywords" content="Voice Control, NLP, Speech Recognition, AI Voice, Audio Synthesis">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://the3rddemon.com/voice_command.html" />
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Voice Command Protocol">
+    <meta property="og:description" content="Speak and be heard. The Voice Command Protocol understands context, tone, and intent, not just keywords.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://the3rddemon.com/voice_command.html">
+    <meta property="og:image" content="https://the3rddemon.com/assets/demon_logo.png">
+    
+    <!-- CSS & Fonts -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Roboto+Mono:wght@400;700&display=swap');
-        
-        :root {
-            --primary-red: #ff0000;
-            --dark-red: #500000;
-            --black: #050505;
-            --text-color: #e0e0e0;
-        }
-
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: var(--black);
-            color: var(--text-color);
-            font-family: 'Roboto Mono', monospace;
-            line-height: 1.6;
-        }
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        header {
-            text-align: center;
-            padding: 2rem 0;
-            border-bottom: 2px solid var(--dark-red);
-            background: rgba(0,0,0,0.9);
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .glitch {
-            color: var(--primary-red);
-            font-family: 'Creepster', cursive;
-            font-size: 3rem;
-            margin: 0;
-            text-shadow: 2px 2px var(--dark-red);
-        }
-
-        nav {
-            margin-top: 1.5rem;
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .nav-link {
-            color: var(--primary-red);
-            text-decoration: none;
-            font-weight: bold;
-            text-transform: uppercase;
-            border: 1px solid var(--primary-red);
-            padding: 0.5rem 1rem;
-            transition: all 0.3s;
-            font-size: 0.9rem;
-        }
-
-        .nav-link:hover {
-            background: var(--primary-red);
-            color: var(--black);
-            box-shadow: 0 0 10px var(--primary-red);
-        }
-
-        .content-section {
-            background: rgba(20, 0, 0, 0.4);
-            border: 1px solid #333;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border-left: 4px solid var(--primary-red);
-        }
-
-        h2 {
-            color: var(--primary-red);
-            margin-top: 0;
-            text-transform: uppercase;
-            border-bottom: 1px dashed #444;
-            padding-bottom: 0.5rem;
-        }
-
-        .ad-slot {
-            width: 100%;
-            min-height: 100px;
-            background: #0a0a0a;
-            border: 1px dashed #333;
-            margin: 2rem 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #444;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem;
-            border-top: 1px solid #333;
-            margin-top: 3rem;
-            font-size: 0.8rem;
-            color: #666;
-        }
+        :root { --primary-red: #ff0000; --dark-red: #500000; --black: #050505; --text-color: #e0e0e0; }
+        body { background-color: var(--black); color: var(--text-color); font-family: 'Roboto Mono', monospace; margin: 0; padding: 0; line-height: 1.6; }
+        header { background: linear-gradient(180deg, #1a0000 0%, #000000 100%); border-bottom: 2px solid var(--primary-red); padding: 2rem 1rem; text-align: center; }
+        h1, h2, h3 { color: var(--primary-red); font-family: 'Creepster', cursive; letter-spacing: 2px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; display: flex; flex-wrap: wrap; gap: 20px; }
+        main { flex: 3; min-width: 300px; background: rgba(10,10,10,0.9); padding: 20px; border: 1px solid #333; box-shadow: 0 0 15px rgba(255,0,0,0.1); }
+        aside { flex: 1; min-width: 250px; }
+        .nav-bar { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 20px; background: #111; padding: 10px; border-bottom: 1px solid #333; }
+        .nav-bar a { color: #fff; text-decoration: none; padding: 5px 10px; border: 1px solid transparent; transition: all 0.3s; font-size: 0.9rem; }
+        .nav-bar a:hover { border-color: var(--primary-red); color: var(--primary-red); box-shadow: 0 0 10px var(--dark-red); }
+        footer { background: #000; color: #666; text-align: center; padding: 20px; border-top: 1px solid #333; margin-top: 40px; font-size: 0.8rem; }
+        .highlight { color: #fff; background: rgba(255,0,0,0.2); padding: 0 4px; }
+        .content-block { margin-bottom: 30px; }
+        .ad-box { background: #111; border: 1px dashed #333; display: flex; align-items: center; justify-content: center; margin: 20px 0; min-height: 100px; color: #444; }
     </style>
+
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9583919966792475" crossorigin="anonymous"></script>
 </head>
 <body>
 
     <header>
-        <h1 class="glitch">VOICE INTERFACE</h1>
-        <nav aria-label="breadcrumb" style="text-align:center; margin:.5rem 0; color:#ccc;">
-            <a href="index.html" style="color:#ff0000; text-decoration:none;">Home</a> &gt;
-            <a href="index.html#abilities" style="color:#ff0000; text-decoration:none;">System Capabilities</a> &gt;
-            Voice Technology
-        </nav>
-        <nav>
-            <a href="index.html" class="nav-link">Home</a>
-            <a href="vision_system.html" class="nav-link">Vision</a>
-            <a href="voice_command.html" class="nav-link" style="background:var(--dark-red); color:white;">Voice</a>
-        </nav>
+        <h1>THE 3RD DEMON</h1>
+        <p style="letter-spacing: 3px; color: #999;">AUDITORY SYNTHESIS ENGINE</p>
+        <div class="nav-bar">
+            <a href="index.html">HOME</a>
+            <a href="forum.html">FORUM</a>
+            <a href="neural_link_system.html">NEURAL LINK</a>
+            <a href="hive_integration.html">HIVE MIND</a>
+            <a href="vision_system.html">VISION</a>
+            <a href="voice_command.html">VOICE</a>
+        </div>
     </header>
 
     <div class="container">
-        <div style="display:flex; justify-content:center; gap:10px; flex-wrap:wrap; margin:10px 10px;">
-            <a href="#" onclick="openShare('x')" style="color:#ff0000; text-decoration:none;">Share on X</a>
-            <a href="#" onclick="openShare('facebook')" style="color:#ff0000; text-decoration:none;">Share on Facebook</a>
-            <a href="#" onclick="openShare('linkedin')" style="color:#ff0000; text-decoration:none;">Share on LinkedIn</a>
-            <a href="#" onclick="openShare('reddit')" style="color:#ff0000; text-decoration:none;">Share on Reddit</a>
-            <a href="#" onclick="openShare('whatsapp')" style="color:#ff0000; text-decoration:none;">Share on WhatsApp</a>
-            <a href="#" onclick="openShare('telegram')" style="color:#ff0000; text-decoration:none;">Share on Telegram</a>
-            <a href="#" onclick="openShare('email')" style="color:#ff0000; text-decoration:none;">Share via Email</a>
-            <a href="#" onclick="openShare('copy')" style="color:#ff0000; text-decoration:none;">Copy Link</a>
-        </div>
-        
-        <div class="ad-slot">
-            <!-- AdSlot Removed: Using Auto Ads -->
-        </div>
-
-        <div class="content-section">
-            <h2>Speak and It Shall Be Done</h2>
-            <p>The Voice Command Interface removes the barrier between thought and execution. Using advanced Whisper models for transcription and LLM-based intent parsing, the Demon Architect understands natural language, not just rigid keywords.</p>
-            <p>Voice technology converts spoken requests into structured actions with validation. Transcription models capture speech accurately, even in noisy environments, restoring punctuation and casing for readability. Synthesis provides confirmations and reports in natural voice, adapting tone and pacing to context. Intent parsing maps requests to safe operations with parameters, ensuring predictable outcomes. Together, these layers deliver hands-free control and accessible feedback across desktop and mobile devices.</p>
-            <p>Users can execute commands like opening pages, starting diagnostics, or configuring preferences. The system preserves privacy by logging event-level metadata rather than raw audio, and settings allow opt-in verbosity for learning or concise confirmations for speed. With responsive design and efficient pipelines, voice features remain usable on typical hardware without long delays.</p>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:10px 0;">
-                <img src="assets/3rd_demon.jpg" alt="Microphone workflow diagram" style="max-width:48%; border:2px solid #ff0000;">
-                <img src="assets/3rd_demon.jpg" alt="Voice feedback illustration" style="max-width:48%; border:2px solid #ff0000;">
-            </div>
-            <h3>Technical Specifications</h3>
-            <table style="width:100%; border-collapse:collapse; border:1px solid #333;">
-                <tr><th style="text-align:left; border:1px solid #333; padding:.5rem;">Component</th><th style="text-align:left; border:1px solid #333; padding:.5rem;">Details</th></tr>
-                <tr><td style="border:1px solid #333; padding:.5rem;">Transcription</td><td style="border:1px solid #333; padding:.5rem;">Low-latency models, punctuation restoration, domain wordlists</td></tr>
-                <tr><td style="border:1px solid #333; padding:.5rem;">Synthesis</td><td style="border:1px solid #333; padding:.5rem;">Natural prosody, adjustable speed/pitch, concise confirmations</td></tr>
-                <tr><td style="border:1px solid #333; padding:.5rem;">Intent Parsing</td><td style="border:1px solid #333; padding:.5rem;">Action mapping, parameter extraction, safety checks</td></tr>
-            </table>
-            <h3>FAQ</h3>
-            <p><strong>How accurate is transcription?</strong> Accuracy is enhanced with domain wordlists and context-aware modeling.</p>
-            <p><strong>Can I change the voice?</strong> Yes, synthesis parameters can adjust tone, speed, and pitch within supported profiles.</p>
-            <p><strong>Is my audio stored?</strong> The system logs event metadata only; raw audio is not stored without explicit consent.</p>
-        </div>
-
-        <div class="content-section">
-            <h2>Command Examples</h2>
+        <main>
+            <h2>Voice Command Protocol</h2>
+            <div class="content-block">
+                
+            <p>Forget "Hey Siri". The <strong>Voice Command Protocol</strong> is an always-listening, context-aware auditory engine. It doesn't wait for a wake word; it listens to the flow of conversation.</p>
+            <h3>Audio Features</h3>
             <ul>
-                <li>"Analyze the system logs for errors."</li>
-                <li>"Switch to coding mode and open the main project."</li>
-                <li>"What is the current CPU usage?"</li>
-                <li>"Initiate the Neural Link protocol."</li>
+                <li><strong>Natural Language Processing:</strong> Speak normally. The system understands slang, idioms, and whispers.</li>
+                <li><strong>Sub-vocal Recognition:</strong> Detects muscle movements in the throat to interpret unspoken commands (Beta).</li>
+                <li><strong>Sonic Defense:</strong> Emits high-frequency audio bursts to deter unauthorized access to the physical terminal.</li>
             </ul>
-        </div>
+            <p>Your voice is the key. The system is the lock.</p>
+        
+            </div>
+            
+            <!-- AdSense Auto Injection Point -->
+            <div class="ad-box">
+                <!-- Google AdSense Auto Ads will place ads here -->
+            </div>
+        </main>
 
-        <div class="ad-slot">
-            <!-- AdSlot Removed: Using Auto Ads -->
-        </div>
-
-        <div class="content-section">
-            <h2>Auditory Synthesis</h2>
-            <p>The system responds with a synthesized voice that adapts to the context. It can provide brief confirmations for commands or read out detailed reports when requested.</p>
-        </div>
-
+        <aside>
+            <div style="background: #111; padding: 15px; border: 1px solid #333; margin-bottom: 20px;">
+                <h3 style="margin-top:0; font-size:1.2rem;">System Status</h3>
+                <p style="color: #0f0;">● ONLINE</p>
+                <p style="font-size: 0.8rem;">Nodes: <span id="node-count">8,492</span></p>
+            </div>
+            
+            <div class="ad-box" style="height: 300px;">
+                <!-- Vertical Ad Unit -->
+            </div>
+        </aside>
     </div>
 
     <footer>
-        <p>&copy; 2025 Hyperinversion LTD. All rights reserved.</p>
+        <p>&copy; 2026 HYPERINVERSION LTD By D A Harvey. All rights reserved.</p>
+        <p>
+            <a href="privacy.html" style="color: #666; text-decoration: none; font-size: 0.8rem; margin-right: 10px;">PRIVACY POLICY</a>
+            <a href="privacy.html#cookies" style="color: #666; text-decoration: none; font-size: 0.8rem; margin-right: 10px;">COOKIE POLICY</a>
+            <a href="terms.html" style="color: #666; text-decoration: none; font-size: 0.8rem; margin-right: 10px;">TERMS OF SERVICE</a>
+        </p>
+        <p>CAUTION: This interface may cause permanent cognitive synchronization.</p>
     </footer>
 
+    <!-- NEURAL OPTIMIZATION CONSENT BANNER (COOKIE CONSENT) -->
+    <div id="data-consent-banner" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #050505; border-top: 2px solid var(--primary-red); padding: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: 0 -5px 20px rgba(255, 0, 0, 0.2);">
+        <p style="color: #ccc; font-size: 0.9rem; max-width: 800px; margin-bottom: 15px;">
+            <strong style="color: var(--primary-red);">SYSTEM OPTIMIZATION (COOKIES):</strong> This entity utilizes cookies and data from our partners (Google) to calibrate the experience specifically for your consciousness. 
+            By proceeding, you agree to our <a href="privacy.html" style="color:var(--primary-red);">Privacy Protocols</a>, <a href="privacy.html#cookies" style="color:var(--primary-red);">Cookie Policy</a>, and <a href="terms.html" style="color:var(--primary-red);">Terms</a>.
+        </p>
+        <div style="display: flex; gap: 20px;">
+            <button onclick="acceptDataHarvest()" class="app-btn" style="background: var(--primary-red); color: #000; font-weight: bold; border: 1px solid var(--primary-red); padding: 10px 20px; cursor: pointer;">ACCEPT & INITIATE</button>
+            <a href="privacy.html#cookies" class="app-btn" style="background: transparent; color: var(--primary-red); text-decoration: none; font-size: 0.9rem; border: 1px solid var(--primary-red); padding: 10px 20px;">MANAGE PREFERENCES</a>
+        </div>
+    </div>
+
+    <script>
+        // Simple node counter animation
+        let count = 8492;
+        setInterval(() => {
+            count += Math.floor(Math.random() * 5);
+            document.getElementById('node-count').innerText = count.toLocaleString();
+        }, 3000);
+
+        // Cookie Consent Logic
+        function acceptDataHarvest() {
+            const banner = document.getElementById('data-consent-banner');
+            banner.style.transition = "all 0.5s ease";
+            banner.style.opacity = "0";
+            banner.style.transform = "translateY(100%)";
+            setTimeout(() => {
+                banner.style.display = 'none';
+            }, 500);
+            document.cookie = "data_harvest_consent=true; max-age=31536000; path=/";
+        }
+        
+        // Check consent on load
+        if (document.cookie.split(';').some((item) => item.trim().startsWith('data_harvest_consent='))) {
+            document.getElementById('data-consent-banner').style.display = 'none';
+        }
+    </script>
+    <!-- Security Protocol Injection -->
+    <script src="assets/security_protocol.js" async></script>
 </body>
 </html>
-<script>
-    function openShare(provider){
-        var url = encodeURIComponent(window.location.href)
-        var title = encodeURIComponent(document.title)
-        var link = ''
-        if(provider==='x'){ link = 'https://twitter.com/intent/tweet?url='+url+'&text='+title }
-        else if(provider==='facebook'){ link = 'https://www.facebook.com/sharer/sharer.php?u='+url }
-        else if(provider==='linkedin'){ link = 'https://www.linkedin.com/sharing/share-offsite/?url='+url }
-        else if(provider==='reddit'){ link = 'https://www.reddit.com/submit?url='+url+'&title='+title }
-        else if(provider==='whatsapp'){ link = 'https://api.whatsapp.com/send?text='+title+'%20'+url }
-        else if(provider==='telegram'){ link = 'https://t.me/share/url?url='+url+'&text='+title }
-        else if(provider==='email'){ link = 'mailto:?subject='+title+'&body='+url }
-        else if(provider==='copy'){ try{ navigator.clipboard.writeText(window.location.href) }catch(e){} return }
-        window.open(link, '_blank','noopener,noreferrer')
-    }
-</script>
