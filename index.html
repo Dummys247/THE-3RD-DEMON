@@ -783,17 +783,8 @@
             }
             try {
                 const params = new URLSearchParams(window.location.search);
-                if (params.get('paywall') === '1') {
-                    const banner = document.getElementById('paywall-banner');
-                    if (banner) banner.style.display = 'block';
-                    const userId = localStorage.getItem('demon_user_id') || 'ANON';
-                    const btn = document.getElementById('paywall-paypal');
-                    if (btn) {
-                        const href = btn.getAttribute('href');
-                        const sep = href.includes('?') ? '&' : '?';
-                        btn.setAttribute('href', href + sep + 'custom=' + encodeURIComponent(userId));
-                    }
-                }
+                // Paywall logic removed per user request
+                
                 if (params.get('app') === '1') {
                     openApp();
                     document.title = "THE_3RD_DEMON.EXE";

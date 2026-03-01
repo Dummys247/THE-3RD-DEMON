@@ -71,8 +71,7 @@ class NeuralLink {
     }
 
     isPaywallUnlocked() {
-        const uid = localStorage.getItem('demon_user_id') || '';
-        return typeof uid === 'string' && uid.startsWith('SUB-');
+        return true; // Paywall removed as per user request
     }
 
     async startCamera() {
