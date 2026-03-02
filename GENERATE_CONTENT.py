@@ -522,42 +522,61 @@ PAGES = [
                     // Check browser support
                     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
                     if (!SpeechRecognition) {
-                        document.getElementById('ai-status-text').innerText = "VOICE MODULE DAMAGED";
+                        document.getElementById('ai-status-text').innerText = "VOICE MODULE NOT SUPPORTED";
                         document.getElementById('fallback-input-container').style.display = 'flex';
-                        // Speak error even if recognition fails
-                        speak("Error. Voice module damaged. Use manual input.");
+                        speak("Browser not supported. Use text input.");
                         return;
                     }
 
                     try {
                         recognition = new SpeechRecognition();
-                        recognition.continuous = false;
+                        recognition.continuous = false; // Must be false for better reliability on mobile/some desktops
                         recognition.lang = 'en-US';
                         recognition.interimResults = false;
+                        recognition.maxAlternatives = 1;
 
                         recognition.onstart = function() {
                             isListening = true;
-                            document.getElementById('ai-status-text').innerText = "LISTENING...";
+                            document.getElementById('ai-status-text').innerText = "LISTENING... SPEAK NOW";
                             document.getElementById('ai-core-dot').style.animation = "listening-glow 1.5s infinite";
                         };
 
                         recognition.onresult = function(event) {
-                            const transcript = event.results[0][0].transcript;
-                            document.getElementById('ai-transcript').innerText = `"${transcript}"`;
-                            processCommand(transcript);
+                            // Check if results exist
+                            if (event.results.length > 0) {
+                                const transcript = event.results[0][0].transcript;
+                                console.log("Heard:", transcript);
+                                document.getElementById('ai-transcript').innerText = `"${transcript}"`;
+                                processCommand(transcript);
+                            } else {
+                                document.getElementById('ai-status-text').innerText = "NO AUDIO DETECTED";
+                                setTimeout(stopListening, 1000);
+                            }
+                        };
+
+                        recognition.onnomatch = function(event) {
+                            document.getElementById('ai-status-text').innerText = "UNINTELLIGIBLE";
+                            stopListening();
                         };
 
                         recognition.onerror = function(event) {
                             console.error("Speech Error:", event.error);
-                            document.getElementById('ai-status-text').innerText = "ERROR: " + event.error.toUpperCase();
-                            stopListening();
+                            let errorMsg = "ERROR: " + event.error.toUpperCase();
                             
-                            if(event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-                                document.getElementById('fallback-input-container').style.display = 'flex';
-                                speak("Access denied. Manual override required.");
-                            } else {
-                                speak("Signal lost. Retrying.");
+                            if (event.error === 'no-speech') {
+                                errorMsg = "NO SPEECH DETECTED";
                             }
+                            if (event.error === 'audio-capture') {
+                                errorMsg = "NO MICROPHONE FOUND";
+                            }
+                            if (event.error === 'not-allowed') {
+                                errorMsg = "MIC PERMISSION DENIED";
+                                document.getElementById('fallback-input-container').style.display = 'flex';
+                                speak("Microphone access denied. Enable permissions or use text.");
+                            }
+                            
+                            document.getElementById('ai-status-text').innerText = errorMsg;
+                            stopListening();
                         };
 
                         recognition.onend = function() {
@@ -567,6 +586,7 @@ PAGES = [
                         recognition.start();
                     } catch (e) {
                         console.error(e);
+                        document.getElementById('ai-status-text').innerText = "INIT ERROR";
                         document.getElementById('fallback-input-container').style.display = 'flex';
                     }
                 }
