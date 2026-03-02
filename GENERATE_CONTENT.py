@@ -397,13 +397,17 @@ PAGES = [
 
             <div id="neural-voice-core" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2rem; background: radial-gradient(circle, #1a0000 0%, #000000 100%); border: 1px solid #330000; position: relative; overflow: hidden; min-height: 600px;">
                 
-                <!-- INTERNAL BROWSER MODAL (New Feature) -->
+                <!-- INTERNAL BROWSER MODAL (New Feature - REFACTORED FOR HTML INJECTION) -->
                 <div id="internal-browser" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 80%; background: #000; border: 2px solid #ff0000; z-index: 9999; display: none; flex-direction: column; box-shadow: 0 0 50px rgba(255,0,0,0.5);">
                     <div style="background: #300; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f00;">
                         <span style="color: #fff; font-family: monospace;">INTERNAL DATASPHERE VIEWER</span>
                         <button onclick="document.getElementById('internal-browser').style.display='none'" style="background: #f00; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold;">CLOSE [X]</button>
                     </div>
-                    <iframe id="browser-frame" src="" style="flex-grow: 1; border: none; background: #fff;"></iframe>
+                    <!-- IFRAME REPLACED WITH DIV FOR DIRECT CONTENT -->
+                    <div id="browser-content" style="flex-grow: 1; background: #0a0a0a; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; overflow-y: auto;">
+                        <h3 style="color: #ff0000; border-bottom: 1px solid #333;">SEARCH RESULTS:</h3>
+                        <div id="search-results-list"></div>
+                    </div>
                 </div>
 
                 <!-- SYSTEM LOG (Debug Console) -->
@@ -851,14 +855,31 @@ PAGES = [
                         }
                         
                         // LYRIC MATCHING (Fallback for Music ID)
-                        if (cmd.includes("lyrics") || cmd.includes("sings") || cmd.includes("goes like")) {
-                            const query = text.replace(/lyrics|sings|goes like/gi, "").trim();
-                            // NOW we use the internal browser to show the result of the lyrics
-                             const target = `https://www.google.com/search?q=song+lyrics+${encodeURIComponent(query)}`;
-                             document.getElementById('browser-frame').src = target;
+                         if (cmd.includes("lyrics") || cmd.includes("sings") || cmd.includes("goes like")) {
+                             const query = text.replace(/lyrics|sings|goes like/gi, "").trim();
+                             
+                             // DISPLAY RESULTS IN MODAL (HTML INJECTION)
                              document.getElementById('internal-browser').style.display = 'flex';
+                             const list = document.getElementById('search-results-list');
+                             
+                             list.innerHTML = `
+                                 <p style="color: #fff;">Searching for lyrics: "<span style="color:yellow">${query}</span>"</p>
+                                 <br>
+                                 <div style="border: 1px solid #333; padding: 10px; margin-bottom: 10px;">
+                                     <h4 style="color: #ff0000; margin: 0;">POSSIBLE MATCH: [GENIUS DATABASE]</h4>
+                                     <p>Click to verify on Genius.com</p>
+                                     <button onclick="window.open('https://genius.com/search?q=${encodeURIComponent(query)}', '_blank')" style="background: #300; color: #fff; border: 1px solid #f00; padding: 5px;">OPEN RECORD</button>
+                                 </div>
+                                 <div style="border: 1px solid #333; padding: 10px; margin-bottom: 10px;">
+                                     <h4 style="color: #ff0000; margin: 0;">POSSIBLE MATCH: [GOOGLE ARCHIVE]</h4>
+                                     <p>Click to verify on Google</p>
+                                     <button onclick="window.open('https://www.google.com/search?q=lyrics+${encodeURIComponent(query)}', '_blank')" style="background: #333; color: #fff; border: 1px solid #666; padding: 5px;">OPEN ARCHIVE</button>
+                                 </div>
+                             `;
+                             
+                             this.speak("DISPLAYING MATCHING RECORDS FROM THE HIVE.");
                              return;
-                        }
+                         }
 
                         // IMMEDIATE RESPONSE (No Latency)
                         const response = this.generateResponse(text);
