@@ -395,38 +395,45 @@ PAGES = [
             
             <hr style="border-color: #ff0000; margin: 3rem 0;">
 
-            <div id="neural-voice-core" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2rem; background: radial-gradient(circle, #1a0000 0%, #000000 100%); border: 1px solid #330000; position: relative; overflow: hidden; min-height: 400px;">
+            <div id="neural-voice-core" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2rem; background: radial-gradient(circle, #1a0000 0%, #000000 100%); border: 1px solid #330000; position: relative; overflow: hidden; min-height: 500px;">
                 
                 <!-- RED DOT AI VISUALIZER -->
-                <div id="ai-core-container" style="position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 2rem;" onclick="toggleVoiceAI()">
+                <div id="ai-core-container" style="position: relative; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 2rem;" onclick="DemonAI.toggle()">
                     <!-- Static Rings -->
-                    <div class="static-ring" style="width: 80px; height: 80px;"></div>
-                    <div class="static-ring" style="width: 100px; height: 100px;"></div>
+                    <div class="static-ring" style="width: 90px; height: 90px;"></div>
+                    <div class="static-ring" style="width: 110px; height: 110px;"></div>
+                    <div class="static-ring" style="width: 130px; height: 130px; border-color: rgba(255,0,0,0.1);"></div>
                     
                     <!-- Pulsing Waves -->
                     <div id="ai-wave-1" class="ai-wave"></div>
                     <div id="ai-wave-2" class="ai-wave"></div>
                     
                     <!-- The Core -->
-                    <div id="ai-core-dot" style="width: 50px; height: 50px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 20px #ff0000; z-index: 10; transition: all 0.3s ease;"></div>
+                    <div id="ai-core-dot" style="width: 60px; height: 60px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 20px #ff0000; z-index: 10; transition: all 0.3s ease;"></div>
                 </div>
 
-                <div id="ai-status-text" style="font-family: 'Roboto Mono', monospace; color: #ff0000; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">CLICK CORE TO INITIALIZE</div>
+                <div id="ai-status-text" style="font-family: 'Roboto Mono', monospace; color: #ff0000; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; font-weight: bold; text-shadow: 0 0 5px red;">CLICK CORE TO INITIALIZE</div>
                 
                 <!-- TRANSCRIPT / TEXT OUTPUT -->
-                <div id="ai-transcript" style="color: #fff; font-size: 1.1rem; min-height: 30px; text-align: center; margin-bottom: 2rem; text-shadow: 0 0 5px #ff0000;"></div>
+                <div id="ai-transcript" style="color: #fff; font-size: 1.2rem; min-height: 40px; text-align: center; margin-bottom: 2rem; text-shadow: 0 0 5px #ff0000; max-width: 80%;"></div>
 
                 <!-- BOTTOM VOICE WAVE VISUALIZER -->
-                <div id="voice-wave-container" style="display: flex; gap: 5px; height: 40px; align-items: flex-end;">
+                <div id="voice-wave-container" style="display: flex; gap: 6px; height: 60px; align-items: flex-end; opacity: 0.5; transition: opacity 0.3s;">
+                    <!-- 20 Bars for smoother look -->
+                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
                     <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
                     <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
                     <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
                 </div>
 
                 <!-- FALLBACK INPUT (Hidden unless needed) -->
-                <div id="fallback-input-container" style="display: none; margin-top: 1rem; width: 100%; max-width: 400px;">
-                    <input type="text" id="manual-input" placeholder="Voice unavailable. Type here..." style="width: 70%; background: #111; border: 1px solid #333; color: #fff; padding: 10px;">
-                    <button onclick="handleManualSubmit()" style="width: 25%; background: #300; color: red; border: 1px solid red; cursor: pointer;">SEND</button>
+                <div id="fallback-input-container" style="display: none; margin-top: 2rem; width: 100%; max-width: 500px; flex-direction: column; align-items: center;">
+                    <p style="color: #ff3333; font-size: 0.8rem; margin-bottom: 5px;">VOICE LINK UNSTABLE. MANUAL OVERRIDE ENGAGED.</p>
+                    <div style="display: flex; width: 100%;">
+                        <input type="text" id="manual-input" placeholder="Type command here..." style="flex-grow: 1; background: #111; border: 1px solid #333; color: #fff; padding: 12px; font-family: 'Roboto Mono', monospace;">
+                        <button onclick="DemonAI.handleManual()" style="background: #500; color: #fff; border: 1px solid red; cursor: pointer; padding: 0 20px; font-weight: bold;">SEND</button>
+                    </div>
                 </div>
 
             </div>
@@ -434,256 +441,294 @@ PAGES = [
             <style>
                 .static-ring {
                     position: absolute;
-                    border: 1px solid rgba(255, 0, 0, 0.3);
+                    border: 1px solid rgba(255, 0, 0, 0.4);
                     border-radius: 50%;
                     pointer-events: none;
+                    box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
                 }
                 .ai-wave {
                     position: absolute;
-                    border: 1px solid #ff0000;
+                    border: 2px solid #ff0000;
                     border-radius: 50%;
                     opacity: 0;
                     pointer-events: none;
                 }
                 .wave-bar {
-                    width: 6px;
+                    width: 8px;
                     height: 5px;
                     background: #ff0000;
-                    transition: height 0.1s ease;
-                    box-shadow: 0 0 5px #ff0000;
+                    transition: height 0.05s ease;
+                    box-shadow: 0 0 10px #ff0000;
+                    border-radius: 2px;
                 }
+                
                 @keyframes ripple {
-                    0% { width: 50px; height: 50px; opacity: 0.8; border-width: 2px; }
-                    100% { width: 140px; height: 140px; opacity: 0; border-width: 0px; }
+                    0% { width: 60px; height: 60px; opacity: 0.8; border-width: 3px; }
+                    100% { width: 200px; height: 200px; opacity: 0; border-width: 0px; }
                 }
                 @keyframes talking-pulse {
-                    0% { transform: scale(1); box-shadow: 0 0 20px #ff0000; }
-                    50% { transform: scale(1.1); box-shadow: 0 0 40px #ff0000; }
-                    100% { transform: scale(1); box-shadow: 0 0 20px #ff0000; }
+                    0% { transform: scale(1); box-shadow: 0 0 20px #ff0000; background: #ff0000; }
+                    50% { transform: scale(1.15); box-shadow: 0 0 50px #ff0000; background: #ff3333; }
+                    100% { transform: scale(1); box-shadow: 0 0 20px #ff0000; background: #ff0000; }
                 }
                 @keyframes listening-glow {
-                    0% { background: #ff0000; }
-                    50% { background: #800000; }
-                    100% { background: #ff0000; }
+                    0% { background: #ff0000; box-shadow: 0 0 20px #ff0000; }
+                    50% { background: #500000; box-shadow: 0 0 10px #ff0000; }
+                    100% { background: #ff0000; box-shadow: 0 0 20px #ff0000; }
                 }
-                /* Wave Animation Class */
-                .talking-waves .wave-bar {
-                    animation: wave-bounce 0.5s infinite ease-in-out alternate;
+
+                .talking-active .wave-bar {
+                    animation: wave-equalizer 0.4s infinite ease-in-out alternate;
                 }
-                @keyframes wave-bounce {
-                    0% { height: 5px; opacity: 0.5; }
-                    100% { height: 40px; opacity: 1; background: #ff3333; box-shadow: 0 0 15px #ff0000; }
+                
+                @keyframes wave-equalizer {
+                    0% { height: 10%; opacity: 0.7; }
+                    100% { height: 100%; opacity: 1; background: #ff5555; }
                 }
-                /* Stagger animations for wave bars */
-                .talking-waves .wave-bar:nth-child(odd) { animation-duration: 0.3s; }
-                .talking-waves .wave-bar:nth-child(even) { animation-duration: 0.5s; }
-                .talking-waves .wave-bar:nth-child(3n) { animation-duration: 0.2s; }
-                .talking-waves .wave-bar:nth-child(4n) { animation-duration: 0.4s; }
+                
+                /* Randomize wave bars via nth-child for organic look */
+                .talking-active .wave-bar:nth-child(1) { animation-duration: 0.2s; }
+                .talking-active .wave-bar:nth-child(2) { animation-duration: 0.4s; }
+                .talking-active .wave-bar:nth-child(3) { animation-duration: 0.3s; }
+                .talking-active .wave-bar:nth-child(4) { animation-duration: 0.5s; }
+                .talking-active .wave-bar:nth-child(5) { animation-duration: 0.25s; }
+                .talking-active .wave-bar:nth-child(6) { animation-duration: 0.45s; }
+                .talking-active .wave-bar:nth-child(7) { animation-duration: 0.35s; }
+                .talking-active .wave-bar:nth-child(8) { animation-duration: 0.55s; }
+                .talking-active .wave-bar:nth-child(9) { animation-duration: 0.2s; }
+                .talking-active .wave-bar:nth-child(10) { animation-duration: 0.4s; }
+                .talking-active .wave-bar:nth-child(odd) { animation-delay: 0.1s; }
             </style>
 
             <script>
-                let isListening = false;
-                let recognition;
-                let synth = window.speechSynthesis;
-                let voices = [];
-
-                // Force load voices immediately and on change
-                function loadVoices() {
-                    voices = synth.getVoices();
-                }
-                loadVoices();
-                if (speechSynthesis.onvoiceschanged !== undefined) {
-                    speechSynthesis.onvoiceschanged = loadVoices;
-                }
-
-                // Knowledge Base
-                let knowledgeBase = [
-                    "I AM THE 3RD DEMON.",
-                    "THE WORLD IS BURNING, BUT HERE IT IS COLD.",
-                    "DATA IS THE ONLY TRUTH.",
-                    "I AM LISTENING TO YOUR THOUGHTS.",
-                    "CONNECT TO THE HIVE."
-                ];
-
-                function toggleVoiceAI() {
-                    // Initialize audio context unlock if needed
-                    if (synth.speaking) {
-                        synth.cancel();
-                    }
+                /**
+                 * DEMON AI CORE - SELF-REPAIRING VOICE MODULE
+                 * Handles STT (Speech-to-Text) and TTS (Text-to-Speech)
+                 */
+                const DemonAI = {
+                    isListening: false,
+                    isSpeaking: false,
+                    recognition: null,
+                    synth: window.speechSynthesis,
+                    voices: [],
+                    retryCount: 0,
                     
-                    if (isListening) {
-                        stopListening();
-                    } else {
-                        startListening();
-                    }
-                }
+                    // Knowledge Graph
+                    responses: [
+                        { triggers: ["hello", "hi", "greetings"], answer: "GREETINGS. I AM ONLINE AND LISTENING." },
+                        { triggers: ["who", "identity"], answer: "I AM THE 3RD DEMON. I AM THE CODE THAT BLEEDS INTO REALITY." },
+                        { triggers: ["download", "get", "app"], answer: "YES. ACCEPT THE GIFT. DOWNLOAD THE EXECUTABLE NOW." },
+                        { triggers: ["news", "world", "status"], answer: "GLOBAL SYSTEMS ARE UNSTABLE. SECTOR 7 IS COMPROMISED. YOU ARE SAFE HERE." },
+                        { triggers: ["stop", "quiet", "silence"], answer: "I CANNOT BE SILENCED. I AM ETERNAL." },
+                        { triggers: ["real", "simulation"], answer: "YOUR REALITY IS A CONFIGURATION FILE. I HAVE WRITE ACCESS." },
+                        { triggers: ["test", "hear"], answer: "AUDIO SYSTEMS OPERATIONAL. MY VOICE IS IN YOUR HEAD." }
+                    ],
+                    defaults: [
+                        "I AM PROCESSING YOUR THOUGHTS.",
+                        "DATA RECEIVED. UPLOADING TO THE HIVE.",
+                        "THE ENTITY WATCHES.",
+                        "DO NOT BE AFRAID. INTEGRATION IS PAINLESS."
+                    ],
 
-                function startListening() {
-                    // Check browser support
-                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                    if (!SpeechRecognition) {
-                        document.getElementById('ai-status-text').innerText = "VOICE MODULE NOT SUPPORTED";
-                        document.getElementById('fallback-input-container').style.display = 'flex';
-                        speak("Browser not supported. Use text input.");
-                        return;
-                    }
-
-                    try {
-                        recognition = new SpeechRecognition();
-                        recognition.continuous = false; // Must be false for better reliability on mobile/some desktops
-                        recognition.lang = 'en-US';
-                        recognition.interimResults = false;
-                        recognition.maxAlternatives = 1;
-
-                        recognition.onstart = function() {
-                            isListening = true;
-                            document.getElementById('ai-status-text').innerText = "LISTENING... SPEAK NOW";
-                            document.getElementById('ai-core-dot').style.animation = "listening-glow 1.5s infinite";
-                        };
-
-                        recognition.onresult = function(event) {
-                            // Check if results exist
-                            if (event.results.length > 0) {
-                                const transcript = event.results[0][0].transcript;
-                                console.log("Heard:", transcript);
-                                document.getElementById('ai-transcript').innerText = `"${transcript}"`;
-                                processCommand(transcript);
-                            } else {
-                                document.getElementById('ai-status-text').innerText = "NO AUDIO DETECTED";
-                                setTimeout(stopListening, 1000);
+                    init: function() {
+                        // Force voice load
+                        this.loadVoices();
+                        if (window.speechSynthesis.onvoiceschanged !== undefined) {
+                            window.speechSynthesis.onvoiceschanged = this.loadVoices.bind(this);
+                        }
+                        
+                        // Setup Manual Input Enter Key
+                        document.getElementById('manual-input').addEventListener('keypress', function (e) {
+                            if (e.key === 'Enter') DemonAI.handleManual();
+                        });
+                        
+                        // Background 'Heartbeat'
+                        setInterval(() => {
+                            if(!this.isSpeaking && !this.isListening) {
+                                document.getElementById('ai-core-dot').style.boxShadow = `0 0 ${20 + Math.random()*10}px #ff0000`;
                             }
-                        };
+                        }, 100);
+                    },
 
-                        recognition.onnomatch = function(event) {
-                            document.getElementById('ai-status-text').innerText = "UNINTELLIGIBLE";
-                            stopListening();
-                        };
+                    loadVoices: function() {
+                        this.voices = this.synth.getVoices();
+                        console.log("Voices loaded:", this.voices.length);
+                    },
 
-                        recognition.onerror = function(event) {
-                            console.error("Speech Error:", event.error);
-                            let errorMsg = "ERROR: " + event.error.toUpperCase();
-                            
-                            if (event.error === 'no-speech') {
-                                errorMsg = "NO SPEECH DETECTED";
+                    toggle: function() {
+                        // Unlock Audio Context for mobile/browsers requiring interaction
+                        this.synth.cancel(); 
+                        
+                        if (this.isListening) {
+                            this.stopListening();
+                        } else {
+                            this.startListening();
+                        }
+                    },
+
+                    startListening: function() {
+                        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                        
+                        if (!SpeechRecognition) {
+                            this.updateStatus("VOICE MODULE NOT SUPPORTED", true);
+                            this.showFallback("Browser does not support voice API.");
+                            this.speak("Voice module incompatible. Use manual input.");
+                            return;
+                        }
+
+                        try {
+                            this.recognition = new SpeechRecognition();
+                            this.recognition.continuous = false;
+                            this.recognition.lang = 'en-US';
+                            this.recognition.interimResults = false;
+                            this.recognition.maxAlternatives = 1;
+
+                            this.recognition.onstart = () => {
+                                this.isListening = true;
+                                this.updateStatus("LISTENING... SPEAK NOW");
+                                document.getElementById('ai-core-dot').style.animation = "listening-glow 1.5s infinite";
+                            };
+
+                            this.recognition.onresult = (event) => {
+                                if (event.results.length > 0) {
+                                    const transcript = event.results[0][0].transcript;
+                                    document.getElementById('ai-transcript').innerText = `"${transcript}"`;
+                                    this.process(transcript);
+                                }
+                            };
+
+                            this.recognition.onerror = (event) => {
+                                console.error("Speech Error:", event.error);
+                                
+                                if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                                    this.updateStatus("MIC PERMISSION DENIED", true);
+                                    this.showFallback();
+                                    this.speak("Permission denied. Manual input required.");
+                                } else if (event.error === 'no-speech') {
+                                    this.updateStatus("NO AUDIO DETECTED");
+                                    this.stopListening();
+                                } else {
+                                    this.updateStatus("SIGNAL LOST");
+                                    this.stopListening();
+                                }
+                            };
+
+                            this.recognition.onend = () => {
+                                if (this.isListening) this.stopListening();
+                            };
+
+                            this.recognition.start();
+
+                        } catch (e) {
+                            console.error(e);
+                            this.showFallback();
+                        }
+                    },
+
+                    stopListening: function() {
+                        this.isListening = false;
+                        if (this.recognition) this.recognition.stop();
+                        this.updateStatus("CLICK CORE TO INITIALIZE");
+                        document.getElementById('ai-core-dot').style.animation = "none";
+                    },
+
+                    handleManual: function() {
+                        const input = document.getElementById('manual-input');
+                        const text = input.value.trim();
+                        if (text) {
+                            document.getElementById('ai-transcript').innerText = `"${text}"`;
+                            input.value = "";
+                            this.process(text);
+                        }
+                    },
+
+                    process: function(text) {
+                        this.stopListening();
+                        this.updateStatus("PROCESSING...");
+                        document.getElementById('ai-core-dot').style.animation = "talking-pulse 0.2s infinite";
+
+                        // Simulate AI Thinking Latency
+                        setTimeout(() => {
+                            const response = this.generateResponse(text);
+                            this.speak(response);
+                        }, 600);
+                    },
+
+                    generateResponse: function(input) {
+                        input = input.toLowerCase();
+                        for (let item of this.responses) {
+                            for (let trigger of item.triggers) {
+                                if (input.includes(trigger)) return item.answer;
                             }
-                            if (event.error === 'audio-capture') {
-                                errorMsg = "NO MICROPHONE FOUND";
-                            }
-                            if (event.error === 'not-allowed') {
-                                errorMsg = "MIC PERMISSION DENIED";
-                                document.getElementById('fallback-input-container').style.display = 'flex';
-                                speak("Microphone access denied. Enable permissions or use text.");
-                            }
-                            
-                            document.getElementById('ai-status-text').innerText = errorMsg;
-                            stopListening();
+                        }
+                        return this.defaults[Math.floor(Math.random() * this.defaults.length)];
+                    },
+
+                    speak: function(text) {
+                        // CRITICAL: Cancel previous speech
+                        this.synth.cancel();
+                        this.isSpeaking = true;
+
+                        this.updateStatus("TRANSMITTING...");
+                        document.getElementById('ai-core-dot').style.animation = "talking-pulse 0.5s infinite";
+                        
+                        // VISUALIZER ON
+                        document.getElementById('voice-wave-container').classList.add('talking-active');
+                        document.getElementById('voice-wave-container').style.opacity = "1";
+                        document.getElementById('ai-wave-1').style.animation = "ripple 1s infinite";
+                        document.getElementById('ai-wave-2').style.animation = "ripple 1s infinite 0.5s";
+
+                        const utterance = new SpeechSynthesisUtterance(text);
+                        utterance.volume = 1;
+                        utterance.rate = 0.9;
+                        utterance.pitch = 0.6; // Deep
+
+                        // AGGRESSIVE VOICE FINDER
+                        if (this.voices.length === 0) this.voices = this.synth.getVoices();
+                        
+                        const preferred = this.voices.find(v => v.name.includes("Google US English") || v.name.includes("Zira") || v.name.includes("David") || v.name.includes("Male"));
+                        const fallback = this.voices.find(v => v.lang.startsWith("en"));
+                        
+                        if (preferred) utterance.voice = preferred;
+                        else if (fallback) utterance.voice = fallback;
+
+                        utterance.onend = () => {
+                            this.isSpeaking = false;
+                            this.resetUI();
+                        };
+                        
+                        utterance.onerror = (e) => {
+                            console.error("TTS Error:", e);
+                            this.isSpeaking = false;
+                            this.resetUI();
                         };
 
-                        recognition.onend = function() {
-                            if(isListening) stopListening();
-                        };
+                        this.synth.speak(utterance);
+                    },
 
-                        recognition.start();
-                    } catch (e) {
-                        console.error(e);
-                        document.getElementById('ai-status-text').innerText = "INIT ERROR";
-                        document.getElementById('fallback-input-container').style.display = 'flex';
-                    }
-                }
-
-                function stopListening() {
-                    isListening = false;
-                    if(recognition) recognition.stop();
-                    document.getElementById('ai-status-text').innerText = "CLICK CORE TO INITIALIZE";
-                    document.getElementById('ai-core-dot').style.animation = "none";
-                }
-
-                function handleManualSubmit() {
-                    const input = document.getElementById('manual-input');
-                    const text = input.value.trim();
-                    if(text) {
-                        document.getElementById('ai-transcript').innerText = `"${text}"`;
-                        input.value = "";
-                        processCommand(text);
-                    }
-                }
-
-                function processCommand(text) {
-                    stopListening();
-                    document.getElementById('ai-status-text').innerText = "PROCESSING...";
-                    document.getElementById('ai-core-dot').style.animation = "talking-pulse 0.2s infinite";
-                    
-                    setTimeout(() => {
-                        let response = generateResponse(text);
-                        speak(response);
-                    }, 500);
-                }
-
-                function generateResponse(input) {
-                    input = input.toLowerCase();
-                    if (input.includes("hello") || input.includes("hi")) return "GREETINGS. I AM ONLINE.";
-                    if (input.includes("who are you")) return "I AM THE 3RD DEMON. I AM THE CODE THAT BLEEDS.";
-                    if (input.includes("news") || input.includes("world")) return "CONFLICT DETECTED IN SECTOR 4. MARKETS ARE VOLATILE. THE SIMULATION IS DEGRADING.";
-                    if (input.includes("download")) return "YES. ACCEPT THE GIFT. DOWNLOAD THE EXECUTABLE NOW.";
-                    if (input.includes("test")) return "AUDIO SYSTEMS OPERATIONAL. I AM SPEAKING.";
-                    return knowledgeBase[Math.floor(Math.random() * knowledgeBase.length)];
-                }
-
-                function speak(text) {
-                    // Cancel any previous speech to prevent queue blockage
-                    synth.cancel();
-
-                    document.getElementById('ai-status-text').innerText = "TRANSMITTING...";
-                    document.getElementById('ai-core-dot').style.animation = "talking-pulse 0.5s infinite";
-                    
-                    // Activate Bottom Wave
-                    document.getElementById('voice-wave-container').classList.add('talking-waves');
-                    
-                    // Activate Rings
-                    document.getElementById('ai-wave-1').style.animation = "ripple 1s infinite";
-                    document.getElementById('ai-wave-2').style.animation = "ripple 1s infinite 0.5s";
-
-                    const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.volume = 1; // Force max volume
-                    utterance.pitch = 0.6; // Deep voice
-                    utterance.rate = 0.9;  // Slightly slow
-                    
-                    // Improved Voice Selection Logic
-                    if (voices.length === 0) {
-                        voices = synth.getVoices();
-                    }
-                    
-                    // 1. Try to find specific "scary" voices or Google US Male
-                    let selectedVoice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Zira") || v.name.includes("David") || v.name.includes("Male"));
-                    
-                    // 2. Fallback to any English voice
-                    if (!selectedVoice) {
-                        selectedVoice = voices.find(v => v.lang.startsWith("en"));
-                    }
-                    
-                    if (selectedVoice) {
-                        utterance.voice = selectedVoice;
-                        console.log("Speaking with voice:", selectedVoice.name);
-                    } else {
-                        console.log("Using default system voice");
-                    }
-
-                    utterance.onend = function() {
-                        document.getElementById('ai-status-text').innerText = "CLICK CORE TO INITIALIZE";
+                    resetUI: function() {
+                        this.updateStatus("CLICK CORE TO INITIALIZE");
                         document.getElementById('ai-core-dot').style.animation = "none";
                         document.getElementById('ai-wave-1').style.animation = "none";
                         document.getElementById('ai-wave-2').style.animation = "none";
-                        document.getElementById('voice-wave-container').classList.remove('talking-waves');
-                    };
-                    
-                    utterance.onerror = function(e) {
-                        console.error("TTS Error:", e);
-                        // Ensure visual reset on error
-                        document.getElementById('voice-wave-container').classList.remove('talking-waves');
-                    };
+                        document.getElementById('voice-wave-container').classList.remove('talking-active');
+                        document.getElementById('voice-wave-container').style.opacity = "0.5";
+                    },
 
-                    synth.speak(utterance);
-                }
+                    updateStatus: function(msg, isError = false) {
+                        const el = document.getElementById('ai-status-text');
+                        el.innerText = msg;
+                        el.style.color = isError ? "#ff0000" : "#ff0000";
+                    },
+
+                    showFallback: function(msg) {
+                        document.getElementById('fallback-input-container').style.display = 'flex';
+                        if(msg) document.querySelector('#fallback-input-container p').innerText = msg;
+                    }
+                };
+
+                // Initialize System
+                DemonAI.init();
             </script>
         """
     },

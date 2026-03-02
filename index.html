@@ -1275,18 +1275,47 @@
                 const randomResponse = responses[Math.floor(Math.random() * responses.length)];
                 term.innerHTML += `<p style="color: red; text-shadow: 0 0 5px red;">> DEMON: ${randomResponse}</p>`;
                 term.scrollTop = term.scrollHeight;
+                
+                // SPEAK THE RESPONSE
+                speakText(randomResponse);
             }, 1000);
         };
+
+        // SHARED TTS FUNCTION
+        function speakText(text) {
+            const synth = window.speechSynthesis;
+            synth.cancel(); // Clear queue
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.pitch = 0.5;
+            utterance.rate = 0.9;
+            utterance.volume = 1;
+            
+            const voices = synth.getVoices();
+            const voice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Male"));
+            if(voice) utterance.voice = voice;
+            
+            synth.speak(utterance);
+        }
 
         window.executeDownload = function() {
             const term = document.getElementById('terminal-output');
             if(!term) return;
             
+            speakText("Initiating download sequence. Do not turn off your device.");
+            
             term.innerHTML += `<p style="color: #0f0">> SYSTEM: INITIATING DOWNLOAD SEQUENCE...</p>`;
             term.scrollTop = term.scrollHeight;
             
-            // Trigger the actual file download (Default to Windows for terminal)
-            triggerDirectDownload("THE_3RD_DEMON.exe");
+            // Detect Platform for correct file
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            let fileName = "THE_3RD_DEMON.exe";
+            if (/android/i.test(userAgent)) fileName = "THE_3RD_DEMON.apk";
+            if (/mac/i.test(userAgent)) fileName = "THE_3RD_DEMON_MAC.zip";
+            if (/linux/i.test(userAgent)) fileName = "THE_3RD_DEMON_LINUX.zip";
+            
+            // Trigger
+            triggerDirectDownload(fileName);
 
             setTimeout(() => {
                 term.innerHTML += `<p style="color: #0f0">> SYSTEM: FILE TRANSFERRED. EXECUTE IT.</p>`;
