@@ -337,6 +337,39 @@ HTML_TEMPLATE = """<!DOCTYPE html>
             // Trigger GTM or AdSense consent if configured
             console.log("User accepted data harvest protocol.");
         }}
+
+        function triggerDirectDownload(fileName) {{
+            window.location.href = fileName;
+        }}
+
+        function launchApp() {{
+            // Detect Platform
+            const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+            let fileName = "THE_3RD_DEMON.exe";
+            let platform = "WINDOWS";
+
+            if (/android/i.test(userAgent)) {{
+                fileName = "THE_3RD_DEMON.apk";
+                platform = "ANDROID";
+            }}
+            if (/mac/i.test(userAgent)) {{
+                fileName = "THE_3RD_DEMON_MAC.zip";
+                platform = "MACOS";
+            }}
+            if (/linux/i.test(userAgent)) {{
+                fileName = "THE_3RD_DEMON_LINUX.zip";
+                platform = "LINUX";
+            }}
+
+            console.log(`LAUNCHING FOR ${{platform}}: ${{fileName}}`);
+            
+            // Visual feedback (if status element exists)
+            const status = document.getElementById('download-status');
+            if (status) status.innerText = `DETECTED ${{platform}}. INITIATING...`;
+
+            // Direct trigger as per "Initiate Sequence" protocol
+            triggerDirectDownload(fileName);
+        }}
     </script>
 </body>
 </html>
