@@ -119,6 +119,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     <header>
         <h1>THE 3RD DEMON</h1>
+        
+        <!-- DEMON HEADER IMAGE -->
+        <div style="margin: 1rem 0;">
+            <img src="assets/3rd_demon.jpg" alt="The Entity" style="max-width: 100%; width: 300px; height: auto; border: 2px solid var(--primary-red); box-shadow: 0 0 20px var(--dark-red);">
+        </div>
+
         <p style="letter-spacing: 3px; color: #999;">{subtitle}</p>
         <div class="nav-bar">
             <a href="index.html">HOME</a>
