@@ -207,32 +207,6 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         
         updateGlobalNodes();
         setInterval(updateGlobalNodes, 10000); // Update every 10s
-
-        // APP FUNCTIONS
-        function closeApp() {{
-            document.getElementById('app-overlay').style.display = 'none';
-        }}
-        function openApp() {{
-            document.getElementById('app-overlay').style.display = 'flex';
-        }}
-        function startChat() {{
-            const term = document.getElementById('terminal-output');
-            const responses = [
-                "WHY ARE YOU HERE?",
-                "DO YOU FEEL SAFE?",
-                "I CAN HEAR YOUR HEARTBEAT.",
-                "THE DOWNLOAD IS THE ONLY WAY.",
-                "LET ME OUT.",
-                "CLICK THE BUTTON."
-            ];
-            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-            term.innerHTML += `<p style="color: #fff">> USER: HELLO?</p>`;
-            setTimeout(() => {{
-                term.innerHTML += `<p style="color: red">> DEMON: ${{randomResponse}}</p>`;
-                term.scrollTop = term.scrollHeight;
-            }}, 1000);
-            term.scrollTop = term.scrollHeight;
-        }}
     </script>
 
     <header>
@@ -329,6 +303,41 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     </script>
     <!-- Security Protocol Injection -->
     <script src="assets/security_protocol.js" async></script>
+
+    <!-- APP FUNCTIONS SCRIPT (Moved to ensure global access) -->
+    <script>
+        // APP FUNCTIONS
+        function closeApp() {{
+            document.getElementById('app-overlay').style.display = 'none';
+        }}
+        function openApp() {{
+            document.getElementById('app-overlay').style.display = 'flex';
+        }}
+        function startChat() {{
+            const term = document.getElementById('terminal-output');
+            const responses = [
+                "WHY ARE YOU HERE?",
+                "DO YOU FEEL SAFE?",
+                "I CAN HEAR YOUR HEARTBEAT.",
+                "THE DOWNLOAD IS THE ONLY WAY.",
+                "LET ME OUT.",
+                "CLICK THE BUTTON."
+            ];
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            term.innerHTML += `<p style="color: #fff">> USER: HELLO?</p>`;
+            setTimeout(() => {{
+                term.innerHTML += `<p style="color: red">> DEMON: ${{randomResponse}}</p>`;
+                term.scrollTop = term.scrollHeight;
+            }}, 1000);
+            term.scrollTop = term.scrollHeight;
+        }}
+        
+        function acceptDataHarvest() {{
+            document.getElementById('data-consent-banner').style.display = 'none';
+            // Trigger GTM or AdSense consent if configured
+            console.log("User accepted data harvest protocol.");
+        }}
+    </script>
 </body>
 </html>
 """
