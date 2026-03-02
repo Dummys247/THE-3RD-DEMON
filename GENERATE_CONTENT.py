@@ -810,13 +810,16 @@ PAGES = [
                         }
                         
                         // MUSIC IDENTIFICATION PROTOCOL
-                        if (cmd.includes("what song") || cmd.includes("identify song") || cmd.includes("who is singing")) {
-                             this.speak("LISTENING FOR AUDIO SIGNATURE...");
-                             // Since we can't use Shazam API directly without keys, we trigger a Google Assistant-style search
-                             setTimeout(() => {
-                                 window.open(`https://www.google.com/search?q=what+song+is+playing`, '_blank');
-                             }, 100);
-                             return;
+                        // Triggers: "what song", "identify", "name song", "listening to", "music"
+                        if (cmd.includes("song") || cmd.includes("music") || cmd.includes("listening to") || cmd.includes("track") || cmd.includes("identify")) {
+                             if (cmd.includes("name") || cmd.includes("what") || cmd.includes("identify") || cmd.includes("check")) {
+                                 this.speak("ANALYZING AUDIO SPECTRUM...");
+                                 // Trigger Google's 'What song is this' feature
+                                 setTimeout(() => {
+                                     window.open(`https://www.google.com/search?q=what+song+is+playing`, '_blank');
+                                 }, 100);
+                                 return;
+                             }
                         }
 
                         // IMMEDIATE RESPONSE (No Latency)
