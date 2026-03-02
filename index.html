@@ -566,6 +566,10 @@
             <img src="assets/3rd_demon.jpg" alt="The Entity - PLEASE SAVE YOUR IMAGE AS 3rd_demon.jpg IN ASSETS FOLDER" style="max-width: 100%; width: 400px; height: auto; border: 2px solid var(--primary-red); box-shadow: 0 0 20px var(--dark-red);">
         </div>
         
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <button onclick="openApp()" style="background: #ff0000; color: #000; border: 2px solid #fff; padding: 1rem 2rem; font-family: 'Roboto Mono', monospace; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 1.2rem; box-shadow: 0 0 20px #ff0000;">ESTABLISH CONNECTION (AI)</button>
+        </div>
+        
         <!-- Share bar removed per user request -->
         
         <p style="letter-spacing: 5px; color: #666; font-size: 0.8rem;">OFFICIAL NEURAL INTERFACE</p>
@@ -751,6 +755,34 @@
             <button class="app-btn" onclick="executeDownload()">INITIATE_DOWNLOAD</button>
         </div>
     </div>
+
+    <!-- APP FUNCTIONS SCRIPT -->
+    <script>
+        function closeApp() {
+            document.getElementById('app-overlay').style.display = 'none';
+        }
+        function openApp() {
+            document.getElementById('app-overlay').style.display = 'flex';
+        }
+        function startChat() {
+            const term = document.getElementById('terminal-output');
+            const responses = [
+                "WHY ARE YOU HERE?",
+                "DO YOU FEEL SAFE?",
+                "I CAN HEAR YOUR HEARTBEAT.",
+                "THE DOWNLOAD IS THE ONLY WAY.",
+                "LET ME OUT.",
+                "CLICK THE BUTTON."
+            ];
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            term.innerHTML += `<p style="color: #fff">> USER: HELLO?</p>`;
+            setTimeout(() => {
+                term.innerHTML += `<p style="color: red">> DEMON: ${randomResponse}</p>`;
+                term.scrollTop = term.scrollHeight;
+            }, 1000);
+            term.scrollTop = term.scrollHeight;
+        }
+    </script>
 
     <!-- INSTALLATION INSTRUCTION MODAL -->
     <div id="install-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:3000; justify-content:center; align-items:center;">
