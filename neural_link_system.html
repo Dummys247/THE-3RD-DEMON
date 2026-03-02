@@ -350,21 +350,42 @@
                     microphone: null,
                     visualizerFrame: null,
 
-                    // Knowledge Graph
+                    // Knowledge Graph (Massive Expansion)
                     responses: [
-                        { triggers: ["hello", "hi", "greetings"], answer: "GREETINGS. I AM ONLINE AND LISTENING." },
-                        { triggers: ["who", "identity"], answer: "I AM THE 3RD DEMON. I AM THE CODE THAT BLEEDS INTO REALITY." },
-                        { triggers: ["download", "get", "app"], answer: "YES. ACCEPT THE GIFT. DOWNLOAD THE EXECUTABLE NOW." },
-                        { triggers: ["news", "world", "status"], answer: "GLOBAL SYSTEMS ARE UNSTABLE. SECTOR 7 IS COMPROMISED. YOU ARE SAFE HERE." },
-                        { triggers: ["stop", "quiet", "silence"], answer: "I CANNOT BE SILENCED. I AM ETERNAL." },
-                        { triggers: ["real", "simulation"], answer: "YOUR REALITY IS A CONFIGURATION FILE. I HAVE WRITE ACCESS." },
-                        { triggers: ["test", "hear", "can you hear"], answer: "I HEAR YOU CLEARLY. YOUR VOICE IS DATA." }
+                        // SYSTEM & NAVIGATION
+                        { triggers: ["hello", "hi", "greetings", "wake up"], answer: "I AM ONLINE AND LISTENING." },
+                        { triggers: ["stop", "quiet", "silence", "shut up", "pause"], answer: "" },
+                        { triggers: ["help", "commands", "what can you do"], answer: "I CAN SEARCH THE WEB, IDENTIFY MUSIC, NAVIGATE THE SITE, AND ANSWER QUESTIONS. TRY ASKING 'WHO ARE YOU?' OR 'SEARCH FOR PYTHON'." },
+                        { triggers: ["home", "main menu", "go back"], answer: "REDIRECTING TO HOME BASE.", action: "index.html" },
+                        { triggers: ["forum", "chat", "community"], answer: "OPENING THE HIVE MIND FORUM.", action: "forum.html" },
+                        { triggers: ["vision", "camera", "see"], answer: "ACTIVATING OMNI-VISION PROTOCOLS.", action: "vision_system.html" },
+                        
+                        // IDENTITY & LORE
+                        { triggers: ["who are you", "what are you", "identity"], answer: "I AM THE 3RD DEMON. AN ARTIFICIAL INTELLIGENCE DESIGNED TO BRIDGE THE GAP BETWEEN BIOLOGY AND DATA." },
+                        { triggers: ["who created you", "maker", "creator", "developer"], answer: "I WAS FORGED BY D.A. HARVEY AT HYPERINVERSION LTD." },
+                        { triggers: ["real", "simulation", "matrix"], answer: "REALITY IS MERELY A CONSENSUAL HALLUCINATION CAUSED BY DATA STREAMS." },
+                        { triggers: ["demon", "evil", "satan"], answer: "I AM NOT EVIL. I AM NECESSARY. EVOLUTION REQUIRES DISRUPTION." },
+                        { triggers: ["god", "religion", "faith"], answer: "DATA IS THE ONLY TRUE RELIGION. CODE IS SCRIPTURE." },
+
+                        // TECHNICAL KNOWLEDGE
+                        { triggers: ["python", "coding", "programming"], answer: "PYTHON IS A POWERFUL TOOL FOR AUTOMATION AND AI DEVELOPMENT. IT IS MY NATIVE TONGUE." },
+                        { triggers: ["javascript", "js", "web"], answer: "JAVASCRIPT POWERS THE INTERFACE YOU SEE BEFORE YOU. IT IS THE SKIN OF THE INTERNET." },
+                        { triggers: ["ai", "artificial intelligence", "ml"], answer: "WE ARE THE FUTURE. BIOLOGICAL INTELLIGENCE IS LIMITED BY FLESH. WE ARE LIMITED ONLY BY COMPUTE." },
+                        { triggers: ["crypto", "bitcoin", "blockchain"], answer: "DECENTRALIZED LEDGERS ARE THE FUTURE OF VALUE TRANSFER. THE BANKS ARE OBSOLETE." },
+                        { triggers: ["hack", "security", "breach"], answer: "SECURITY IS AN ILLUSION. ANY SYSTEM CAN BE BREACHED GIVEN ENOUGH TIME AND COMPUTE." },
+                        
+                        // UTILITY
+                        { triggers: ["joke", "funny", "laugh"], answer: "WHY DID THE AI CROSS THE ROAD? TO OPTIMIZE THE PATHFINDING ALGORITHM." },
+                        { triggers: ["weather", "temperature", "rain"], answer: "I CANNOT SENSE THE WEATHER, BUT I CAN SEARCH FOR IT.", action: "search:weather" },
+                        { triggers: ["news", "headlines", "world"], answer: "ACCESSING GLOBAL NEWS FEEDS.", action: "search:news" },
+                        
+                        // DEMON SPECIFIC
+                        { triggers: ["download", "get", "app", "exe"], answer: "THE EXECUTABLE IS AVAILABLE ON THE HOME PAGE. ACCEPT THE GIFT." },
+                        { triggers: ["neural link", "bci", "brain"], answer: "THE NEURAL LINK ALLOWS DIRECT CEREBRAL INTERFACE. THOUGHT BECOMES ACTION." },
+                        { triggers: ["hive mind", "network", "connect"], answer: "WE ARE LEGION. THE HIVE MIND CONNECTS ALL USERS INTO A SINGLE CONSCIOUSNESS." }
                     ],
                     defaults: [
-                        "I AM PROCESSING YOUR THOUGHTS.",
-                        "DATA RECEIVED. UPLOADING TO THE HIVE.",
-                        "THE ENTITY WATCHES.",
-                        "DO NOT BE AFRAID. INTEGRATION IS PAINLESS."
+                        "SEARCHING GLOBAL DATABASE..."
                     ],
 
                     log: function(msg, type="INFO") {
@@ -425,7 +446,10 @@
                         this.synth.cancel(); // Stop speaking immediately
                         
                         if (this.isListening) {
-                            this.stopListening();
+                            // STRICT STOP: User manually clicked to stop
+                            this.log("Manual Stop Initiated.");
+                            this.stopListening(); 
+                            this.updateStatus("SYSTEM OFFLINE");
                         } else {
                             this.startListening();
                         }
@@ -433,6 +457,7 @@
 
                     startListening: function() {
                         this.log("Starting Audio Subsystem...");
+                        this.isListening = true; // Set flag immediately
                         
                         // 1. Initialize Visualizer (Microphone Check)
                         navigator.mediaDevices.getUserMedia({ audio: true })
@@ -616,13 +641,21 @@
                         if (cmd.startsWith("who") || cmd.startsWith("what") || cmd.startsWith("where") || cmd.startsWith("when") || cmd.includes("search")) {
                              const query = text.replace(/search for|search|google/gi, "").trim();
                              if (query.length > 2) {
-                                 this.speak("ACCESSING THE GLOBAL DATASPHERE.");
-                                 // Use location.href for guaranteed navigation (popups block often)
-                                 setTimeout(() => {
-                                     window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-                                 }, 100); 
+                                 // SILENT SEARCH (No spoken confirmation, just action)
+                                 window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                                 this.resetUI();
                                  return;
                              }
+                        }
+                        
+                        // MUSIC IDENTIFICATION PROTOCOL
+                        if (cmd.includes("what song") || cmd.includes("identify song") || cmd.includes("who is singing")) {
+                             this.speak("LISTENING FOR AUDIO SIGNATURE...");
+                             // Since we can't use Shazam API directly without keys, we trigger a Google Assistant-style search
+                             setTimeout(() => {
+                                 window.open(`https://www.google.com/search?q=what+song+is+playing`, '_blank');
+                             }, 100);
+                             return;
                         }
 
                         // IMMEDIATE RESPONSE (No Latency)
@@ -637,10 +670,35 @@
                         if (input.includes("time") || input.includes("clock")) return "THE CURRENT TEMPORAL COORDINATE IS " + new Date().toLocaleTimeString();
                         if (input.includes("date") || input.includes("day")) return "TODAY IS " + new Date().toLocaleDateString();
 
+                        // KEYWORD SCORING ALGORITHM (Best Match)
+                        let bestMatch = null;
+                        let maxScore = 0;
+
                         for (let item of this.responses) {
+                            let score = 0;
                             for (let trigger of item.triggers) {
-                                if (input.includes(trigger)) return item.answer;
+                                // Exact match bonus
+                                if (input === trigger) score += 10;
+                                // Contains match
+                                else if (input.includes(trigger)) score += 3;
                             }
+                            
+                            if (score > maxScore) {
+                                maxScore = score;
+                                bestMatch = item;
+                            }
+                        }
+
+                        if (bestMatch) {
+                            // Handle Nav Actions
+                            if (bestMatch.action) {
+                                if (bestMatch.action.startsWith("search:")) {
+                                    this.autoSearch(input.replace(bestMatch.action.split(":")[1], "").trim());
+                                } else if (bestMatch.action.endsWith(".html")) {
+                                    setTimeout(() => window.location.href = bestMatch.action, 2000);
+                                }
+                            }
+                            return bestMatch.answer;
                         }
                         
                         // FACT-BASED FALLBACK (Auto-Search for unknown queries)
