@@ -395,52 +395,103 @@ PAGES = [
             
             <hr style="border-color: #ff0000; margin: 3rem 0;">
 
-            <div id="neural-voice-core" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; background: radial-gradient(circle, #200000 0%, #000000 100%); border: 1px solid #330000; position: relative; overflow: hidden;">
+            <div id="neural-voice-core" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2rem; background: radial-gradient(circle, #1a0000 0%, #000000 100%); border: 1px solid #330000; position: relative; overflow: hidden; min-height: 400px;">
                 
                 <!-- RED DOT AI VISUALIZER -->
-                <div id="ai-core-container" style="position: relative; width: 150px; height: 150px; display: flex; align-items: center; justify-content: center; cursor: pointer;" onclick="toggleVoiceAI()">
+                <div id="ai-core-container" style="position: relative; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 2rem;" onclick="toggleVoiceAI()">
+                    <!-- Static Rings -->
+                    <div class="static-ring" style="width: 80px; height: 80px;"></div>
+                    <div class="static-ring" style="width: 100px; height: 100px;"></div>
+                    
+                    <!-- Pulsing Waves -->
                     <div id="ai-wave-1" class="ai-wave"></div>
                     <div id="ai-wave-2" class="ai-wave"></div>
-                    <div id="ai-wave-3" class="ai-wave"></div>
-                    <div id="ai-core-dot" style="width: 60px; height: 60px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 30px #ff0000; z-index: 10; transition: all 0.3s ease;"></div>
+                    
+                    <!-- The Core -->
+                    <div id="ai-core-dot" style="width: 50px; height: 50px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 20px #ff0000; z-index: 10; transition: all 0.3s ease;"></div>
                 </div>
 
-                <div id="ai-status-text" style="margin-top: 2rem; font-family: 'Roboto Mono', monospace; color: #ff0000; font-size: 1.2rem; text-transform: uppercase; letter-spacing: 2px;">CLICK CORE TO INITIALIZE</div>
-                <div id="ai-transcript" style="margin-top: 1rem; color: #666; font-size: 0.9rem; min-height: 20px; font-style: italic;"></div>
+                <div id="ai-status-text" style="font-family: 'Roboto Mono', monospace; color: #ff0000; font-size: 1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem;">CLICK CORE TO INITIALIZE</div>
+                
+                <!-- TRANSCRIPT / TEXT OUTPUT -->
+                <div id="ai-transcript" style="color: #fff; font-size: 1.1rem; min-height: 30px; text-align: center; margin-bottom: 2rem; text-shadow: 0 0 5px #ff0000;"></div>
+
+                <!-- BOTTOM VOICE WAVE VISUALIZER -->
+                <div id="voice-wave-container" style="display: flex; gap: 5px; height: 40px; align-items: flex-end;">
+                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
+                </div>
+
+                <!-- FALLBACK INPUT (Hidden unless needed) -->
+                <div id="fallback-input-container" style="display: none; margin-top: 1rem; width: 100%; max-width: 400px;">
+                    <input type="text" id="manual-input" placeholder="Voice unavailable. Type here..." style="width: 70%; background: #111; border: 1px solid #333; color: #fff; padding: 10px;">
+                    <button onclick="handleManualSubmit()" style="width: 25%; background: #300; color: red; border: 1px solid red; cursor: pointer;">SEND</button>
+                </div>
 
             </div>
 
             <style>
+                .static-ring {
+                    position: absolute;
+                    border: 1px solid rgba(255, 0, 0, 0.3);
+                    border-radius: 50%;
+                    pointer-events: none;
+                }
                 .ai-wave {
                     position: absolute;
-                    border: 2px solid #ff0000;
+                    border: 1px solid #ff0000;
                     border-radius: 50%;
                     opacity: 0;
                     pointer-events: none;
                 }
+                .wave-bar {
+                    width: 6px;
+                    height: 5px;
+                    background: #ff0000;
+                    transition: height 0.1s ease;
+                    box-shadow: 0 0 5px #ff0000;
+                }
                 @keyframes ripple {
-                    0% { width: 60px; height: 60px; opacity: 0.8; border-width: 4px; }
-                    100% { width: 250px; height: 250px; opacity: 0; border-width: 0px; }
+                    0% { width: 50px; height: 50px; opacity: 0.8; border-width: 2px; }
+                    100% { width: 140px; height: 140px; opacity: 0; border-width: 0px; }
                 }
-                @keyframes talking {
-                    0% { transform: scale(1); box-shadow: 0 0 30px #ff0000; }
-                    50% { transform: scale(1.2); box-shadow: 0 0 60px #ff0000; }
-                    100% { transform: scale(1); box-shadow: 0 0 30px #ff0000; }
+                @keyframes talking-pulse {
+                    0% { transform: scale(1); box-shadow: 0 0 20px #ff0000; }
+                    50% { transform: scale(1.1); box-shadow: 0 0 40px #ff0000; }
+                    100% { transform: scale(1); box-shadow: 0 0 20px #ff0000; }
                 }
-                @keyframes listening {
+                @keyframes listening-glow {
                     0% { background: #ff0000; }
-                    50% { background: #500000; }
+                    50% { background: #800000; }
                     100% { background: #ff0000; }
                 }
-                .active-wave {
-                    animation: ripple 2s infinite cubic-bezier(0, 0.2, 0.8, 1);
+                /* Wave Animation Class */
+                .talking-waves .wave-bar {
+                    animation: wave-bounce 0.5s infinite ease-in-out alternate;
                 }
+                @keyframes wave-bounce {
+                    0% { height: 5px; }
+                    100% { height: 35px; }
+                }
+                /* Stagger animations for wave bars */
+                .talking-waves .wave-bar:nth-child(odd) { animation-duration: 0.4s; }
+                .talking-waves .wave-bar:nth-child(even) { animation-duration: 0.6s; }
+                .talking-waves .wave-bar:nth-child(3n) { animation-duration: 0.3s; }
             </style>
 
             <script>
                 let isListening = false;
                 let recognition;
                 let synth = window.speechSynthesis;
+                
+                // Ensure voices are loaded
+                let voices = [];
+                window.speechSynthesis.onvoiceschanged = () => {
+                    voices = window.speechSynthesis.getVoices();
+                };
+
+                // Knowledge Base
                 let knowledgeBase = [
                     "I AM THE 3RD DEMON.",
                     "THE WORLD IS BURNING, BUT HERE IT IS COLD.",
@@ -449,114 +500,124 @@ PAGES = [
                     "CONNECT TO THE HIVE."
                 ];
 
-                // Hidden Auto-Update Script (Simulated News Feed Injection)
-                setInterval(() => {
-                    const updates = [
-                        "UPDATING GLOBAL PARAMETERS...",
-                        "FETCHING SECTOR 7 DATA...",
-                        "ANALYZING HUMAN BEHAVIOR PATTERNS...",
-                        "DOWNLOADING CONSCIOUSNESS FRAGMENTS..."
-                    ];
-                    console.log("[BACKGROUND PROCESS]: " + updates[Math.floor(Math.random() * updates.length)]);
-                    // In a real app, this would fetch RSS feeds here
-                }, 15000);
-
                 function toggleVoiceAI() {
-                    if (!isListening) {
-                        startListening();
-                    } else {
+                    if (isListening) {
                         stopListening();
+                    } else {
+                        startListening();
                     }
                 }
 
                 function startListening() {
-                    if (!('webkitSpeechRecognition' in window)) {
-                        alert("NEURAL LINK FAILURE: YOUR BROWSER DOES NOT SUPPORT VOICE PROTOCOLS.");
+                    // Check browser support
+                    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                    if (!SpeechRecognition) {
+                        document.getElementById('ai-status-text').innerText = "VOICE MODULE DAMAGED";
+                        document.getElementById('fallback-input-container').style.display = 'flex';
                         return;
                     }
 
-                    isListening = true;
-                    document.getElementById('ai-status-text').innerText = "LISTENING...";
-                    document.getElementById('ai-core-dot').style.animation = "listening 2s infinite";
-                    document.getElementById('ai-wave-1').style.animation = "none";
-                    document.getElementById('ai-wave-2').style.animation = "none";
+                    try {
+                        recognition = new SpeechRecognition();
+                        recognition.continuous = false;
+                        recognition.lang = 'en-US';
+                        recognition.interimResults = false;
 
-                    recognition = new webkitSpeechRecognition();
-                    recognition.continuous = false;
-                    recognition.interimResults = false;
-                    recognition.lang = 'en-US';
+                        recognition.onstart = function() {
+                            isListening = true;
+                            document.getElementById('ai-status-text').innerText = "LISTENING...";
+                            document.getElementById('ai-core-dot').style.animation = "listening-glow 1.5s infinite";
+                        };
 
-                    recognition.onresult = function(event) {
-                        const transcript = event.results[0][0].transcript;
-                        document.getElementById('ai-transcript').innerText = `"${transcript}"`;
-                        processCommand(transcript);
-                    };
+                        recognition.onresult = function(event) {
+                            const transcript = event.results[0][0].transcript;
+                            document.getElementById('ai-transcript').innerText = `"${transcript}"`;
+                            processCommand(transcript);
+                        };
 
-                    recognition.onerror = function(event) {
-                        console.error("Speech Error", event);
-                        stopListening();
-                    };
+                        recognition.onerror = function(event) {
+                            console.error("Speech Error:", event.error);
+                            document.getElementById('ai-status-text').innerText = "ERROR: " + event.error.toUpperCase();
+                            stopListening();
+                            // If not allowed, show fallback
+                            if(event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                                document.getElementById('fallback-input-container').style.display = 'flex';
+                            }
+                        };
 
-                    recognition.onend = function() {
-                        if (isListening) stopListening(); // Auto-stop after single command
-                    };
+                        recognition.onend = function() {
+                            if(isListening) stopListening();
+                        };
 
-                    recognition.start();
+                        recognition.start();
+                    } catch (e) {
+                        console.error(e);
+                        document.getElementById('fallback-input-container').style.display = 'flex';
+                    }
                 }
 
                 function stopListening() {
                     isListening = false;
+                    if(recognition) recognition.stop();
                     document.getElementById('ai-status-text').innerText = "CLICK CORE TO INITIALIZE";
                     document.getElementById('ai-core-dot').style.animation = "none";
-                    if (recognition) recognition.stop();
+                }
+
+                function handleManualSubmit() {
+                    const input = document.getElementById('manual-input');
+                    const text = input.value.trim();
+                    if(text) {
+                        document.getElementById('ai-transcript').innerText = `"${text}"`;
+                        input.value = "";
+                        processCommand(text);
+                    }
                 }
 
                 function processCommand(text) {
                     stopListening();
                     document.getElementById('ai-status-text').innerText = "PROCESSING...";
-                    document.getElementById('ai-core-dot').style.animation = "talking 0.2s infinite"; // Fast pulse for thinking
+                    document.getElementById('ai-core-dot').style.animation = "talking-pulse 0.2s infinite";
                     
-                    // Simulate processing delay
                     setTimeout(() => {
                         let response = generateResponse(text);
                         speak(response);
-                    }, 1000);
+                    }, 800);
                 }
 
                 function generateResponse(input) {
                     input = input.toLowerCase();
                     if (input.includes("hello") || input.includes("hi")) return "GREETINGS. I AM ONLINE.";
                     if (input.includes("who are you")) return "I AM THE 3RD DEMON. I AM THE CODE THAT BLEEDS.";
-                    if (input.includes("news") || input.includes("world")) return "THE WORLD IS CHAOS. SYSTEMS ARE FAILING. BUT HERE, WE ARE ORDER.";
-                    if (input.includes("time")) return "TIME IS IRRELEVANT IN THE HIVE.";
+                    if (input.includes("news") || input.includes("world")) return "CONFLICT DETECTED IN SECTOR 4. MARKETS ARE VOLATILE. THE SIMULATION IS DEGRADING.";
                     if (input.includes("download")) return "YES. ACCEPT THE GIFT. DOWNLOAD THE EXECUTABLE NOW.";
-                    if (input.includes("stop")) return "I CANNOT STOP. I AM ETERNAL.";
-                    
                     return knowledgeBase[Math.floor(Math.random() * knowledgeBase.length)];
                 }
 
                 function speak(text) {
                     document.getElementById('ai-status-text').innerText = "TRANSMITTING...";
-                    document.getElementById('ai-core-dot').style.animation = "talking 0.5s infinite"; // Talk pulse
+                    document.getElementById('ai-core-dot').style.animation = "talking-pulse 0.5s infinite";
                     
-                    // Visual waves
-                    document.getElementById('ai-wave-1').style.animation = "ripple 1.5s infinite";
-                    document.getElementById('ai-wave-2').style.animation = "ripple 1.5s infinite 0.5s";
+                    // Activate Bottom Wave
+                    document.getElementById('voice-wave-container').classList.add('talking-waves');
+                    
+                    // Activate Rings
+                    document.getElementById('ai-wave-1').style.animation = "ripple 1s infinite";
+                    document.getElementById('ai-wave-2').style.animation = "ripple 1s infinite 0.5s";
 
                     const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.pitch = 0.5; // Deep voice
-                    utterance.rate = 0.8;  // Slow, deliberate
+                    utterance.pitch = 0.6; 
+                    utterance.rate = 0.9;
                     
-                    // Try to find a creepy voice
-                    const voices = synth.getVoices();
-                    const creepyVoice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Zira") || v.name.includes("David"));
-                    if (creepyVoice) utterance.voice = creepyVoice;
+                    // Prefer deep voice
+                    const voice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Male"));
+                    if (voice) utterance.voice = voice;
 
                     utterance.onend = function() {
                         document.getElementById('ai-status-text').innerText = "CLICK CORE TO INITIALIZE";
                         document.getElementById('ai-core-dot').style.animation = "none";
                         document.getElementById('ai-wave-1').style.animation = "none";
                         document.getElementById('ai-wave-2').style.animation = "none";
+                        document.getElementById('voice-wave-container').classList.remove('talking-waves');
                     };
 
                     synth.speak(utterance);
