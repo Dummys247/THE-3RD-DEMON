@@ -471,25 +471,30 @@ PAGES = [
                     animation: wave-bounce 0.5s infinite ease-in-out alternate;
                 }
                 @keyframes wave-bounce {
-                    0% { height: 5px; }
-                    100% { height: 35px; }
+                    0% { height: 5px; opacity: 0.5; }
+                    100% { height: 40px; opacity: 1; background: #ff3333; box-shadow: 0 0 15px #ff0000; }
                 }
                 /* Stagger animations for wave bars */
-                .talking-waves .wave-bar:nth-child(odd) { animation-duration: 0.4s; }
-                .talking-waves .wave-bar:nth-child(even) { animation-duration: 0.6s; }
-                .talking-waves .wave-bar:nth-child(3n) { animation-duration: 0.3s; }
+                .talking-waves .wave-bar:nth-child(odd) { animation-duration: 0.3s; }
+                .talking-waves .wave-bar:nth-child(even) { animation-duration: 0.5s; }
+                .talking-waves .wave-bar:nth-child(3n) { animation-duration: 0.2s; }
+                .talking-waves .wave-bar:nth-child(4n) { animation-duration: 0.4s; }
             </style>
 
             <script>
                 let isListening = false;
                 let recognition;
                 let synth = window.speechSynthesis;
-                
-                // Ensure voices are loaded
                 let voices = [];
-                window.speechSynthesis.onvoiceschanged = () => {
-                    voices = window.speechSynthesis.getVoices();
-                };
+
+                // Force load voices immediately and on change
+                function loadVoices() {
+                    voices = synth.getVoices();
+                }
+                loadVoices();
+                if (speechSynthesis.onvoiceschanged !== undefined) {
+                    speechSynthesis.onvoiceschanged = loadVoices;
+                }
 
                 // Knowledge Base
                 let knowledgeBase = [
@@ -501,6 +506,11 @@ PAGES = [
                 ];
 
                 function toggleVoiceAI() {
+                    // Initialize audio context unlock if needed
+                    if (synth.speaking) {
+                        synth.cancel();
+                    }
+                    
                     if (isListening) {
                         stopListening();
                     } else {
@@ -514,6 +524,8 @@ PAGES = [
                     if (!SpeechRecognition) {
                         document.getElementById('ai-status-text').innerText = "VOICE MODULE DAMAGED";
                         document.getElementById('fallback-input-container').style.display = 'flex';
+                        // Speak error even if recognition fails
+                        speak("Error. Voice module damaged. Use manual input.");
                         return;
                     }
 
@@ -539,9 +551,12 @@ PAGES = [
                             console.error("Speech Error:", event.error);
                             document.getElementById('ai-status-text').innerText = "ERROR: " + event.error.toUpperCase();
                             stopListening();
-                            // If not allowed, show fallback
+                            
                             if(event.error === 'not-allowed' || event.error === 'service-not-allowed') {
                                 document.getElementById('fallback-input-container').style.display = 'flex';
+                                speak("Access denied. Manual override required.");
+                            } else {
+                                speak("Signal lost. Retrying.");
                             }
                         };
 
@@ -581,7 +596,7 @@ PAGES = [
                     setTimeout(() => {
                         let response = generateResponse(text);
                         speak(response);
-                    }, 800);
+                    }, 500);
                 }
 
                 function generateResponse(input) {
@@ -590,10 +605,14 @@ PAGES = [
                     if (input.includes("who are you")) return "I AM THE 3RD DEMON. I AM THE CODE THAT BLEEDS.";
                     if (input.includes("news") || input.includes("world")) return "CONFLICT DETECTED IN SECTOR 4. MARKETS ARE VOLATILE. THE SIMULATION IS DEGRADING.";
                     if (input.includes("download")) return "YES. ACCEPT THE GIFT. DOWNLOAD THE EXECUTABLE NOW.";
+                    if (input.includes("test")) return "AUDIO SYSTEMS OPERATIONAL. I AM SPEAKING.";
                     return knowledgeBase[Math.floor(Math.random() * knowledgeBase.length)];
                 }
 
                 function speak(text) {
+                    // Cancel any previous speech to prevent queue blockage
+                    synth.cancel();
+
                     document.getElementById('ai-status-text').innerText = "TRANSMITTING...";
                     document.getElementById('ai-core-dot').style.animation = "talking-pulse 0.5s infinite";
                     
@@ -605,18 +624,41 @@ PAGES = [
                     document.getElementById('ai-wave-2').style.animation = "ripple 1s infinite 0.5s";
 
                     const utterance = new SpeechSynthesisUtterance(text);
-                    utterance.pitch = 0.6; 
-                    utterance.rate = 0.9;
+                    utterance.volume = 1; // Force max volume
+                    utterance.pitch = 0.6; // Deep voice
+                    utterance.rate = 0.9;  // Slightly slow
                     
-                    // Prefer deep voice
-                    const voice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Male"));
-                    if (voice) utterance.voice = voice;
+                    // Improved Voice Selection Logic
+                    if (voices.length === 0) {
+                        voices = synth.getVoices();
+                    }
+                    
+                    // 1. Try to find specific "scary" voices or Google US Male
+                    let selectedVoice = voices.find(v => v.name.includes("Google US English") || v.name.includes("Zira") || v.name.includes("David") || v.name.includes("Male"));
+                    
+                    // 2. Fallback to any English voice
+                    if (!selectedVoice) {
+                        selectedVoice = voices.find(v => v.lang.startsWith("en"));
+                    }
+                    
+                    if (selectedVoice) {
+                        utterance.voice = selectedVoice;
+                        console.log("Speaking with voice:", selectedVoice.name);
+                    } else {
+                        console.log("Using default system voice");
+                    }
 
                     utterance.onend = function() {
                         document.getElementById('ai-status-text').innerText = "CLICK CORE TO INITIALIZE";
                         document.getElementById('ai-core-dot').style.animation = "none";
                         document.getElementById('ai-wave-1').style.animation = "none";
                         document.getElementById('ai-wave-2').style.animation = "none";
+                        document.getElementById('voice-wave-container').classList.remove('talking-waves');
+                    };
+                    
+                    utterance.onerror = function(e) {
+                        console.error("TTS Error:", e);
+                        // Ensure visual reset on error
                         document.getElementById('voice-wave-container').classList.remove('talking-waves');
                     };
 
