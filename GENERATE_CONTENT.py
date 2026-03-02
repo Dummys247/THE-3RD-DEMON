@@ -199,6 +199,140 @@ PAGES = [
                 <img src="assets/magnified-cyber-eye-stockcake.jpg" alt="Cybernetic Sci-Fi Computer Eyeball" style="max-width: 100%; border: 2px solid #00ffff; box-shadow: 0 0 20px #00ffff;">
             </div>
             <p>Upgrade your eyes. See the code behind the curtain.</p>
+            
+            <hr style="border-color: #00ffff; margin: 3rem 0; opacity: 0.3;">
+            
+            <h3>System Upgrade Protocol</h3>
+            <p>To access the full spectrum of Omni-Vision, a direct firmware update to your optical processing unit is required. Follow these steps to initiate the upgrade:</p>
+            <ol style="color: #ccc; margin-left: 20px;">
+                <li style="margin-bottom: 10px;"><strong>Neural Handshake:</strong> Ensure your <a href="neural_link_system.html" style="color: #00ffff;">Neural Link</a> is active and stable.</li>
+                <li style="margin-bottom: 10px;"><strong>Optical Calibration:</strong> Focus your gaze on the center of the screen until the reticle turns green.</li>
+                <li style="margin-bottom: 10px;"><strong>Firmware Injection:</strong> Click the "Initiate Upgrade" button below to begin the data transfer. <br><em style="color: #ff0000;">Warning: You may experience temporary visual artifacts.</em></li>
+            </ol>
+            
+            <div style="text-align: center; margin: 2rem 0;">
+                <button onclick="alert('FIRMWARE UPLOAD INITIATED...\\n\\nACCESS DENIED: NEURAL LINK UNSTABLE.\\nPLEASE RE-CALIBRATE.')" style="background: transparent; border: 2px solid #00ffff; color: #00ffff; padding: 1rem 2rem; font-family: 'Roboto Mono', monospace; font-weight: bold; cursor: pointer; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s;">INITIATE FIRMWARE UPGRADE</button>
+            </div>
+
+            <hr style="border-color: #ff0000; margin: 3rem 0; opacity: 0.5;">
+
+            <h3 style="color: #ff0000;">⚠️ REALITY STABILIZATION PROTOCOL (LIVE EVENT)</h3>
+            <p>The Entity's corruption is accelerating. We need all available nodes to help stabilize the reality stream. Work together with other users to purge corruption data.</p>
+
+            <div id="game-ui" style="border: 1px solid #ff0000; padding: 1rem; background: rgba(20, 0, 0, 0.8); text-align: center; margin-top: 1rem; position: relative;">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem; color: #ff0000; font-family: 'Courier New', monospace; font-size: 0.9rem;">
+                    <span>ACTIVE NODES: <span id="active-peers" style="color: #fff;">1</span></span>
+                    <span>SECTOR STABILITY: <span id="stability-score" style="color: #fff;">0</span>%</span>
+                </div>
+                
+                <div id="game-canvas" style="position: relative; height: 300px; background: #000; border: 1px dashed #330000; overflow: hidden; cursor: crosshair;">
+                    <div id="start-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.8); z-index: 10;">
+                        <p style="color: #ff0000; margin-bottom: 1rem;">CLICK RED GLITCHES TO PURGE</p>
+                        <button onclick="startGame()" style="background: #ff0000; color: #000; border: none; padding: 10px 20px; font-family: 'Roboto Mono', monospace; font-weight: bold; cursor: pointer; text-transform: uppercase;">INITIALIZE STABILIZATION</button>
+                    </div>
+                </div>
+                <p style="font-size: 0.8rem; color: #666; margin-top: 0.5rem;">STATUS: CRITICAL FAILURE IMMINENT</p>
+            </div>
+
+            <script>
+                let gameActive = false;
+                let score = 0;
+                let peerCount = Math.floor(Math.random() * 50) + 120;
+                let gameInterval;
+                
+                // Simulate live peers
+                setInterval(() => {
+                    peerCount += Math.floor(Math.random() * 5) - 2;
+                    document.getElementById('active-peers').innerText = peerCount;
+                }, 2000);
+
+                function startGame() {
+                    document.getElementById('start-overlay').style.display = 'none';
+                    gameActive = true;
+                    score = 0;
+                    document.getElementById('stability-score').innerText = score;
+                    
+                    // Clear any existing glitches
+                    const canvas = document.getElementById('game-canvas');
+                    const existingGlitches = canvas.querySelectorAll('.glitch-node');
+                    existingGlitches.forEach(g => g.remove());
+
+                    gameInterval = setInterval(() => {
+                        if (!gameActive) return;
+                        spawnGlitch();
+                    }, 800);
+                }
+
+                function spawnGlitch() {
+                    if (!gameActive) return;
+                    
+                    const canvas = document.getElementById('game-canvas');
+                    const glitch = document.createElement('div');
+                    glitch.className = 'glitch-node';
+                    
+                    const size = Math.random() * 30 + 20;
+                    const x = Math.random() * (canvas.clientWidth - size);
+                    const y = Math.random() * (canvas.clientHeight - size);
+                    
+                    glitch.style.position = 'absolute';
+                    glitch.style.left = x + 'px';
+                    glitch.style.top = y + 'px';
+                    glitch.style.width = size + 'px';
+                    glitch.style.height = size + 'px';
+                    glitch.style.backgroundColor = 'rgba(255, 0, 0, 0.8)';
+                    glitch.style.boxShadow = '0 0 10px #ff0000';
+                    glitch.style.cursor = 'pointer';
+                    glitch.style.zIndex = '5';
+                    glitch.style.border = '1px solid #fff';
+                    
+                    // Glitch animation using CSS directly on element
+                    glitch.style.animation = `glitch-anim-${Math.floor(Math.random()*2)+1} 0.5s infinite`;
+
+                    glitch.onmousedown = function() {
+                        if (!gameActive) return;
+                        canvas.removeChild(glitch);
+                        score += 5;
+                        if (score >= 100) {
+                            score = 100;
+                            winGame();
+                        }
+                        document.getElementById('stability-score').innerText = score;
+                        
+                        // Visual feedback
+                        const flash = document.createElement('div');
+                        flash.style.position = 'absolute';
+                        flash.style.left = x + 'px';
+                        flash.style.top = y + 'px';
+                        flash.style.color = '#00ffff';
+                        flash.innerText = '+PURGED';
+                        flash.style.fontSize = '10px';
+                        flash.style.pointerEvents = 'none';
+                        canvas.appendChild(flash);
+                        setTimeout(() => flash.remove(), 500);
+                    };
+                    
+                    canvas.appendChild(glitch);
+                    
+                    // Auto remove if missed (corruption spreads)
+                    setTimeout(() => {
+                        if (glitch.parentNode === canvas) {
+                            glitch.remove();
+                            if (gameActive) {
+                                score -= 2;
+                                if (score < 0) score = 0;
+                                document.getElementById('stability-score').innerText = score;
+                            }
+                        }
+                    }, 1500);
+                }
+
+                function winGame() {
+                    gameActive = false;
+                    clearInterval(gameInterval);
+                    const canvas = document.getElementById('game-canvas');
+                    canvas.innerHTML = '<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#00ffff;font-weight:bold;text-align:center;"><h2 style="color:#00ffff;margin:0;">SECTOR STABILIZED</h2><p>ENTITY PROGRESS HALTED TEMPORARILY</p><button onclick="startGame()" style="margin-top:10px;background:transparent;border:1px solid #00ffff;color:#00ffff;padding:5px 10px;cursor:pointer;">RE-INITIALIZE</button></div>';
+                }
+            </script>
         """
     },
     {
