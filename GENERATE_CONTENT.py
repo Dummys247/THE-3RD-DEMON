@@ -397,6 +397,15 @@ PAGES = [
 
             <div id="neural-voice-core" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2rem; background: radial-gradient(circle, #1a0000 0%, #000000 100%); border: 1px solid #330000; position: relative; overflow: hidden; min-height: 600px;">
                 
+                <!-- INTERNAL BROWSER MODAL (New Feature) -->
+                <div id="internal-browser" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 80%; background: #000; border: 2px solid #ff0000; z-index: 9999; display: none; flex-direction: column; box-shadow: 0 0 50px rgba(255,0,0,0.5);">
+                    <div style="background: #300; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f00;">
+                        <span style="color: #fff; font-family: monospace;">INTERNAL DATASPHERE VIEWER</span>
+                        <button onclick="document.getElementById('internal-browser').style.display='none'" style="background: #f00; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold;">CLOSE [X]</button>
+                    </div>
+                    <iframe id="browser-frame" src="" style="flex-grow: 1; border: none; background: #fff;"></iframe>
+                </div>
+
                 <!-- SYSTEM LOG (Debug Console) -->
                 <div id="system-log" style="position: absolute; top: 10px; right: 10px; width: 250px; height: 100px; background: rgba(0,0,0,0.8); border: 1px solid #330000; color: #00ff00; font-family: 'Courier New', monospace; font-size: 0.7rem; overflow-y: auto; padding: 5px; display: none;">
                     <div style="border-bottom: 1px solid #333; margin-bottom: 3px;">SYSTEM DIAGNOSTIC LOG</div>
@@ -822,11 +831,15 @@ PAGES = [
                         // Triggers: "what song", "identify", "name song", "listening to", "music"
                         if (cmd.includes("song") || cmd.includes("music") || cmd.includes("listening to") || cmd.includes("track") || cmd.includes("identify")) {
                              if (cmd.includes("name") || cmd.includes("what") || cmd.includes("identify") || cmd.includes("check")) {
-                                 this.speak("OPENING AUDIO IDENTIFICATION PORTAL. PLEASE PLAY THE MUSIC CLEARLY.");
-                                 // Use AHA Music for direct browser-based recognition
-                                 setTimeout(() => {
-                                     window.open(`https://www.aha-music.com/identify-songs-music-recognition-online`, '_blank');
-                                 }, 100);
+                                 this.speak("ANALYZING AUDIO PATTERNS...");
+                                 
+                                 // Try to use AHA Music in Internal Browser
+                                 // If it blocks iframe, fallback to Google
+                                 const target = "https://www.aha-music.com/identify-songs-music-recognition-online";
+                                 
+                                 document.getElementById('browser-frame').src = target;
+                                 document.getElementById('internal-browser').style.display = 'flex';
+                                 
                                  return;
                              }
                         }
