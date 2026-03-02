@@ -87,6 +87,38 @@
      crossorigin="anonymous"></script>
 
     <style>
+        .hive-status-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: #000;
+            color: #00ff00;
+            border-bottom: 1px solid #00ff00;
+            text-align: center;
+            font-size: 0.8rem;
+            padding: 5px 0;
+            z-index: 9999;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+        .hive-pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #00ff00;
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { opacity: 0.4; box-shadow: 0 0 0 0 rgba(0, 255, 0, 0.4); }
+            70% { opacity: 1; box-shadow: 0 0 0 10px rgba(0, 255, 0, 0); }
+            100% { opacity: 0.4; box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
+        }
+        /* Adjust body to not hide under fixed header */
+        body { margin-top: 30px !important; }
+
         @import url('https://fonts.googleapis.com/css2?family=Creepster&family=Roboto+Mono:wght@400;700&display=swap');
 
         :root {
@@ -485,6 +517,36 @@
     </style>
 </head>
 <body id="top">
+    <div class="hive-status-bar">
+        <span class="hive-pulse"></span>
+        HIVE CONNECTION ESTABLISHED: <span id="global-active-nodes">CALCULATING...</span> NODES ONLINE
+    </div>
+
+    <script>
+        // Deterministic pseudo-random number generator based on time (so all users see roughly same number)
+        function updateGlobalNodes() {
+            const now = new Date();
+            // Create a seed based on minute (changes every minute)
+            const timeSeed = now.getUTCFullYear() + now.getUTCMonth() + now.getUTCDate() + now.getUTCHours() + now.getUTCMinutes();
+            
+            // Base count ~8000 + time variance
+            let baseCount = 8420;
+            
+            // Add sine wave fluctuation based on hour (peak at 20:00 UTC)
+            const hour = now.getUTCHours();
+            const dailyFluctuation = Math.sin((hour / 24) * Math.PI) * 5000;
+            
+            // Add minute noise
+            const minuteNoise = (timeSeed % 100) * 3;
+            
+            let total = Math.floor(baseCount + dailyFluctuation + minuteNoise);
+            
+            document.getElementById('global-active-nodes').innerText = total.toLocaleString();
+        }
+        
+        updateGlobalNodes();
+        setInterval(updateGlobalNodes, 10000); // Update every 10s
+    </script>
 
     <div class="bg-overlay"></div>
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
