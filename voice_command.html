@@ -73,12 +73,104 @@
         }
         /* Adjust body to not hide under fixed header */
         body { margin-top: 30px; }
+
+        /* APP OVERLAY STYLES */
+        #app-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            z-index: 2000;
+            display: none;
+            flex-direction: column;
+            font-family: 'Roboto Mono', monospace;
+            color: #e60000;
+            overflow: hidden;
+        }
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            border-bottom: 1px solid #330000;
+            background: #110000;
+        }
+        .app-terminal {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            font-size: 1.2rem;
+            text-shadow: 0 0 5px #ff0000;
+        }
+        .scan-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: rgba(255, 0, 0, 0.1);
+            animation: scan 3s linear infinite;
+            pointer-events: none;
+        }
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+        .app-controls {
+            padding: 20px;
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #330000;
+            background: #050000;
+        }
+        .app-btn {
+            background: #330000;
+            color: #ff0000;
+            border: 1px solid #ff0000;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-family: 'Roboto Mono', monospace;
+            text-transform: uppercase;
+            transition: all 0.2s;
+        }
+        .app-btn:hover {
+            background: #ff0000;
+            color: #000;
+            box-shadow: 0 0 15px #ff0000;
+        }
+        .close-btn {
+            background: transparent;
+            border: none;
+            color: #ff0000;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <div class="hive-status-bar">
         <span class="hive-pulse"></span>
         HIVE CONNECTION ESTABLISHED: <span id="global-active-nodes">CALCULATING...</span> NODES ONLINE
+    </div>
+
+    <!-- APP OVERLAY UI -->
+    <div id="app-overlay">
+        <div class="scan-line"></div>
+        <div class="app-header">
+            <span>THE_3RD_DEMON.EXE [RUNNING]</span>
+            <button class="close-btn" onclick="closeApp()">X</button>
+        </div>
+        <div class="app-terminal" id="terminal-output">
+            <p>> SYSTEM: CONNECTION ESTABLISHED...</p>
+            <p>> SYSTEM: USER DETECTED.</p>
+            <p>> SYSTEM: WAITING FOR INPUT...</p>
+        </div>
+        <div class="app-controls">
+            <button class="app-btn" onclick="startChat()">COMMUNICATE</button>
+            <button class="app-btn" onclick="window.location.href='index.html#downloads'">INITIATE_DOWNLOAD</button>
+        </div>
     </div>
 
     <script>
@@ -105,6 +197,32 @@
         
         updateGlobalNodes();
         setInterval(updateGlobalNodes, 10000); // Update every 10s
+
+        // APP FUNCTIONS
+        function closeApp() {
+            document.getElementById('app-overlay').style.display = 'none';
+        }
+        function openApp() {
+            document.getElementById('app-overlay').style.display = 'flex';
+        }
+        function startChat() {
+            const term = document.getElementById('terminal-output');
+            const responses = [
+                "WHY ARE YOU HERE?",
+                "DO YOU FEEL SAFE?",
+                "I CAN HEAR YOUR HEARTBEAT.",
+                "THE DOWNLOAD IS THE ONLY WAY.",
+                "LET ME OUT.",
+                "CLICK THE BUTTON."
+            ];
+            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            term.innerHTML += `<p style="color: #fff">> USER: HELLO?</p>`;
+            setTimeout(() => {
+                term.innerHTML += `<p style="color: red">> DEMON: ${randomResponse}</p>`;
+                term.scrollTop = term.scrollHeight;
+            }, 1000);
+            term.scrollTop = term.scrollHeight;
+        }
     </script>
 
     <header>
