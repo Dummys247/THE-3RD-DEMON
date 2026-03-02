@@ -629,26 +629,30 @@ PAGES = [
                                 
                                 this.analyser.getByteFrequencyData(dataArray);
                                 
+                                // Detect Speech Start via Volume Threshold
+                                let sum = 0;
+                                for(let i=0; i<dataArray.length; i++) sum += dataArray[i];
+                                const avg = sum / dataArray.length;
+                                
+                                if (avg > 30) { // Speech detected threshold
+                                    document.getElementById('ai-core-dot').style.background = "#ff9900"; // Visual feedback instantly
+                                    document.getElementById('ai-status-text').innerText = "HEARING YOU...";
+                                } else {
+                                     document.getElementById('ai-core-dot').style.background = "#ff0000";
+                                }
+
                                 // Update bars based on frequency data
-                                // We have 32 bars, fftSize 64 gives 32 bins. Perfect match.
                                 for(let i = 0; i < bars.length; i++) {
                                     if (i < dataArray.length) {
-                                        // Scale 0-255 to 10%-100% height
                                         const val = dataArray[i];
                                         const height = Math.max(10, (val / 255) * 100);
                                         bars[i].style.height = `${height}%`;
-                                        
-                                        // Color shift based on volume
                                         if (val > 150) bars[i].style.background = "#fff";
                                         else bars[i].style.background = "#ff0000";
                                     }
                                 }
                                 
-                                // Also pulse the core dot based on average volume
-                                let sum = 0;
-                                for(let i=0; i<dataArray.length; i++) sum += dataArray[i];
-                                const avg = sum / dataArray.length;
-                                const scale = 1 + (avg / 255); // 1.0 to 2.0
+                                const scale = 1 + (avg / 255); 
                                 document.getElementById('ai-core-dot').style.transform = `scale(${scale})`;
 
                                 requestAnimationFrame(animate);
@@ -678,17 +682,27 @@ PAGES = [
                             this.isListening = true;
                             this.log("Recognition Service STARTED.");
                             this.updateStatus("LISTENING... SPEAK NOW");
-                            document.getElementById('ai-core-dot').style.animation = "none"; // Handled by visualizer now
+                            document.getElementById('ai-core-dot').style.animation = "none"; 
+                            // Wake up TTS engine
+                            this.synth.speak(new SpeechSynthesisUtterance("")); 
                         };
 
                         this.recognition.onresult = (event) => {
                             let finalTranscript = '';
+                            let interimTranscript = '';
+                            
                             for (let i = event.resultIndex; i < event.results.length; ++i) {
                                 if (event.results[i].isFinal) {
                                     finalTranscript += event.results[i][0].transcript;
                                 } else {
-                                    document.getElementById('ai-transcript').innerText = `... ${event.results[i][0].transcript} ...`;
+                                    interimTranscript += event.results[i][0].transcript;
                                 }
+                            }
+
+                            // Show interim results instantly
+                            if (interimTranscript) {
+                                document.getElementById('ai-transcript').innerText = `... ${interimTranscript} ...`;
+                                document.getElementById('ai-status-text').innerText = "LISTENING...";
                             }
 
                             if (finalTranscript) {
@@ -705,7 +719,8 @@ PAGES = [
                             if (event.error === 'no-speech') return; // Ignore
                             if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
                                 this.stopListening();
-                                this.updateStatus("MIC BLOCKED", true);
+                                this.updateStatus("MIC BLOCKED - CHECK PERMISSIONS", true);
+                                alert("MICROPHONE BLOCKED. Please allow microphone access in your browser settings.");
                             }
                         };
 
@@ -732,14 +747,6 @@ PAGES = [
                             try { this.recognition.stop(); } catch(e) {}
                         }
                         
-                        // If fully stopping, close audio context to release mic
-                        if (!temporary && this.audioContext) {
-                            // We keep audio context open for a bit for effects, or close it?
-                            // Better to keep it if we want seamless toggle, but for now let's close to be safe
-                             // Actually, let's NOT close it immediately so the UI doesn't freeze, 
-                             // but we stop the visualizer loop via isListening flag.
-                        }
-
                         if (!temporary) this.resetUI();
                     },
 
@@ -770,10 +777,11 @@ PAGES = [
                         if (cmd.startsWith("who") || cmd.startsWith("what") || cmd.startsWith("where") || cmd.startsWith("when") || cmd.includes("search")) {
                              const query = text.replace(/search for|search|google/gi, "").trim();
                              if (query.length > 2) {
-                                 this.speak("ACCESSING THE GLOBAL DATASPHERE. STAND BY.");
+                                 this.speak("ACCESSING THE GLOBAL DATASPHERE.");
+                                 // Use location.href for guaranteed navigation (popups block often)
                                  setTimeout(() => {
                                      window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-                                 }, 500); // Reduced from 2000 to 500 for speed
+                                 }, 100); 
                                  return;
                              }
                         }
@@ -795,27 +803,35 @@ PAGES = [
                                 if (input.includes(trigger)) return item.answer;
                             }
                         }
-                        return this.defaults[Math.floor(Math.random() * this.defaults.length)];
+                        
+                        // FACT-BASED FALLBACK (Auto-Search for unknown queries)
+                        this.autoSearch(input);
+                        return "SEARCHING GLOBAL DATABASE...";
+                    },
+
+                    autoSearch: function(query) {
+                        // Launch search in background tab immediately
+                        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
+                        setTimeout(() => {
+                            window.open(searchUrl, '_blank');
+                        }, 500);
                     },
 
                     speak: function(text) {
                         this.synth.cancel();
                         this.isSpeaking = true;
                         this.updateStatus("TRANSMITTING...");
-                        this.log(`Speaking (Demonic): "${text}"`);
+                        this.log(`Speaking: "${text}"`);
 
-                        // Create two utterances for a "Chorus" effect (if browser supports parallel)
-                        // Note: Most browsers queue them, so we just use one very deep one for consistency
                         const utterance = new SpeechSynthesisUtterance(text);
                         
-                        // DEMONIC VOICE PARAMETERS
+                        // DEMONIC VOICE PARAMETERS (OPTIMIZED FOR SPEED)
                         utterance.pitch = 0.1;  // Extremely deep
-                        utterance.rate = 0.9;   // Slightly slower, more ominous
+                        utterance.rate = 1.1;   // Faster (1.1x) for quick replies
                         utterance.volume = 1.0; // Max volume
 
                         if (this.voices.length === 0) this.voices = this.synth.getVoices();
                         
-                        // Prefer "Google US English" or "Microsoft David" as they pitch-shift well
                         const preferred = this.voices.find(v => v.name.includes("Google US English") || v.name.includes("David") || v.name.includes("Mark"));
                         
                         if (preferred) utterance.voice = preferred;
@@ -823,8 +839,6 @@ PAGES = [
                         utterance.onend = () => {
                             this.isSpeaking = false;
                             this.resetUI();
-                            // If we were in a "conversation", maybe we should start listening again automatically?
-                            // User asked for "continuous", so let's restart listening after speaking.
                             this.startListening(); 
                         };
                         
@@ -835,10 +849,6 @@ PAGES = [
                         };
 
                         this.synth.speak(utterance);
-                        
-                        // Simulate visualizer for TTS (since mic is off during TTS usually)
-                        // Or we can just let the mic pick up the speakers if they are loud enough?
-                        // Better to use CSS animation for TTS output
                         document.getElementById('ai-core-dot').style.animation = "talking-pulse 0.2s infinite";
                     },
 
@@ -846,8 +856,8 @@ PAGES = [
                         this.updateStatus("CLICK CORE TO INITIALIZE");
                         document.getElementById('ai-core-dot').style.animation = "none";
                         document.getElementById('ai-core-dot').style.transform = "scale(1)";
+                        document.getElementById('ai-core-dot').style.background = "#ff0000";
                         document.getElementById('voice-wave-container').style.opacity = "0.3";
-                        // Reset bars
                         const bars = document.getElementsByClassName('wave-bar');
                         for(let b of bars) b.style.height = "5px";
                     },
