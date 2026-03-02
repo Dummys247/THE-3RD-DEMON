@@ -756,15 +756,40 @@ PAGES = [
                     process: function(text) {
                         this.updateStatus("PROCESSING...");
                         
-                        // Simulate Latency
-                        setTimeout(() => {
-                            const response = this.generateResponse(text);
-                            this.speak(response);
-                        }, 500);
+                        // COMMAND INTERCEPTOR
+                        const cmd = text.toLowerCase();
+                        if (cmd.includes("stop") || cmd.includes("quiet") || cmd.includes("shut up") || cmd.includes("silence")) {
+                            this.synth.cancel();
+                            this.isSpeaking = false;
+                            this.updateStatus("SILENCE REQUESTED");
+                            this.resetUI();
+                            return; // Do not speak response
+                        }
+
+                        // OMNISCIENCE PROTOCOL (Online Search Fallback)
+                        if (cmd.startsWith("who") || cmd.startsWith("what") || cmd.startsWith("where") || cmd.startsWith("when") || cmd.includes("search")) {
+                             const query = text.replace(/search for|search|google/gi, "").trim();
+                             if (query.length > 2) {
+                                 this.speak("ACCESSING THE GLOBAL DATASPHERE. STAND BY.");
+                                 setTimeout(() => {
+                                     window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+                                 }, 500); // Reduced from 2000 to 500 for speed
+                                 return;
+                             }
+                        }
+
+                        // IMMEDIATE RESPONSE (No Latency)
+                        const response = this.generateResponse(text);
+                        this.speak(response);
                     },
 
                     generateResponse: function(input) {
                         input = input.toLowerCase();
+                        
+                        // Dynamic Time/Date
+                        if (input.includes("time") || input.includes("clock")) return "THE CURRENT TEMPORAL COORDINATE IS " + new Date().toLocaleTimeString();
+                        if (input.includes("date") || input.includes("day")) return "TODAY IS " + new Date().toLocaleDateString();
+
                         for (let item of this.responses) {
                             for (let trigger of item.triggers) {
                                 if (input.includes(trigger)) return item.answer;
@@ -777,15 +802,22 @@ PAGES = [
                         this.synth.cancel();
                         this.isSpeaking = true;
                         this.updateStatus("TRANSMITTING...");
-                        this.log(`Speaking: "${text}"`);
+                        this.log(`Speaking (Demonic): "${text}"`);
 
+                        // Create two utterances for a "Chorus" effect (if browser supports parallel)
+                        // Note: Most browsers queue them, so we just use one very deep one for consistency
                         const utterance = new SpeechSynthesisUtterance(text);
-                        utterance.volume = 1;
-                        utterance.rate = 0.9;
-                        utterance.pitch = 0.6;
+                        
+                        // DEMONIC VOICE PARAMETERS
+                        utterance.pitch = 0.1;  // Extremely deep
+                        utterance.rate = 0.9;   // Slightly slower, more ominous
+                        utterance.volume = 1.0; // Max volume
 
                         if (this.voices.length === 0) this.voices = this.synth.getVoices();
-                        const preferred = this.voices.find(v => v.name.includes("Google US English") || v.name.includes("Zira") || v.name.includes("Male"));
+                        
+                        // Prefer "Google US English" or "Microsoft David" as they pitch-shift well
+                        const preferred = this.voices.find(v => v.name.includes("Google US English") || v.name.includes("David") || v.name.includes("Mark"));
+                        
                         if (preferred) utterance.voice = preferred;
 
                         utterance.onend = () => {
