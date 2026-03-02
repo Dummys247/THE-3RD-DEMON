@@ -196,7 +196,7 @@ PAGES = [
                 <li><strong>Predictive Pathing:</strong> Anticipates the movement of objects in your environment.</li>
             </ul>
             <div style="text-align: center; margin: 2rem 0;">
-                <!-- Image Removed per User Request -->
+                <img src="assets/magnified-cyber-eye-stockcake.jpg" alt="Cybernetic Sci-Fi Computer Eyeball" style="max-width: 100%; border: 2px solid #00ffff; box-shadow: 0 0 20px #00ffff;">
             </div>
             <p>Upgrade your eyes. See the code behind the curtain.</p>
         """
