@@ -593,6 +593,8 @@ PAGES = [
                                 if (event.results.length > 0) {
                                     const transcript = event.results[0][0].transcript;
                                     document.getElementById('ai-transcript').innerText = `"${transcript}"`;
+                                    // Successfully heard something, stop restarting
+                                    this.isListening = false; 
                                     this.process(transcript);
                                 }
                             };
@@ -601,20 +603,29 @@ PAGES = [
                                 console.error("Speech Error:", event.error);
                                 
                                 if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
+                                    this.isListening = false; // Stop trying
                                     this.updateStatus("MIC PERMISSION DENIED", true);
                                     this.showFallback();
                                     this.speak("Permission denied. Manual input required.");
-                                } else if (event.error === 'no-speech') {
-                                    this.updateStatus("NO AUDIO DETECTED");
-                                    this.stopListening();
-                                } else {
-                                    this.updateStatus("SIGNAL LOST");
-                                    this.stopListening();
-                                }
+                                } 
+                                // Ignore 'no-speech' or 'aborted' - we will restart in onend if isListening is true
                             };
 
                             this.recognition.onend = () => {
-                                if (this.isListening) this.stopListening();
+                                // AUTO-RESTART LOOP
+                                // If we are still supposed to be listening (user didn't click off, and we didn't process a command yet)
+                                if (this.isListening) {
+                                    console.log("Restarting listener...");
+                                    try {
+                                        this.recognition.start();
+                                    } catch(e) {
+                                        console.log("Restart error:", e);
+                                        this.isListening = false;
+                                        this.resetUI();
+                                    }
+                                } else {
+                                    this.resetUI();
+                                }
                             };
 
                             this.recognition.start();
@@ -626,10 +637,11 @@ PAGES = [
                     },
 
                     stopListening: function() {
-                        this.isListening = false;
-                        if (this.recognition) this.recognition.stop();
-                        this.updateStatus("CLICK CORE TO INITIALIZE");
-                        document.getElementById('ai-core-dot').style.animation = "none";
+                        this.isListening = false; // This flag breaks the loop in onend
+                        if (this.recognition) {
+                            try { this.recognition.stop(); } catch(e) {}
+                        }
+                        this.resetUI();
                     },
 
                     handleManual: function() {
