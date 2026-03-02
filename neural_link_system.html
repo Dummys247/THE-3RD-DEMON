@@ -661,10 +661,10 @@
                         // Triggers: "what song", "identify", "name song", "listening to", "music"
                         if (cmd.includes("song") || cmd.includes("music") || cmd.includes("listening to") || cmd.includes("track") || cmd.includes("identify")) {
                              if (cmd.includes("name") || cmd.includes("what") || cmd.includes("identify") || cmd.includes("check")) {
-                                 this.speak("ANALYZING AUDIO SPECTRUM...");
-                                 // Trigger Google's 'What song is this' feature
+                                 this.speak("OPENING AUDIO IDENTIFICATION PORTAL. PLEASE PLAY THE MUSIC CLEARLY.");
+                                 // Use AHA Music for direct browser-based recognition
                                  setTimeout(() => {
-                                     window.open(`https://www.google.com/search?q=what+song+is+playing`, '_blank');
+                                     window.open(`https://www.aha-music.com/identify-songs-music-recognition-online`, '_blank');
                                  }, 100);
                                  return;
                              }
