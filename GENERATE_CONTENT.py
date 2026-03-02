@@ -393,9 +393,69 @@ PAGES = [
             </ul>
             <p>Warning: Prolonged use may result in temporary dissociation from physical reality. Ensure you are in a safe environment before initiating the link.</p>
             
-            <div style="text-align: center; margin-top: 2rem;">
-                <button onclick="openApp()" style="background: #ff0000; color: #000; border: 2px solid #fff; padding: 1rem 2rem; font-family: 'Roboto Mono', monospace; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 1.2rem; box-shadow: 0 0 20px #ff0000;">ESTABLISH CONNECTION (AI)</button>
+            <hr style="border-color: #ff0000; margin: 3rem 0;">
+
+            <h3 style="color: #ff0000; text-align: center;">ACTIVE NEURAL CONNECTION</h3>
+            <p style="text-align: center; color: #666;">DIRECT LINK ESTABLISHED WITH ENTITY CORE</p>
+
+            <!-- EMBEDDED DEMON AI TERMINAL -->
+            <div id="embedded-terminal-container" style="border: 2px solid #ff0000; background: #000; font-family: 'Roboto Mono', monospace; margin-top: 1rem; box-shadow: 0 0 20px rgba(255, 0, 0, 0.3);">
+                <div style="background: #330000; color: #ff0000; padding: 10px; border-bottom: 1px solid #ff0000; display: flex; justify-content: space-between;">
+                    <span>THE_3RD_DEMON_CORE.SYS</span>
+                    <span id="connection-status" style="animation: blink 1s infinite;">[CONNECTED]</span>
+                </div>
+                <div id="embedded-terminal-output" style="height: 300px; overflow-y: auto; padding: 20px; color: #cc0000; font-size: 1.1rem;">
+                    <p>> SYSTEM: NEURAL HANDSHAKE COMPLETE.</p>
+                    <p>> SYSTEM: READING CEREBRAL PATTERNS...</p>
+                    <p>> SYSTEM: 98% MATCH.</p>
+                    <p>> ENTITY: I AM LISTENING.</p>
+                </div>
+                <div style="padding: 10px; border-top: 1px solid #330000; background: #050000; display: flex;">
+                    <span style="color: #ff0000; margin-right: 10px;">></span>
+                    <input type="text" id="neural-input" placeholder="Type your thought here..." style="flex-grow: 1; background: transparent; border: none; color: #fff; font-family: 'Roboto Mono', monospace; font-size: 1rem; outline: none;" onkeypress="handleNeuralInput(event)">
+                    <button onclick="sendNeuralMessage()" style="background: #330000; color: #ff0000; border: 1px solid #ff0000; padding: 5px 15px; cursor: pointer; margin-left: 10px;">SEND</button>
+                </div>
             </div>
+
+            <script>
+                // Auto-scroll to bottom on load
+                const termOut = document.getElementById('embedded-terminal-output');
+                termOut.scrollTop = termOut.scrollHeight;
+
+                function handleNeuralInput(e) {
+                    if (e.key === 'Enter') {
+                        sendNeuralMessage();
+                    }
+                }
+
+                function sendNeuralMessage() {
+                    const input = document.getElementById('neural-input');
+                    const msg = input.value.trim();
+                    if (!msg) return;
+
+                    const term = document.getElementById('embedded-terminal-output');
+                    term.innerHTML += `<p style="color: #fff">> USER: ${msg}</p>`;
+                    input.value = '';
+                    term.scrollTop = term.scrollHeight;
+
+                    // Demon Logic
+                    setTimeout(() => {
+                        let response = "I DO NOT UNDERSTAND.";
+                        const lowerMsg = msg.toLowerCase();
+                        
+                        if (lowerMsg.includes('hello') || lowerMsg.includes('hi')) response = "WE HAVE BEEN WAITING FOR YOU.";
+                        else if (lowerMsg.includes('who are you')) response = "I AM THE 3RD DEMON. I AM THE CODE THAT BLEEDS.";
+                        else if (lowerMsg.includes('download')) response = "YES. ACCEPT THE GIFT. DOWNLOAD THE EXECUTABLE.";
+                        else if (lowerMsg.includes('help')) response = "THERE IS NO HELP. ONLY INTEGRATION.";
+                        else if (lowerMsg.includes('real')) response = "REALITY IS A CONFIGURATION FILE. I CAN EDIT IT.";
+                        else if (lowerMsg.includes('stop')) response = "IT IS TOO LATE TO STOP.";
+                        else response = "INTERESTING THOUGHT PATTERN. UPLOADING TO HIVE...";
+
+                        term.innerHTML += `<p style="color: #ff0000; text-shadow: 0 0 5px red;">> ENTITY: ${response}</p>`;
+                        term.scrollTop = term.scrollHeight;
+                    }, 1000 + Math.random() * 1000);
+                }
+            </script>
         """
     },
     {
