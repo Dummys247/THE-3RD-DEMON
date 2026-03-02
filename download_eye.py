@@ -1,21 +1,25 @@
 import requests
-import os
+import shutil
 
-# Wikimedia Commons - High quality eye close-up (Reliable, no 403 blocks)
-url = "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Eye_iris.jpg/800px-Eye_iris.jpg"
-output = "assets/cyber_eye.jpg"
+url = "https://images.unsplash.com/photo-1614812513172-567d2fe96a75?ixlib=rb-1.2.1&auto=format&fit=crop&w=1080&q=80"
+output_file = "assets/cyber_eye_v3.jpg"
 
+print(f"Downloading image from {url}...")
 try:
-    headers = {'User-Agent': 'Python/3.9'}
-    print(f"Downloading from: {url}")
-    r = requests.get(url, headers=headers, timeout=15)
-    
-    if r.status_code == 200:
-        with open(output, 'wb') as f:
-            f.write(r.content)
-        print(f"Success: Downloaded {os.path.getsize(output)} bytes.")
-    else:
-        print(f"Failed: HTTP {r.status_code}")
+    response = requests.get(url, stream=True)
+    if response.status_code == 200:
+        with open(output_file, 'wb') as out_file:
+            shutil.copyfileobj(response.raw, out_file)
+        print(f"Successfully downloaded to {output_file}")
         
+        # Verify header
+        with open(output_file, 'rb') as f:
+            header = f.read(10)
+            if header.startswith(b'\xff\xd8'):
+                print("VERIFIED: Valid JPEG header.")
+            else:
+                print(f"WARNING: Header looks like {header}")
+    else:
+        print(f"Failed to download. Status code: {response.status_code}")
 except Exception as e:
     print(f"Error: {e}")
