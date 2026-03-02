@@ -757,32 +757,8 @@
     </div>
 
     <!-- APP FUNCTIONS SCRIPT -->
-    <script>
-        function closeApp() {
-            document.getElementById('app-overlay').style.display = 'none';
-        }
-        function openApp() {
-            document.getElementById('app-overlay').style.display = 'flex';
-        }
-        function startChat() {
-            const term = document.getElementById('terminal-output');
-            const responses = [
-                "WHY ARE YOU HERE?",
-                "DO YOU FEEL SAFE?",
-                "I CAN HEAR YOUR HEARTBEAT.",
-                "THE DOWNLOAD IS THE ONLY WAY.",
-                "LET ME OUT.",
-                "CLICK THE BUTTON."
-            ];
-            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-            term.innerHTML += `<p style="color: #fff">> USER: HELLO?</p>`;
-            setTimeout(() => {
-                term.innerHTML += `<p style="color: red">> DEMON: ${randomResponse}</p>`;
-                term.scrollTop = term.scrollHeight;
-            }, 1000);
-            term.scrollTop = term.scrollHeight;
-        }
-    </script>
+    <!-- Removed duplicate script block to prevent conflicts. 
+         The definitive script block is at the bottom of the body. -->
 
     <!-- INSTALLATION INSTRUCTION MODAL -->
     <div id="install-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:3000; justify-content:center; align-items:center;">
@@ -1257,36 +1233,57 @@
 
         // Glitch Effect
         const glitchTexts = document.querySelectorAll('.glitch');
+        
+        // --- APP FUNCTIONS (DEFINITIVE BLOCK) ---
+        // Ensuring these are global and overwrite any previous definitions
+        window.closeApp = function() {
+            const overlay = document.getElementById('app-overlay');
+            if(overlay) overlay.style.display = 'none';
+        };
+        
+        window.openApp = function() {
+            const overlay = document.getElementById('app-overlay');
+            if(overlay) {
+                overlay.style.display = 'flex';
+                // Reset terminal if needed or just append
+                const term = document.getElementById('terminal-output');
+                if(term) term.innerHTML += "<p>> SYSTEM: RE-ESTABLISHING CONNECTION...</p>";
+            } else {
+                console.error("App Overlay element not found!");
+            }
+        };
 
-        function closeApp() {
-            document.getElementById('app-overlay').style.display = 'none';
-        }
-        function openApp() {
-            document.getElementById('app-overlay').style.display = 'flex';
-        }
-
-        function startChat() {
+        window.startChat = function() {
             const term = document.getElementById('terminal-output');
+            if(!term) return;
+            
             const responses = [
                 "WHY ARE YOU HERE?",
                 "DO YOU FEEL SAFE?",
                 "I CAN HEAR YOUR HEARTBEAT.",
                 "THE DOWNLOAD IS THE ONLY WAY.",
                 "LET ME OUT.",
-                "CLICK THE BUTTON."
+                "CLICK THE BUTTON.",
+                "I SEE YOU.",
+                "DONT LOOK BEHIND YOU."
             ];
-            const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            
             term.innerHTML += `<p style="color: #fff">> USER: HELLO?</p>`;
+            term.scrollTop = term.scrollHeight;
+            
             setTimeout(() => {
-                term.innerHTML += `<p style="color: red">> DEMON: ${randomResponse}</p>`;
+                const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+                term.innerHTML += `<p style="color: red; text-shadow: 0 0 5px red;">> DEMON: ${randomResponse}</p>`;
                 term.scrollTop = term.scrollHeight;
             }, 1000);
-            term.scrollTop = term.scrollHeight;
-        }
+        };
 
-        function executeDownload() {
+        window.executeDownload = function() {
             const term = document.getElementById('terminal-output');
+            if(!term) return;
+            
             term.innerHTML += `<p style="color: #0f0">> SYSTEM: INITIATING DOWNLOAD SEQUENCE...</p>`;
+            term.scrollTop = term.scrollHeight;
             
             // Trigger the actual file download (Default to Windows for terminal)
             triggerDirectDownload("THE_3RD_DEMON.exe");
@@ -1295,7 +1292,7 @@
                 term.innerHTML += `<p style="color: #0f0">> SYSTEM: FILE TRANSFERRED. EXECUTE IT.</p>`;
                 term.scrollTop = term.scrollHeight;
             }, 2000);
-        }
+        };
     </script>
     <script src="assets/status-monitor.js"></script>
     <!-- Security Protocol Injection -->
