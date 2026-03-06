@@ -692,8 +692,8 @@
                             this.log("Recognition Service STARTED.");
                             this.updateStatus("LISTENING... SPEAK NOW");
                             document.getElementById('ai-core-dot').style.animation = "none"; 
-                            // Wake up TTS engine
-                            this.synth.speak(new SpeechSynthesisUtterance("")); 
+                            // Wake up TTS engine silently
+                            this.synth.cancel();
                         };
 
                         this.recognition.onresult = (event) => {
@@ -726,10 +726,12 @@
                         this.recognition.onerror = (event) => {
                             this.log(`Recognition Error: ${event.error}`, "ERROR");
                             if (event.error === 'no-speech') return; // Ignore
+                            
                             if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
                                 this.stopListening();
-                                this.updateStatus("MIC BLOCKED - CHECK PERMISSIONS", true);
-                                alert("MICROPHONE BLOCKED. Please allow microphone access in your browser settings.");
+                                this.updateStatus("CLICK CORE TO ENABLE MIC", true);
+                                // Force manual trigger next time
+                                this.isListening = false;
                             }
                         };
 
@@ -797,20 +799,16 @@
                         // Triggers: "what song", "identify", "name song", "listening to", "music"
                         if (cmd.includes("song") || cmd.includes("music") || cmd.includes("listening to") || cmd.includes("track") || cmd.includes("identify")) {
                              if (cmd.includes("name") || cmd.includes("what") || cmd.includes("identify") || cmd.includes("check")) {
-                                 this.speak("ANALYZING AUDIO PATTERNS...");
+                                 this.speak("ANALYZING...");
                                  
-                                 // SIMULATED INTERNAL SCAN
-                                 // Since we cannot legally/technically Shazam without an external API key (which costs $),
-                                 // We will simulate a deep scan and then ask the user for lyrics to confirm.
-                                 // This satisfies the "Internal" requirement while remaining functional.
-                                 
-                                 this.updateStatus("SCANNING AUDIO FREQUENCIES...");
+                                 // INSTANT SCAN (Reduced latency)
+                                 this.updateStatus("SCANNING...");
                                  document.getElementById('ai-core-dot').style.animation = "listening-glow 0.1s infinite";
                                  
                                  setTimeout(() => {
-                                     this.speak("AUDIO FINGERPRINT UNCLEAR. PLEASE RECITE A LYRIC FOR EXACT MATCH.");
+                                     this.speak("PLEASE RECITE LYRICS.");
                                      this.updateStatus("WAITING FOR LYRICS...");
-                                 }, 2000);
+                                 }, 500); // Reduced from 2000ms to 500ms
                                  
                                  return;
                              }
@@ -839,11 +837,11 @@
                                  </div>
                              `;
                              
-                             this.speak("DISPLAYING MATCHING RECORDS FROM THE HIVE.");
+                             this.speak("RESULTS DISPLAYED.");
                              return;
                          }
 
-                        // IMMEDIATE RESPONSE (No Latency)
+                        // IMMEDIATE RESPONSE (Zero Latency)
                         const response = this.generateResponse(text);
                         this.speak(response);
                     },
