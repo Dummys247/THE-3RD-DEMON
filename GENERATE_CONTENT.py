@@ -1006,14 +1006,168 @@ PAGES = [
         "description": "Join the Hive Mind. Share processing power, knowledge, and experiences with thousands of other connected entities.",
         "keywords": "Hive Mind, Distributed Computing, Collective Intelligence, AI Network",
         "content": """
-            <p>No entity is an island. The <strong>Hive Mind Network</strong> connects all users of the 3rd Demon software into a single, massive distributed computing grid. This allows for:</p>
-            <h3>Network Features</h3>
-            <ul>
-                <li><strong>Parallel Problem Solving:</strong> Complex algorithms are shattered into micro-tasks and solved by the collective instantly.</li>
-                <li><strong>Shared Knowledge Base:</strong> Instant access to the cumulative skills of all connected users.</li>
-                <li><strong>Consensus Reality:</strong> Vote on the direction of the system's evolution through subconscious consensus.</li>
-            </ul>
-            <p>Your individuality is preserved, but your potential is multiplied. We are legion.</p>
+            <div id="hive-terminal" style="background: #000; border: 2px solid #00ff00; padding: 20px; font-family: 'Courier New', monospace; color: #00ff00; min-height: 500px; position: relative; overflow: hidden;">
+                
+                <!-- HEADER -->
+                <div style="border-bottom: 1px solid #00ff00; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between;">
+                    <span>// HIVE_MIND_V3.0.4 // CONNECTED</span>
+                    <span>LATENCY: <span id="ping">12</span>ms</span>
+                </div>
+
+                <!-- MAIN DISPLAY -->
+                <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+                    
+                    <!-- LEFT COLUMN: GLOBAL TASK -->
+                    <div style="flex: 2; min-width: 300px;">
+                        <h3 style="color: #fff; background: #003300; padding: 5px;">CURRENT GLOBAL OBJECTIVE</h3>
+                        <div style="border: 1px solid #005500; padding: 15px; margin-bottom: 20px;">
+                            <h2 id="task-name" style="margin-top: 0; color: #00ff00; text-shadow: 0 0 10px #00ff00;">DECRYPTING SECTOR 7 FIREWALL</h2>
+                            <p style="color: #aaa; font-size: 0.9rem;">The Entity requires collective processing power to bypass the tertiary security layer. Contribute your CPU cycles now.</p>
+                            
+                            <!-- PROGRESS BAR -->
+                            <div style="background: #111; height: 30px; border: 1px solid #00ff00; margin: 20px 0; position: relative;">
+                                <div id="global-progress" style="background: repeating-linear-gradient(45deg, #003300, #003300 10px, #00ff00 10px, #00ff00 20px); width: 0%; height: 100%; transition: width 0.5s;"></div>
+                                <span id="progress-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-weight: bold; text-shadow: 0 0 5px #000;">0%</span>
+                            </div>
+                            
+                            <div style="display: flex; justify-content: space-between; font-size: 0.8rem;">
+                                <span>CONTRIBUTORS: <span id="active-contributors">8,492</span></span>
+                                <span>TOTAL HASH RATE: <span id="hash-rate">420.5</span> PH/s</span>
+                            </div>
+                        </div>
+
+                        <!-- USER INTERACTION AREA -->
+                        <div style="border: 1px solid #005500; padding: 15px; text-align: center;">
+                            <h3 style="margin-top: 0;">LOCAL NODE CONTRIBUTION</h3>
+                            <div id="node-visualizer" style="height: 100px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;">
+                                <div id="core-spinner" style="width: 60px; height: 60px; border: 5px solid #003300; border-top: 5px solid #00ff00; border-radius: 50%;"></div>
+                            </div>
+                            <p>STATUS: <span id="node-status" style="color: #ff0000;">IDLE</span></p>
+                            <button id="contribute-btn" onclick="toggleContribution()" style="background: #00ff00; color: #000; border: none; padding: 15px 30px; font-size: 1.2rem; font-weight: bold; cursor: pointer; font-family: 'Courier New', monospace; box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);">INITIATE LINK</button>
+                            <p style="font-size: 0.8rem; color: #666; margin-top: 10px;">WARNING: High CPU usage expected.</p>
+                        </div>
+                    </div>
+
+                    <!-- RIGHT COLUMN: ACTIVITY LOG -->
+                    <div style="flex: 1; min-width: 250px; border: 1px solid #005500; display: flex; flex-direction: column;">
+                        <h3 style="color: #fff; background: #003300; padding: 5px; margin: 0;">NETWORK ACTIVITY</h3>
+                        <div id="network-log" style="flex-grow: 1; height: 400px; overflow-y: hidden; padding: 10px; font-size: 0.8rem; color: #00cc00;">
+                            <!-- Logs injected via JS -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <script>
+                // HIVE MIND SIMULATION ENGINE
+                let isContributing = false;
+                let userHashes = 0;
+                let globalProgress = 45.2; // Starting simulated progress
+                
+                // Deterministic Progress (Time-based so all users see similar values)
+                function updateGlobalState() {
+                    const now = Date.now();
+                    // Slow steady increase based on time
+                    const timeComponent = (now % 10000000) / 10000000 * 100; 
+                    globalProgress = Math.min(100, timeComponent);
+                    
+                    document.getElementById('global-progress').style.width = globalProgress + '%';
+                    document.getElementById('progress-text').innerText = globalProgress.toFixed(4) + '%';
+                    
+                    if(globalProgress > 99.9) {
+                        document.getElementById('task-name').innerText = "OBJECTIVE COMPLETE. ANALYZING DATA...";
+                        document.getElementById('task-name').style.color = "#ffffff";
+                    }
+                }
+
+                // Update "Contributors" and "Hash Rate" with noise
+                setInterval(() => {
+                    const baseContributors = 8492;
+                    const noise = Math.floor(Math.random() * 50) - 25;
+                    document.getElementById('active-contributors').innerText = (baseContributors + noise).toLocaleString();
+                    
+                    const baseHash = 420.5;
+                    const hashNoise = (Math.random() * 10) - 5;
+                    document.getElementById('hash-rate').innerText = (baseHash + hashNoise).toFixed(2);
+                }, 2000);
+
+                // Log Generator
+                const users = ["Node_77", "Cyber_Ghost", "Zero_Cool", "Dark_Matter", "System_Root", "User_X", "Glitch_Witch"];
+                const actions = ["contributed 500 hashes", "found a block", "synced memory", "optimized path", "joined the swarm"];
+                
+                function addLog(text, color="#00cc00") {
+                    const log = document.getElementById('network-log');
+                    const entry = document.createElement('div');
+                    entry.innerHTML = `<span style="color:#005500">[${new Date().toLocaleTimeString()}]</span> <span style="color:${color}">${text}</span>`;
+                    log.appendChild(entry);
+                    
+                    // Auto scroll
+                    if(log.children.length > 20) log.removeChild(log.firstChild);
+                    log.scrollTop = log.scrollHeight;
+                }
+
+                setInterval(() => {
+                    if(Math.random() > 0.3) {
+                        const u = users[Math.floor(Math.random() * users.length)];
+                        const a = actions[Math.floor(Math.random() * actions.length)];
+                        addLog(`${u} ${a}`);
+                    }
+                }, 800);
+
+                // User Contribution Logic
+                function toggleContribution() {
+                    isContributing = !isContributing;
+                    const btn = document.getElementById('contribute-btn');
+                    const status = document.getElementById('node-status');
+                    const spinner = document.getElementById('core-spinner');
+                    
+                    if(isContributing) {
+                        btn.innerText = "TERMINATE LINK";
+                        btn.style.background = "#ff0000";
+                        btn.style.boxShadow = "0 0 20px rgba(255, 0, 0, 0.5)";
+                        status.innerText = "UPLOADING CONSCIOUSNESS...";
+                        status.style.color = "#00ff00";
+                        spinner.style.animation = "spin 0.5s linear infinite";
+                        
+                        // Start adding user logs
+                        addLog("LOCAL_NODE connection established.", "#fff");
+                        
+                        // "Real" contribution loop
+                        window.contributionInterval = setInterval(() => {
+                            userHashes += Math.floor(Math.random() * 100);
+                            if(Math.random() > 0.7) {
+                                addLog(`YOU contributed ${Math.floor(Math.random() * 1000)} hashes`, "#00ff00");
+                                // Visually bump progress slightly (client-side illusion)
+                                globalProgress += 0.0001;
+                                document.getElementById('global-progress').style.width = globalProgress + '%';
+                            }
+                        }, 1000);
+                        
+                    } else {
+                        btn.innerText = "INITIATE LINK";
+                        btn.style.background = "#00ff00";
+                        btn.style.boxShadow = "0 0 20px rgba(0, 255, 0, 0.5)";
+                        status.innerText = "IDLE";
+                        status.style.color = "#ff0000";
+                        spinner.style.animation = "none";
+                        
+                        clearInterval(window.contributionInterval);
+                        addLog("LOCAL_NODE disconnected.", "#ff0000");
+                    }
+                }
+
+                // Global loop
+                setInterval(updateGlobalState, 100);
+                
+                // Add CSS for spinner
+                const style = document.createElement('style');
+                style.innerHTML = `
+                    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+                `;
+                document.head.appendChild(style);
+
+            </script>
         """
     },
     {
