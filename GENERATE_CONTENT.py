@@ -842,9 +842,15 @@ PAGES = [
                             return;
                         }
 
+                        // FORCE KILL existing instance to prevent "already started" errors
+                        if (this.recognition) {
+                            try { this.recognition.abort(); } catch(e) {}
+                            this.recognition = null;
+                        }
+
                         this.recognition = new SpeechRecognition();
-                        this.recognition.continuous = true;
-                        this.recognition.interimResults = true;
+                        this.recognition.continuous = false; // Changed to FALSE for better stability
+                        this.recognition.interimResults = false; // Changed to FALSE to prevent partial spam
                         this.recognition.lang = 'en-US';
                         this.recognition.maxAlternatives = 1;
 
@@ -858,57 +864,46 @@ PAGES = [
                         };
 
                         this.recognition.onresult = (event) => {
-                            let finalTranscript = '';
-                            let interimTranscript = '';
+                            let finalTranscript = event.results[0][0].transcript;
                             
-                            for (let i = event.resultIndex; i < event.results.length; ++i) {
-                                if (event.results[i].isFinal) {
-                                    finalTranscript += event.results[i][0].transcript;
-                                } else {
-                                    interimTranscript += event.results[i][0].transcript;
-                                }
-                            }
-
-                            // Show interim results instantly
-                            if (interimTranscript) {
-                                document.getElementById('ai-transcript').innerText = `... ${interimTranscript} ...`;
-                                document.getElementById('ai-status-text').innerText = "LISTENING...";
-                            }
-
                             if (finalTranscript) {
                                 this.log(`Heard: "${finalTranscript}"`);
                                 document.getElementById('ai-transcript').innerText = `"${finalTranscript}"`;
-                                // Pause listening to process
-                                this.stopListening(true); // true = temporary stop
                                 this.process(finalTranscript);
                             }
                         };
 
                         this.recognition.onerror = (event) => {
                             this.log(`Recognition Error: ${event.error}`, "ERROR");
-                            if (event.error === 'no-speech') return; // Ignore
+                            if (event.error === 'no-speech') {
+                                this.resetUI(); // Just go back to idle
+                                return;
+                            }
                             
                             if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
                                 this.stopListening();
                                 this.updateStatus("CLICK CORE TO ENABLE MIC", true);
-                                // Force manual trigger next time
                                 this.isListening = false;
                             }
                         };
 
                         this.recognition.onend = () => {
                             this.log("Recognition Service STOPPED.");
-                            // If we didn't mean to stop, restart
-                            if (this.isListening) {
-                                this.log("Auto-Restarting Recognition...");
-                                try { this.recognition.start(); } catch(e) {}
-                            }
+                            this.isListening = false;
+                            // Do not auto-restart. Wait for user trigger or response completion.
                         };
 
                         try {
                             this.recognition.start();
                         } catch(e) {
                             this.log(`Start Error: ${e.message}`, "ERROR");
+                            // If start fails, it might be because it's already running. Try aborting and retrying once.
+                            try {
+                                this.recognition.abort();
+                                setTimeout(() => this.recognition.start(), 100);
+                            } catch(retryErr) {
+                                this.log(`Retry Failed: ${retryErr.message}`, "ERROR");
+                            }
                         }
                     },
 
