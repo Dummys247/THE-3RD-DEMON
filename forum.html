@@ -223,25 +223,165 @@
             <h2>Community Forum</h2>
             <div class="content-block">
                 
-    <div id="disqus_thread"></div>
+    <div id="forum-container" style="max-width: 1000px; margin: 0 auto;">
+        
+        <!-- FORUM CONTROLS -->
+        <div style="background: #111; border: 1px solid #333; padding: 15px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <span style="color: #ff0000; font-weight: bold;">STATUS:</span> <span style="color: #0f0;">ONLINE</span>
+                <span style="color: #666; margin: 0 10px;">|</span>
+                <span style="color: #ff0000; font-weight: bold;">NODES:</span> <span id="forum-users">8,492</span>
+            </div>
+            <button onclick="togglePostForm()" style="background: #ff0000; color: #000; border: none; padding: 8px 20px; font-weight: bold; cursor: pointer; font-family: 'Roboto Mono', monospace;">+ NEW TRANSMISSION</button>
+        </div>
+
+        <!-- NEW POST FORM (Hidden by default) -->
+        <div id="new-post-form" style="display: none; background: #0a0a0a; border: 1px solid #ff0000; padding: 20px; margin-bottom: 20px; box-shadow: 0 0 20px rgba(255,0,0,0.1);">
+            <h3 style="color: #ff0000; margin-top: 0;">INITIATE TRANSMISSION</h3>
+            <input type="text" id="post-username" placeholder="IDENTIFIER (Optional)" style="width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 10px; margin-bottom: 10px; font-family: 'Roboto Mono', monospace; box-sizing: border-box;">
+            <input type="text" id="post-title" placeholder="SUBJECT" style="width: 100%; background: #111; border: 1px solid #333; color: #fff; padding: 10px; margin-bottom: 10px; font-family: 'Roboto Mono', monospace; box-sizing: border-box;">
+            <textarea id="post-content" placeholder="MESSAGE DATA..." style="width: 100%; height: 100px; background: #111; border: 1px solid #333; color: #fff; padding: 10px; margin-bottom: 10px; font-family: 'Roboto Mono', monospace; box-sizing: border-box; resize: vertical;"></textarea>
+            <div style="display: flex; justify-content: flex-end; gap: 10px;">
+                <button onclick="togglePostForm()" style="background: transparent; border: 1px solid #666; color: #666; padding: 8px 20px; cursor: pointer;">CANCEL</button>
+                <button onclick="submitPost()" style="background: #ff0000; border: 1px solid #ff0000; color: #000; padding: 8px 20px; font-weight: bold; cursor: pointer;">TRANSMIT</button>
+            </div>
+        </div>
+
+        <!-- POSTS FEED -->
+        <div id="posts-feed">
+            <!-- Posts will be injected here -->
+        </div>
+
+    </div>
+
     <script>
-        /**
-        *  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-        *  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables    */
-        /*
-        var disqus_config = function () {
-        this.page.url = "https://the3rddemon.com/forum.html";  // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = "forum_main"; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-        };
-        */
-        (function() { // DON'T EDIT BELOW THIS LINE
-        var d = document, s = d.createElement('script');
-        s.src = 'https://the-3rd-demon.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-        })();
+        // FORUM DATA STORE
+        const DEFAULT_POSTS = [
+            {
+                id: 1,
+                user: "System_Admin",
+                title: "V3.0 Update Log",
+                content: "The neural link stability has been improved by 14%. Users experiencing hallucinations should recalibrate their optical sensors.",
+                time: "2 hours ago",
+                replies: 42,
+                pinned: true
+            },
+            {
+                id: 2,
+                user: "Neon_Drifter",
+                title: "Anyone else hearing voices?",
+                content: "Since the last update, I swear the AI is whispering to me when the browser is closed. Is this a feature?",
+                time: "45 mins ago",
+                replies: 12,
+                pinned: false
+            },
+            {
+                id: 3,
+                user: "Data_Ghost",
+                title: "Hidden level in Vision System",
+                content: "If you stare at the red sun for 30 seconds, a debug menu opens. Found some weird logs about 'Project Ascension'.",
+                time: "10 mins ago",
+                replies: 5,
+                pinned: false
+            }
+        ];
+
+        // Load posts from LocalStorage or use default
+        let posts = JSON.parse(localStorage.getItem('demon_forum_posts'));
+        if (!posts || posts.length === 0) {
+            posts = DEFAULT_POSTS;
+            localStorage.setItem('demon_forum_posts', JSON.stringify(posts));
+        }
+
+        function renderPosts() {
+            const container = document.getElementById('posts-feed');
+            container.innerHTML = '';
+
+            posts.forEach(post => {
+                const postEl = document.createElement('div');
+                postEl.className = 'forum-post';
+                postEl.style.cssText = `
+                    background: rgba(20, 20, 20, 0.8);
+                    border: 1px solid ${post.pinned ? '#ff0000' : '#333'};
+                    padding: 15px;
+                    margin-bottom: 15px;
+                    position: relative;
+                    transition: all 0.3s;
+                `;
+                if(post.pinned) postEl.style.boxShadow = "0 0 10px rgba(255,0,0,0.1)";
+
+                const badge = post.pinned ? '<span style="background: #ff0000; color: #000; font-size: 0.6rem; padding: 2px 5px; margin-right: 10px; font-weight: bold;">PINNED</span>' : '';
+
+                postEl.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 10px;">
+                        <span style="color: #ff0000; font-weight: bold;">${badge}[${post.user}]</span>
+                        <span style="color: #666; font-size: 0.8rem;">${post.time}</span>
+                    </div>
+                    <h4 style="color: #fff; margin: 0 0 10px 0; font-size: 1.1rem;">${post.title}</h4>
+                    <p style="color: #ccc; font-size: 0.9rem; margin: 0 0 15px 0;">${post.content}</p>
+                    <div style="display: flex; gap: 15px; font-size: 0.8rem; color: #666;">
+                        <span style="cursor: pointer; hover: color: #fff;">▲ ${Math.floor(Math.random() * 50) + 1} Upvotes</span>
+                        <span style="cursor: pointer; hover: color: #fff;">💬 ${post.replies} Replies</span>
+                        <span style="cursor: pointer; hover: color: #fff;">Share</span>
+                    </div>
+                `;
+                container.appendChild(postEl);
+            });
+        }
+
+        function togglePostForm() {
+            const form = document.getElementById('new-post-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function submitPost() {
+            const user = document.getElementById('post-username').value || "Anonymous_Node";
+            const title = document.getElementById('post-title').value;
+            const content = document.getElementById('post-content').value;
+
+            if(!title || !content) {
+                alert("ERROR: DATA PACKET INCOMPLETE");
+                return;
+            }
+
+            const newPost = {
+                id: Date.now(),
+                user: user,
+                title: title,
+                content: content,
+                time: "Just now",
+                replies: 0,
+                pinned: false
+            };
+
+            posts.unshift(newPost); // Add to top
+            localStorage.setItem('demon_forum_posts', JSON.stringify(posts));
+            
+            togglePostForm();
+            renderPosts();
+            
+            // Clear inputs
+            document.getElementById('post-title').value = "";
+            document.getElementById('post-content').value = "";
+        }
+
+        // SIMULATED ACTIVITY (Makes the forum feel alive)
+        setInterval(() => {
+            const randomUsers = ["Void_Walker", "Null_Pointer", "Cyber_Punk", "Glitch_Witch"];
+            const randomTitles = ["Connection lost?", "Found a bug in sector 7", "Who is watching?", "Upgrade complete"];
+            const randomContents = ["My screen just turned red for a second.", "Can't access the hive mind.", "I saw the entity.", "Download speed is incredible."];
+            
+            if(Math.random() > 0.8) { // 20% chance every 5 seconds to get a new post (fake)
+                // Actually, let's just update the "Nodes" count to be less annoying than adding fake posts constantly
+                const nodes = document.getElementById('forum-users');
+                let count = parseInt(nodes.innerText.replace(/,/g, ''));
+                count += Math.floor(Math.random() * 5) - 2;
+                nodes.innerText = count.toLocaleString();
+            }
+        }, 5000);
+
+        renderPosts();
     </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
     
             </div>
             
