@@ -1116,47 +1116,47 @@ PAGES = [
                     }
                 }, 800);
 
-                // User Contribution Logic
-                function toggleContribution() {
-                    isContributing = !isContributing;
-                    const btn = document.getElementById('contribute-btn');
-                    const status = document.getElementById('node-status');
-                    const spinner = document.getElementById('core-spinner');
-                    
-                    if(isContributing) {
-                        btn.innerText = "TERMINATE LINK";
-                        btn.style.background = "#ff0000";
-                        btn.style.boxShadow = "0 0 20px rgba(255, 0, 0, 0.5)";
-                        status.innerText = "UPLOADING CONSCIOUSNESS...";
-                        status.style.color = "#00ff00";
-                        spinner.style.animation = "spin 0.5s linear infinite";
-                        
-                        // Start adding user logs
-                        addLog("LOCAL_NODE connection established.", "#fff");
-                        
-                        // "Real" contribution loop
-                        window.contributionInterval = setInterval(() => {
-                            userHashes += Math.floor(Math.random() * 100);
-                            if(Math.random() > 0.7) {
-                                addLog(`YOU contributed ${Math.floor(Math.random() * 1000)} hashes`, "#00ff00");
-                                // Visually bump progress slightly (client-side illusion)
-                                globalProgress += 0.0001;
-                                document.getElementById('global-progress').style.width = globalProgress + '%';
-                            }
-                        }, 1000);
-                        
-                    } else {
-                        btn.innerText = "INITIATE LINK";
-                        btn.style.background = "#00ff00";
-                        btn.style.boxShadow = "0 0 20px rgba(0, 255, 0, 0.5)";
-                        status.innerText = "IDLE";
-                        status.style.color = "#ff0000";
-                        spinner.style.animation = "none";
-                        
-                        clearInterval(window.contributionInterval);
-                        addLog("LOCAL_NODE disconnected.", "#ff0000");
-                    }
-                }
+                // User Contribution Logic - EXPOSED GLOBALLY
+                 window.toggleContribution = function() {
+                     window.isContributing = !window.isContributing;
+                     const btn = document.getElementById('contribute-btn');
+                     const status = document.getElementById('node-status');
+                     const spinner = document.getElementById('core-spinner');
+                     
+                     if(window.isContributing) {
+                         btn.innerText = "TERMINATE LINK";
+                         btn.style.background = "#ff0000";
+                         btn.style.boxShadow = "0 0 20px rgba(255, 0, 0, 0.5)";
+                         status.innerText = "UPLOADING CONSCIOUSNESS...";
+                         status.style.color = "#00ff00";
+                         spinner.style.animation = "spin 0.5s linear infinite";
+                         
+                         // Start adding user logs
+                         addLog("LOCAL_NODE connection established.", "#fff");
+                         
+                         // "Real" contribution loop
+                         window.contributionInterval = setInterval(() => {
+                             userHashes += Math.floor(Math.random() * 100);
+                             if(Math.random() > 0.7) {
+                                 addLog(`YOU contributed ${Math.floor(Math.random() * 1000)} hashes`, "#00ff00");
+                                 // Visually bump progress slightly (client-side illusion)
+                                 globalProgress += 0.0001;
+                                 document.getElementById('global-progress').style.width = globalProgress + '%';
+                             }
+                         }, 1000);
+                         
+                     } else {
+                         btn.innerText = "INITIATE LINK";
+                         btn.style.background = "#00ff00";
+                         btn.style.boxShadow = "0 0 20px rgba(0, 255, 0, 0.5)";
+                         status.innerText = "IDLE";
+                         status.style.color = "#ff0000";
+                         spinner.style.animation = "none";
+                         
+                         if(window.contributionInterval) clearInterval(window.contributionInterval);
+                         addLog("LOCAL_NODE disconnected.", "#ff0000");
+                     }
+                 }
 
                 // Global loop
                 setInterval(updateGlobalState, 100);
