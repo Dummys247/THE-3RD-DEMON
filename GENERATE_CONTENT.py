@@ -345,7 +345,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         function launchApp() {{
             // Detect Platform
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            let fileName = "THE_3RD_DEMON.exe";
+            let fileName = "the3rddemon.EXE";
             let platform = "WINDOWS";
 
             if (/android/i.test(userAgent)) {{
