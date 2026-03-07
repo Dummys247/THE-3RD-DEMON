@@ -1676,7 +1676,22 @@ def generate_forum():
         f.write(html)
     print("  [+] Created forum.html")
 
+def generate_ads_txt():
+    print("[*] Generating ads.txt...")
+    # Extract numeric ID from PUB_ID (e.g., "ca-pub-123" -> "pub-123")
+    # Standard format: google.com, pub-0000000000000000, DIRECT, f08c47fec0942fa0
+    
+    # robustly handle "ca-pub" or just "pub"
+    clean_pub_id = PUB_ID.replace("ca-", "") if "ca-" in PUB_ID else PUB_ID
+    
+    ads_content = f"google.com, {clean_pub_id}, DIRECT, f08c47fec0942fa0"
+    
+    with open("ads.txt", "w", encoding="utf-8") as f:
+        f.write(ads_content)
+    print(f"  [+] Created ads.txt with ID: {clean_pub_id}")
+
 if __name__ == "__main__":
     generate_pages()
     generate_forum()
+    generate_ads_txt()
     print("[SUCCESS] Content generation complete.")
