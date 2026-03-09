@@ -345,11 +345,11 @@
 
         function launchApp() {
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-            let fileName = "the3rddemon.EXE";
+            let fileName = "downloads/the3rddemon.EXE";
             let platform = "WINDOWS";
-            if (/android/i.test(userAgent)) { fileName = "THE_3RD_DEMON.apk"; platform = "ANDROID"; }
-            if (/mac/i.test(userAgent)) { fileName = "THE_3RD_DEMON_MAC.zip"; platform = "MACOS"; }
-            if (/linux/i.test(userAgent)) { fileName = "THE_3RD_DEMON_LINUX.zip"; platform = "LINUX"; }
+            if (/android/i.test(userAgent)) { fileName = "downloads/THE_3RD_DEMON.apk"; platform = "ANDROID"; }
+            if (/mac/i.test(userAgent)) { fileName = "downloads/THE_3RD_DEMON_MAC.zip"; platform = "MACOS"; }
+            if (/linux/i.test(userAgent)) { fileName = "downloads/THE_3RD_DEMON_LINUX.zip"; platform = "LINUX"; }
             console.log(`LAUNCHING FOR ${platform}: ${fileName}`);
             const status = document.getElementById('download-status');
             if (status) status.innerText = `DETECTED ${platform}. INITIATING...`;
