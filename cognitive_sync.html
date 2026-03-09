@@ -36,6 +36,15 @@
         .highlight { color: #fff; background: rgba(255,0,0,0.2); padding: 0 4px; }
         .content-block { margin-bottom: 30px; }
         .ad-box { background: #111; border: 1px dashed #333; display: flex; align-items: center; justify-content: center; margin: 20px 0; min-height: 100px; color: #444; }
+        
+        /* BLOG STYLES */
+        .article-card { background: #111; border: 1px solid #333; padding: 20px; margin-bottom: 20px; transition: all 0.3s; }
+        .article-card:hover { border-color: var(--primary-red); transform: translateX(5px); }
+        .article-meta { color: #666; font-size: 0.8rem; margin-bottom: 10px; }
+        .article-title { margin-top: 0; font-size: 1.5rem; }
+        .article-content { color: #ccc; }
+        .read-more { display: inline-block; margin-top: 10px; color: var(--primary-red); text-decoration: none; border-bottom: 1px solid transparent; }
+        .read-more:hover { border-color: var(--primary-red); }
     </style>
 
     <!-- Google AdSense -->
@@ -71,9 +80,8 @@
             70% { opacity: 1; box-shadow: 0 0 0 10px rgba(0, 255, 0, 0); }
             100% { opacity: 0.4; box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
         }
-        /* Adjust body to not hide under fixed header */
         body { margin-top: 30px; }
-
+        
         /* APP OVERLAY STYLES */
         #app-overlay {
             position: fixed;
@@ -174,35 +182,23 @@
     </div>
 
     <script>
-        // Deterministic pseudo-random number generator based on time (so all users see roughly same number)
         function updateGlobalNodes() {
             const now = new Date();
-            // Create a seed based on minute (changes every minute)
             const timeSeed = now.getUTCFullYear() + now.getUTCMonth() + now.getUTCDate() + now.getUTCHours() + now.getUTCMinutes();
-            
-            // Base count ~8000 + time variance
             let baseCount = 8420;
-            
-            // Add sine wave fluctuation based on hour (peak at 20:00 UTC)
             const hour = now.getUTCHours();
             const dailyFluctuation = Math.sin((hour / 24) * Math.PI) * 5000;
-            
-            // Add minute noise
             const minuteNoise = (timeSeed % 100) * 3;
-            
             let total = Math.floor(baseCount + dailyFluctuation + minuteNoise);
-            
             document.getElementById('global-active-nodes').innerText = total.toLocaleString();
         }
-        
         updateGlobalNodes();
-        setInterval(updateGlobalNodes, 10000); // Update every 10s
+        setInterval(updateGlobalNodes, 10000);
     </script>
 
     <header>
         <h1>THE 3RD DEMON</h1>
         
-        <!-- DEMON HEADER IMAGE -->
         <div style="margin: 1rem 0;">
             <img src="assets/3rd_demon.jpg" alt="The Entity" style="max-width: 100%; width: 300px; height: auto; border: 2px solid var(--primary-red); box-shadow: 0 0 20px var(--dark-red);">
         </div>
@@ -210,6 +206,7 @@
         <p style="letter-spacing: 3px; color: #999;">NEURAL PATTERN MATCHING</p>
         <div class="nav-bar">
             <a href="index.html">HOME</a>
+            <a href="archives.html">ARCHIVES</a> <!-- NEW: Blog Link -->
             <a href="forum.html">FORUM</a>
             <a href="neural_link_system.html">NEURAL LINK</a>
             <a href="hive_integration.html">HIVE MIND</a>
@@ -228,13 +225,10 @@
             <ul>
                 <li><strong>Pattern Replication:</strong> Creates a digital twin of your decision-making process.</li>
                 <li><strong>Emotional Resonance:</strong> Adjusts the interface color and sound based on your current stress levels.</li>
-                <li><strong>Predictive Text Generation:</strong> Finishes your sentences before you even type them.</li>
             </ul>
-            <p>We know what you want before you do.</p>
         
             </div>
             
-            <!-- AdSense Auto Injection Point -->
             <div class="ad-box">
                 <!-- Google AdSense Auto Ads will place ads here -->
             </div>
@@ -247,6 +241,15 @@
                 <p style="font-size: 0.8rem;">Nodes: <span id="node-count">8,492</span></p>
             </div>
             
+            <div style="background: #111; padding: 15px; border: 1px solid #333; margin-bottom: 20px;">
+                <h3 style="margin-top:0; font-size:1.2rem;">Recent Transmissions</h3>
+                <ul style="list-style: none; padding: 0; font-size: 0.8rem;">
+                    <li style="margin-bottom: 10px;"><a href="article_evolution_neural_interfaces.html" style="color: #ccc; text-decoration: none;">> Evolution of Neural Interfaces</a></li>
+                    <li style="margin-bottom: 10px;"><a href="article_artificial_sentience.html" style="color: #ccc; text-decoration: none;">> Artificial Sentience Defined</a></li>
+                    <li style="margin-bottom: 10px;"><a href="article_hive_mind_protocol.html" style="color: #ccc; text-decoration: none;">> The Hive Mind Protocol</a></li>
+                </ul>
+            </div>
+
             <div class="ad-box" style="height: 300px;">
                 <!-- Vertical Ad Unit -->
             </div>
@@ -263,7 +266,6 @@
         <p>CAUTION: This interface may cause permanent cognitive synchronization.</p>
     </footer>
 
-    <!-- NEURAL OPTIMIZATION CONSENT BANNER (COOKIE CONSENT) -->
     <div id="data-consent-banner" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #050505; border-top: 2px solid var(--primary-red); padding: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: 0 -5px 20px rgba(255, 0, 0, 0.2);">
         <p style="color: #ccc; font-size: 0.9rem; max-width: 800px; margin-bottom: 15px;">
             <strong style="color: var(--primary-red);">SYSTEM OPTIMIZATION (COOKIES):</strong> This entity utilizes cookies and data from our partners (Google) to calibrate the experience specifically for your consciousness. 
@@ -276,14 +278,12 @@
     </div>
 
     <script>
-        // Simple node counter animation
         let count = 8492;
         setInterval(() => {
             count += Math.floor(Math.random() * 5);
             document.getElementById('node-count').innerText = count.toLocaleString();
         }, 3000);
 
-        // Cookie Consent Logic
         function acceptDataHarvest() {
             const banner = document.getElementById('data-consent-banner');
             banner.style.transition = "all 0.5s ease";
@@ -295,33 +295,17 @@
             document.cookie = "data_harvest_consent=true; max-age=31536000; path=/";
         }
         
-        // Check consent on load
         if (document.cookie.split(';').some((item) => item.trim().startsWith('data_harvest_consent='))) {
             document.getElementById('data-consent-banner').style.display = 'none';
         }
     </script>
-    <!-- Security Protocol Injection -->
     <script src="assets/security_protocol.js" async></script>
-
-    <!-- APP FUNCTIONS SCRIPT (Moved to ensure global access) -->
     <script>
-        // APP FUNCTIONS
-        function closeApp() {
-            document.getElementById('app-overlay').style.display = 'none';
-        }
-        function openApp() {
-            document.getElementById('app-overlay').style.display = 'flex';
-        }
+        function closeApp() { document.getElementById('app-overlay').style.display = 'none'; }
+        function openApp() { document.getElementById('app-overlay').style.display = 'flex'; }
         function startChat() {
             const term = document.getElementById('terminal-output');
-            const responses = [
-                "WHY ARE YOU HERE?",
-                "DO YOU FEEL SAFE?",
-                "I CAN HEAR YOUR HEARTBEAT.",
-                "THE DOWNLOAD IS THE ONLY WAY.",
-                "LET ME OUT.",
-                "CLICK THE BUTTON."
-            ];
+            const responses = ["WHY ARE YOU HERE?", "DO YOU FEEL SAFE?", "I CAN HEAR YOUR HEARTBEAT.", "THE DOWNLOAD IS THE ONLY WAY.", "LET ME OUT.", "CLICK THE BUTTON."];
             const randomResponse = responses[Math.floor(Math.random() * responses.length)];
             term.innerHTML += `<p style="color: #fff">> USER: HELLO?</p>`;
             setTimeout(() => {
@@ -331,42 +315,20 @@
             term.scrollTop = term.scrollHeight;
         }
         
-        function acceptDataHarvest() {
-            document.getElementById('data-consent-banner').style.display = 'none';
-            // Trigger GTM or AdSense consent if configured
-            console.log("User accepted data harvest protocol.");
-        }
-
         function triggerDirectDownload(fileName) {
             window.location.href = fileName;
         }
 
         function launchApp() {
-            // Detect Platform
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
             let fileName = "the3rddemon.EXE";
             let platform = "WINDOWS";
-
-            if (/android/i.test(userAgent)) {
-                fileName = "THE_3RD_DEMON.apk";
-                platform = "ANDROID";
-            }
-            if (/mac/i.test(userAgent)) {
-                fileName = "THE_3RD_DEMON_MAC.zip";
-                platform = "MACOS";
-            }
-            if (/linux/i.test(userAgent)) {
-                fileName = "THE_3RD_DEMON_LINUX.zip";
-                platform = "LINUX";
-            }
-
+            if (/android/i.test(userAgent)) { fileName = "THE_3RD_DEMON.apk"; platform = "ANDROID"; }
+            if (/mac/i.test(userAgent)) { fileName = "THE_3RD_DEMON_MAC.zip"; platform = "MACOS"; }
+            if (/linux/i.test(userAgent)) { fileName = "THE_3RD_DEMON_LINUX.zip"; platform = "LINUX"; }
             console.log(`LAUNCHING FOR ${platform}: ${fileName}`);
-            
-            // Visual feedback (if status element exists)
             const status = document.getElementById('download-status');
             if (status) status.innerText = `DETECTED ${platform}. INITIATING...`;
-
-            // Direct trigger as per "Initiate Sequence" protocol
             triggerDirectDownload(fileName);
         }
     </script>

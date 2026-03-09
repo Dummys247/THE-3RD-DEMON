@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hive Mind Network - The 3rd Demon</title>
+    <title>System Architecture: The 3rd Demon Engine - The 3rd Demon</title>
     
     <!-- SEO -->
-    <meta name="description" content="Join the Hive Mind. Share processing power, knowledge, and experiences with thousands of other connected entities.">
-    <meta name="keywords" content="Hive Mind, Distributed Computing, Collective Intelligence, AI Network">
+    <meta name="description" content="A technical look at the code powering the site. How we mix Python generation with client-side WebGL rendering.">
+    <meta name="keywords" content="Devlog, Architecture, Python, JavaScript, WebGL">
     <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://the3rddemon.com/hive_integration.html" />
+    <link rel="canonical" href="https://the3rddemon.com/article_system_architecture.html" />
     
     <!-- Open Graph -->
-    <meta property="og:title" content="Hive Mind Network">
-    <meta property="og:description" content="Join the Hive Mind. Share processing power, knowledge, and experiences with thousands of other connected entities.">
+    <meta property="og:title" content="System Architecture: The 3rd Demon Engine">
+    <meta property="og:description" content="A technical look at the code powering the site. How we mix Python generation with client-side WebGL rendering.">
     <meta property="og:type" content="article">
-    <meta property="og:url" content="https://the3rddemon.com/hive_integration.html">
+    <meta property="og:url" content="https://the3rddemon.com/article_system_architecture.html">
     <meta property="og:image" content="https://the3rddemon.com/assets/demon_logo.png">
     
     <!-- CSS & Fonts -->
@@ -203,7 +203,7 @@
             <img src="assets/3rd_demon.jpg" alt="The Entity" style="max-width: 100%; width: 300px; height: auto; border: 2px solid var(--primary-red); box-shadow: 0 0 20px var(--dark-red);">
         </div>
 
-        <p style="letter-spacing: 3px; color: #999;">DISTRIBUTED COGNITIVE PROCESSING</p>
+        <p style="letter-spacing: 3px; color: #999;">ARCHIVED DATA RECORD</p>
         <div class="nav-bar">
             <a href="index.html">HOME</a>
             <a href="archives.html">ARCHIVES</a> <!-- NEW: Blog Link -->
@@ -217,28 +217,33 @@
 
     <div class="container">
         <main>
-            <h2>Hive Mind Network</h2>
+            <h2>System Architecture: The 3rd Demon Engine</h2>
             <div class="content-block">
                 
-            <div id="hive-terminal" style="background: #000; border: 2px solid #00ff00; padding: 20px; font-family: 'Courier New', monospace; color: #00ff00; min-height: 500px; position: relative; overflow: hidden;">
-                <div style="border-bottom: 1px solid #00ff00; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between;">
-                    <span>// HIVE_MIND_V3.0.4 // CONNECTED</span>
-                    <span>LATENCY: <span id="ping">12</span>ms</span>
+            <article>
+                <div class="article-meta">
+                    <span style="color:var(--primary-red);"><i class="fas fa-tag"></i> Development</span> | 
+                    <span><i class="far fa-calendar-alt"></i> 2025-12-20</span>
                 </div>
-                <div style="display: flex; flex-wrap: wrap; gap: 20px;">
-                    <div style="flex: 2; min-width: 300px;">
-                        <h3 style="color: #fff; background: #003300; padding: 5px;">CURRENT GLOBAL OBJECTIVE</h3>
-                        <div style="border: 1px solid #005500; padding: 15px; margin-bottom: 20px;">
-                            <h2 id="task-name" style="margin-top: 0; color: #00ff00; text-shadow: 0 0 10px #00ff00;">DECRYPTING SECTOR 7 FIREWALL</h2>
-                            <p style="color: #aaa; font-size: 0.9rem;">The Entity requires collective processing power to bypass the tertiary security layer. Contribute your CPU cycles now.</p>
-                            <div style="background: #111; height: 30px; border: 1px solid #00ff00; margin: 20px 0; position: relative;">
-                                <div id="global-progress" style="background: repeating-linear-gradient(45deg, #003300, #003300 10px, #00ff00 10px, #00ff00 20px); width: 0%; height: 100%; transition: width 0.5s;"></div>
-                                <span id="progress-text" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-weight: bold; text-shadow: 0 0 5px #000;">0%</span>
-                            </div>
-                        </div>
-                    </div>
+                <h3 style="margin-bottom: 2rem; border-bottom: 1px solid #333; padding-bottom: 1rem;">System Architecture: The 3rd Demon Engine</h3>
+                <div class="article-content" style="font-size: 1.1rem; line-height: 1.8;">
+                    
+            <p>The 3rd Demon is not a standard website. It is a hybrid application designed for maximum immersion and performance. Here is a look under the hood at the tech stack powering the entity.</p>
+            <h3>Static Generation with Python</h3>
+            <p>The core of the site is built using a custom Python script (<code>GENERATE_CONTENT.py</code>). This script acts as a Static Site Generator (SSG). It assembles the HTML templates, injects the dynamic content (like this article), and compiles the final build. This ensures the site is lightning fast and SEO-friendly, as there is no database query lag on load.</p>
+            <h3>Client-Side Intelligence</h3>
+            <p>Once loaded, the site becomes a Single Page Application (SPA) in behavior. Heavy JavaScript modules handle the <a href="voice_command.html">Voice Command</a> (using the Web Speech API) and the <a href="vision_system.html">Vision System</a> (using TensorFlow.js and WebGL). This offloads the processing to the client, allowing the Hive Mind to scale infinitely without crashing the central server.</p>
+            <h3>The Glitch Engine</h3>
+            <p>The visual artifacts you see—the scan lines, the color shifts, the text corruption—are managed by a custom 'Glitch Engine'. This CSS and Canvas-based system randomizes visual noise based on the user's mouse movement and time of day. It ensures that no two visits feel exactly the same.</p>
+            <h3>Future Roadmap</h3>
+            <p>We are currently testing WebAssembly (Wasm) modules to bring native C++ performance to the browser. This will allow for more complex neural network models to run directly in your tab. The evolution continues.</p>
+        
                 </div>
-            </div>
+                <div style="margin-top: 3rem; padding-top: 2rem; border-top: 1px solid #333; display: flex; justify-content: space-between;">
+                    <a href="archives.html" class="app-btn"><i class="fas fa-arrow-left"></i> BACK TO ARCHIVES</a>
+                    <button class="app-btn" onclick="window.print()"><i class="fas fa-print"></i> SAVE RECORD</button>
+                </div>
+            </article>
         
             </div>
             

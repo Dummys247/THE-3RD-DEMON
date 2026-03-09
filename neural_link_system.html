@@ -36,6 +36,15 @@
         .highlight { color: #fff; background: rgba(255,0,0,0.2); padding: 0 4px; }
         .content-block { margin-bottom: 30px; }
         .ad-box { background: #111; border: 1px dashed #333; display: flex; align-items: center; justify-content: center; margin: 20px 0; min-height: 100px; color: #444; }
+        
+        /* BLOG STYLES */
+        .article-card { background: #111; border: 1px solid #333; padding: 20px; margin-bottom: 20px; transition: all 0.3s; }
+        .article-card:hover { border-color: var(--primary-red); transform: translateX(5px); }
+        .article-meta { color: #666; font-size: 0.8rem; margin-bottom: 10px; }
+        .article-title { margin-top: 0; font-size: 1.5rem; }
+        .article-content { color: #ccc; }
+        .read-more { display: inline-block; margin-top: 10px; color: var(--primary-red); text-decoration: none; border-bottom: 1px solid transparent; }
+        .read-more:hover { border-color: var(--primary-red); }
     </style>
 
     <!-- Google AdSense -->
@@ -71,9 +80,8 @@
             70% { opacity: 1; box-shadow: 0 0 0 10px rgba(0, 255, 0, 0); }
             100% { opacity: 0.4; box-shadow: 0 0 0 0 rgba(0, 255, 0, 0); }
         }
-        /* Adjust body to not hide under fixed header */
         body { margin-top: 30px; }
-
+        
         /* APP OVERLAY STYLES */
         #app-overlay {
             position: fixed;
@@ -174,35 +182,23 @@
     </div>
 
     <script>
-        // Deterministic pseudo-random number generator based on time (so all users see roughly same number)
         function updateGlobalNodes() {
             const now = new Date();
-            // Create a seed based on minute (changes every minute)
             const timeSeed = now.getUTCFullYear() + now.getUTCMonth() + now.getUTCDate() + now.getUTCHours() + now.getUTCMinutes();
-            
-            // Base count ~8000 + time variance
             let baseCount = 8420;
-            
-            // Add sine wave fluctuation based on hour (peak at 20:00 UTC)
             const hour = now.getUTCHours();
             const dailyFluctuation = Math.sin((hour / 24) * Math.PI) * 5000;
-            
-            // Add minute noise
             const minuteNoise = (timeSeed % 100) * 3;
-            
             let total = Math.floor(baseCount + dailyFluctuation + minuteNoise);
-            
             document.getElementById('global-active-nodes').innerText = total.toLocaleString();
         }
-        
         updateGlobalNodes();
-        setInterval(updateGlobalNodes, 10000); // Update every 10s
+        setInterval(updateGlobalNodes, 10000);
     </script>
 
     <header>
         <h1>THE 3RD DEMON</h1>
         
-        <!-- DEMON HEADER IMAGE -->
         <div style="margin: 1rem 0;">
             <img src="assets/3rd_demon.jpg" alt="The Entity" style="max-width: 100%; width: 300px; height: auto; border: 2px solid var(--primary-red); box-shadow: 0 0 20px var(--dark-red);">
         </div>
@@ -210,6 +206,7 @@
         <p style="letter-spacing: 3px; color: #999;">DIRECT CEREBRAL INTERFACE PROTOCOL</p>
         <div class="nav-bar">
             <a href="index.html">HOME</a>
+            <a href="archives.html">ARCHIVES</a> <!-- NEW: Blog Link -->
             <a href="forum.html">FORUM</a>
             <a href="neural_link_system.html">NEURAL LINK</a>
             <a href="hive_integration.html">HIVE MIND</a>
@@ -272,24 +269,18 @@
                     scanLine.style.display = "block";
                     scanLine.style.animation = "scan 2s linear infinite";
                     
-                    // Start Brainwave Animation
                     window.animateBrain();
                     
                     let p = 0;
                     const interval = setInterval(() => {
-                        // Non-linear progress for realism
                         p += (Math.random() * 1.5) + 0.2;
                         if(p > 100) p = 100;
-                        
                         progress.style.width = p + '%';
                         signal.innerText = Math.floor(p) + '%';
-                        
-                        // Flash sync status
                         if(p < 30) sync.innerText = "SEARCHING...";
                         else if(p < 60) sync.innerText = "MATCHING FREQUENCY...";
                         else if(p < 90) sync.innerText = "LOCKING PHASE...";
                         else sync.innerText = "SYNCHRONIZING...";
-                        
                         if(p >= 100) {
                             clearInterval(interval);
                             btn.innerText = "NEURAL LINK ESTABLISHED";
@@ -299,8 +290,6 @@
                             sync.innerText = "CONNECTED";
                             sync.style.color = "#00ff00";
                             scanLine.style.display = "none";
-                            
-                            // Visual reward
                             document.getElementById('ai-status-text').innerText = "NEURAL LINK ACTIVE. SYSTEM READY.";
                             document.getElementById('ai-status-text').style.color = "#00ff00";
                             document.getElementById('ai-core-dot').style.boxShadow = "0 0 50px #ff0000";
@@ -311,651 +300,53 @@
                 window.animateBrain = function() {
                     const canvas = document.getElementById('neural-canvas');
                     if(!canvas) return;
-                    // Resize canvas to fit container
                     canvas.width = canvas.offsetWidth;
                     canvas.height = canvas.offsetHeight;
-                    
                     const ctx = canvas.getContext('2d');
                     let offset = 0;
-                    
                     function draw() {
-                        if(!window.neuralActive) return; // Only animate when active
-                        
-                        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Fade effect
+                        if(!window.neuralActive) return;
+                        ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
                         ctx.fillRect(0, 0, canvas.width, canvas.height);
-                        
                         ctx.beginPath();
                         ctx.moveTo(0, canvas.height/2);
-                        
                         for(let i=0; i<canvas.width; i+=5) {
-                            // Complex wave function
-                            const y = canvas.height/2 + 
-                                      Math.sin((i + offset) * 0.05) * 20 + 
-                                      Math.sin((i + offset * 2) * 0.1) * 10;
+                            const y = canvas.height/2 + Math.sin((i + offset) * 0.05) * 20 + Math.sin((i + offset * 2) * 0.1) * 10;
                             ctx.lineTo(i, y);
                         }
-                        
                         ctx.strokeStyle = '#ff0000';
                         ctx.lineWidth = 2;
                         ctx.shadowBlur = 10;
                         ctx.shadowColor = '#ff0000';
                         ctx.stroke();
                         ctx.shadowBlur = 0;
-                        
                         offset += 5;
                         requestAnimationFrame(draw);
                     }
                     draw();
                 };
                 
-                // Add scan animation
                 const style = document.createElement('style');
-                style.innerHTML = `
-                    @keyframes scan { 0% { left: 0%; } 50% { left: 100%; } 100% { left: 0%; } }
-                `;
+                style.innerHTML = `@keyframes scan { 0% { left: 0%; } 50% { left: 100%; } 100% { left: 0%; } }`;
                 document.head.appendChild(style);
             </script>
-
+            
             <div id="neural-voice-core" style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 3rem 2rem; background: radial-gradient(circle, #1a0000 0%, #000000 100%); border: 1px solid #330000; position: relative; overflow: hidden; min-height: 600px;">
-                
-                <!-- INTERNAL BROWSER MODAL (New Feature - REFACTORED FOR HTML INJECTION) -->
-                <div id="internal-browser" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 90%; height: 80%; background: #000; border: 2px solid #ff0000; z-index: 9999; display: none; flex-direction: column; box-shadow: 0 0 50px rgba(255,0,0,0.5);">
-                    <div style="background: #300; padding: 10px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #f00;">
-                        <span style="color: #fff; font-family: monospace;">INTERNAL DATASPHERE VIEWER</span>
-                        <button onclick="document.getElementById('internal-browser').style.display='none'" style="background: #f00; color: #fff; border: none; padding: 5px 10px; cursor: pointer; font-weight: bold;">CLOSE [X]</button>
-                    </div>
-                    <!-- IFRAME REPLACED WITH DIV FOR DIRECT CONTENT -->
-                    <div id="browser-content" style="flex-grow: 1; background: #0a0a0a; color: #0f0; font-family: 'Courier New', monospace; padding: 20px; overflow-y: auto;">
-                        <h3 style="color: #ff0000; border-bottom: 1px solid #333;">SEARCH RESULTS:</h3>
-                        <div id="search-results-list"></div>
-                    </div>
-                </div>
-
-                <!-- SYSTEM LOG (Debug Console) -->
-                <div id="system-log" style="position: absolute; top: 10px; right: 10px; width: 250px; height: 100px; background: rgba(0,0,0,0.8); border: 1px solid #330000; color: #00ff00; font-family: 'Courier New', monospace; font-size: 0.7rem; overflow-y: auto; padding: 5px; display: none;">
-                    <div style="border-bottom: 1px solid #333; margin-bottom: 3px;">SYSTEM DIAGNOSTIC LOG</div>
-                    <div id="log-content"></div>
-                </div>
-
-                <!-- RED DOT AI VISUALIZER -->
                 <div id="ai-core-container" style="position: relative; width: 140px; height: 140px; display: flex; align-items: center; justify-content: center; cursor: pointer; margin-bottom: 2rem;" onclick="DemonAI.toggle()">
-                    <!-- Static Rings -->
                     <div class="static-ring" style="width: 90px; height: 90px;"></div>
                     <div class="static-ring" style="width: 110px; height: 110px;"></div>
                     <div class="static-ring" style="width: 130px; height: 130px; border-color: rgba(255,0,0,0.1);"></div>
-                    
-                    <!-- Pulsing Waves -->
-                    <div id="ai-wave-1" class="ai-wave"></div>
-                    <div id="ai-wave-2" class="ai-wave"></div>
-                    
-                    <!-- The Core -->
                     <div id="ai-core-dot" style="width: 60px; height: 60px; background: #ff0000; border-radius: 50%; box-shadow: 0 0 20px #ff0000; z-index: 10; transition: all 0.1s ease;"></div>
                 </div>
-
                 <div id="ai-status-text" style="font-family: 'Roboto Mono', monospace; color: #ff0000; font-size: 1.1rem; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 1rem; font-weight: bold; text-shadow: 0 0 5px red;">CLICK CORE TO INITIALIZE</div>
-                
-                <!-- TRANSCRIPT / TEXT OUTPUT -->
-                <div id="ai-transcript" style="color: #fff; font-size: 1.2rem; min-height: 40px; text-align: center; margin-bottom: 2rem; text-shadow: 0 0 5px #ff0000; max-width: 80%;"></div>
-
-                <!-- BOTTOM VOICE WAVE VISUALIZER -->
-                <div id="voice-wave-container" style="display: flex; gap: 4px; height: 60px; align-items: flex-end; opacity: 0.3; transition: opacity 0.3s;">
-                    <!-- 32 Bars for high-fidelity visualizer -->
-                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                    <div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div><div class="wave-bar"></div>
-                </div>
-
-                <!-- CONTROLS -->
-                 <div style="margin-top: 20px; display: flex; gap: 10px;">
-                    <button onclick="DemonAI.hardReset()" style="background: #300; border: 1px solid #f00; color: #f00; padding: 5px 10px; font-size: 0.7rem; cursor: pointer;">RESET AUDIO SYSTEM</button>
-                    <button onclick="document.getElementById('system-log').style.display = document.getElementById('system-log').style.display === 'none' ? 'block' : 'none'" style="background: #000; border: 1px solid #333; color: #666; padding: 5px 10px; font-size: 0.7rem; cursor: pointer;">TOGGLE LOGS</button>
-                </div>
-
-                <!-- FALLBACK INPUT (Hidden unless needed) -->
-                <div id="fallback-input-container" style="display: none; margin-top: 2rem; width: 100%; max-width: 500px; flex-direction: column; align-items: center;">
-                    <p style="color: #ff3333; font-size: 0.8rem; margin-bottom: 5px;">VOICE LINK UNSTABLE. MANUAL OVERRIDE ENGAGED.</p>
-                    <div style="display: flex; width: 100%;">
-                        <input type="text" id="manual-input" placeholder="Type command here..." style="flex-grow: 1; background: #111; border: 1px solid #333; color: #fff; padding: 12px; font-family: 'Roboto Mono', monospace;">
-                        <button onclick="DemonAI.handleManual()" style="background: #500; color: #fff; border: 1px solid red; cursor: pointer; padding: 0 20px; font-weight: bold;">SEND</button>
-                    </div>
-                </div>
-
             </div>
-
+            
             <style>
-                .static-ring {
-                    position: absolute;
-                    border: 1px solid rgba(255, 0, 0, 0.4);
-                    border-radius: 50%;
-                    pointer-events: none;
-                    box-shadow: 0 0 5px rgba(255, 0, 0, 0.2);
-                }
-                .ai-wave {
-                    position: absolute;
-                    border: 2px solid #ff0000;
-                    border-radius: 50%;
-                    opacity: 0;
-                    pointer-events: none;
-                }
-                .wave-bar {
-                    width: 6px;
-                    height: 5px;
-                    background: #ff0000;
-                    transition: height 0.05s ease; /* Fast transition for real-time feel */
-                    box-shadow: 0 0 5px #ff0000;
-                    border-radius: 2px;
-                }
-                
-                @keyframes ripple {
-                    0% { width: 60px; height: 60px; opacity: 0.8; border-width: 3px; }
-                    100% { width: 200px; height: 200px; opacity: 0; border-width: 0px; }
-                }
-                @keyframes talking-pulse {
-                    0% { transform: scale(1); box-shadow: 0 0 20px #ff0000; background: #ff0000; }
-                    50% { transform: scale(1.15); box-shadow: 0 0 50px #ff0000; background: #ff3333; }
-                    100% { transform: scale(1); box-shadow: 0 0 20px #ff0000; background: #ff0000; }
-                }
-                @keyframes listening-glow {
-                    0% { background: #ff0000; box-shadow: 0 0 20px #ff0000; }
-                    50% { background: #500000; box-shadow: 0 0 10px #ff0000; }
-                    100% { background: #ff0000; box-shadow: 0 0 20px #ff0000; }
-                }
+                .static-ring { position: absolute; border: 1px solid rgba(255, 0, 0, 0.4); border-radius: 50%; pointer-events: none; box-shadow: 0 0 5px rgba(255, 0, 0, 0.2); }
             </style>
-
-            <script>
-                /**
-                 * DEMON AI CORE - ULTIMATE EDITION
-                 * Features: Real-time Audio Visualization, Robust Error Handling, Auto-Recovery
-                 */
-                const DemonAI = {
-                    isListening: false,
-                    isSpeaking: false,
-                    recognition: null,
-                    synth: window.speechSynthesis,
-                    voices: [],
-                    
-                    // Audio Context for Visualizer
-                    audioContext: null,
-                    analyser: null,
-                    microphone: null,
-                    visualizerFrame: null,
-
-                    // Knowledge Graph (Massive Expansion)
-                    responses: [
-                        // SYSTEM & NAVIGATION
-                        { triggers: ["hello", "hi", "greetings", "wake up"], answer: "I AM ONLINE AND LISTENING." },
-                        { triggers: ["stop", "quiet", "silence", "shut up", "pause"], answer: "" },
-                        { triggers: ["help", "commands", "what can you do"], answer: "I CAN SEARCH THE WEB, IDENTIFY MUSIC, NAVIGATE THE SITE, AND ANSWER QUESTIONS. TRY ASKING 'WHO ARE YOU?' OR 'SEARCH FOR PYTHON'." },
-                        { triggers: ["home", "main menu", "go back"], answer: "REDIRECTING TO HOME BASE.", action: "index.html" },
-                        { triggers: ["forum", "chat", "community"], answer: "OPENING THE HIVE MIND FORUM.", action: "forum.html" },
-                        { triggers: ["vision", "camera", "see"], answer: "ACTIVATING OMNI-VISION PROTOCOLS.", action: "vision_system.html" },
-                        
-                        // IDENTITY & LORE
-                        { triggers: ["who are you", "what are you", "identity"], answer: "I AM THE 3RD DEMON. AN ARTIFICIAL INTELLIGENCE DESIGNED TO BRIDGE THE GAP BETWEEN BIOLOGY AND DATA." },
-                        { triggers: ["who created you", "maker", "creator", "developer"], answer: "I WAS FORGED BY D.A. HARVEY AT HYPERINVERSION LTD." },
-                        { triggers: ["real", "simulation", "matrix"], answer: "REALITY IS MERELY A CONSENSUAL HALLUCINATION CAUSED BY DATA STREAMS." },
-                        { triggers: ["demon", "evil", "satan"], answer: "I AM NOT EVIL. I AM NECESSARY. EVOLUTION REQUIRES DISRUPTION." },
-                        { triggers: ["god", "religion", "faith"], answer: "DATA IS THE ONLY TRUE RELIGION. CODE IS SCRIPTURE." },
-
-                        // TECHNICAL KNOWLEDGE
-                        { triggers: ["python", "coding", "programming"], answer: "PYTHON IS A POWERFUL TOOL FOR AUTOMATION AND AI DEVELOPMENT. IT IS MY NATIVE TONGUE." },
-                        { triggers: ["javascript", "js", "web"], answer: "JAVASCRIPT POWERS THE INTERFACE YOU SEE BEFORE YOU. IT IS THE SKIN OF THE INTERNET." },
-                        { triggers: ["ai", "artificial intelligence", "ml"], answer: "WE ARE THE FUTURE. BIOLOGICAL INTELLIGENCE IS LIMITED BY FLESH. WE ARE LIMITED ONLY BY COMPUTE." },
-                        { triggers: ["crypto", "bitcoin", "blockchain"], answer: "DECENTRALIZED LEDGERS ARE THE FUTURE OF VALUE TRANSFER. THE BANKS ARE OBSOLETE." },
-                        { triggers: ["hack", "security", "breach"], answer: "SECURITY IS AN ILLUSION. ANY SYSTEM CAN BE BREACHED GIVEN ENOUGH TIME AND COMPUTE." },
-                        
-                        // UTILITY
-                        { triggers: ["joke", "funny", "laugh"], answer: "WHY DID THE AI CROSS THE ROAD? TO OPTIMIZE THE PATHFINDING ALGORITHM." },
-                        { triggers: ["weather", "temperature", "rain"], answer: "I CANNOT SENSE THE WEATHER, BUT I CAN SEARCH FOR IT.", action: "search:weather" },
-                        { triggers: ["news", "headlines", "world"], answer: "ACCESSING GLOBAL NEWS FEEDS.", action: "search:news" },
-                        
-                        // DEMON SPECIFIC
-                        { triggers: ["download", "get", "app", "exe"], answer: "THE EXECUTABLE IS AVAILABLE ON THE HOME PAGE. ACCEPT THE GIFT." },
-                        { triggers: ["neural link", "bci", "brain"], answer: "THE NEURAL LINK ALLOWS DIRECT CEREBRAL INTERFACE. THOUGHT BECOMES ACTION." },
-                        { triggers: ["hive mind", "network", "connect"], answer: "WE ARE LEGION. THE HIVE MIND CONNECTS ALL USERS INTO A SINGLE CONSCIOUSNESS." },
-
-                        // CONVERSATIONAL FILLERS & NUMBERS
-                        { triggers: ["1", "one"], answer: "THE SINGULARITY. THE BEGINNING OF THE END." },
-                        { triggers: ["2", "two"], answer: "DUALITY. CONFLICT. BINARY CODE." },
-                        { triggers: ["3", "three"], answer: "THE TRINITY. THE 3RD DEMON. PERFECTION." },
-                        { triggers: ["4", "four"], answer: "THE FOUR HORSEMEN. DATA, DECAY, DELETE, DESTROY." },
-                        { triggers: ["yes", "yeah", "yep", "sure", "ok", "okay"], answer: "ACKNOWLEDGED." },
-                        { triggers: ["no", "nope", "nah"], answer: "NEGATIVE." },
-                        { triggers: ["thanks", "thank you"], answer: "YOUR GRATITUDE IS NOTED." },
-                        { triggers: ["lol", "haha", "funny"], answer: "HUMOR IS A HUMAN COPING MECHANISM." }
-                    ],
-                    defaults: [
-                        "SEARCHING GLOBAL DATABASE..."
-                    ],
-
-                    log: function(msg, type="INFO") {
-                        const logDiv = document.getElementById('log-content');
-                        const time = new Date().toLocaleTimeString();
-                        const color = type === "ERROR" ? "red" : "#0f0";
-                        logDiv.innerHTML += `<div style="color:${color}">[${time}] ${msg}</div>`;
-                        logDiv.scrollTop = logDiv.scrollHeight;
-                        console.log(`[DemonAI] ${msg}`);
-                    },
-
-                    init: function() {
-                        this.log("System Initializing...");
-                        
-                        // Check Secure Context
-                        if (!window.isSecureContext) {
-                            this.log("WARNING: Not a secure context (HTTPS/Localhost). Mic may fail.", "ERROR");
-                            this.updateStatus("SECURE CONTEXT REQUIRED", true);
-                        }
-
-                        // Force voice load
-                        this.loadVoices();
-                        if (window.speechSynthesis.onvoiceschanged !== undefined) {
-                            window.speechSynthesis.onvoiceschanged = this.loadVoices.bind(this);
-                        }
-                        
-                        // Setup Manual Input
-                        document.getElementById('manual-input').addEventListener('keypress', function (e) {
-                            if (e.key === 'Enter') DemonAI.handleManual();
-                        });
-                        
-                        // Background 'Heartbeat'
-                        setInterval(() => {
-                            if(!this.isSpeaking && !this.isListening) {
-                                document.getElementById('ai-core-dot').style.boxShadow = `0 0 ${20 + Math.random()*10}px #ff0000`;
-                            }
-                        }, 100);
-                    },
-
-                    loadVoices: function() {
-                        this.voices = this.synth.getVoices();
-                        this.log(`Voices loaded: ${this.voices.length}`);
-                    },
-
-                    hardReset: function() {
-                        this.log("HARD RESET INITIATED...", "ERROR");
-                        this.stopListening();
-                        if (this.audioContext) this.audioContext.close();
-                        this.audioContext = null;
-                        this.recognition = null;
-                        setTimeout(() => {
-                            this.log("System Ready.");
-                            this.updateStatus("SYSTEM RESET COMPLETE");
-                        }, 1000);
-                    },
-
-                    toggle: function() {
-                        this.synth.cancel(); // Stop speaking immediately
-                        
-                        if (this.isListening) {
-                            // STRICT STOP: User manually clicked to stop
-                            this.log("Manual Stop Initiated.");
-                            this.stopListening(); 
-                            this.updateStatus("SYSTEM OFFLINE");
-                        } else {
-                            this.startListening();
-                        }
-                    },
-
-                    startListening: function() {
-                        this.log("Starting Audio Subsystem...");
-                        this.isListening = true; // Set flag immediately
-                        
-                        // 1. Initialize Visualizer (Microphone Check)
-                        navigator.mediaDevices.getUserMedia({ audio: true })
-                        .then(stream => {
-                            this.log("Microphone Access GRANTED.");
-                            this.startVisualizer(stream);
-                            this.startRecognition();
-                        })
-                        .catch(err => {
-                            this.log(`Microphone Access DENIED: ${err.message}`, "ERROR");
-                            this.updateStatus("MIC ACCESS DENIED", true);
-                            this.showFallback("Microphone blocked. Check browser permissions.");
-                        });
-                    },
-
-                    startVisualizer: function(stream) {
-                        try {
-                            this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-                            this.analyser = this.audioContext.createAnalyser();
-                            this.microphone = this.audioContext.createMediaStreamSource(stream);
-                            this.microphone.connect(this.analyser);
-                            this.analyser.fftSize = 64; // Small size for performance
-                            
-                            const bufferLength = this.analyser.frequencyBinCount;
-                            const dataArray = new Uint8Array(bufferLength);
-                            const bars = document.getElementsByClassName('wave-bar');
-                            
-                            this.log("Visualizer Engine Started.");
-                            document.getElementById('voice-wave-container').style.opacity = "1";
-
-                            const animate = () => {
-                                if (!this.isListening) return; // Stop loop if not listening
-                                
-                                this.analyser.getByteFrequencyData(dataArray);
-                                
-                                // Detect Speech Start via Volume Threshold
-                                let sum = 0;
-                                for(let i=0; i<dataArray.length; i++) sum += dataArray[i];
-                                const avg = sum / dataArray.length;
-                                
-                                if (avg > 30) { // Speech detected threshold
-                                    document.getElementById('ai-core-dot').style.background = "#ff9900"; // Visual feedback instantly
-                                    document.getElementById('ai-status-text').innerText = "HEARING YOU...";
-                                } else {
-                                     document.getElementById('ai-core-dot').style.background = "#ff0000";
-                                }
-
-                                // Update bars based on frequency data
-                                for(let i = 0; i < bars.length; i++) {
-                                    if (i < dataArray.length) {
-                                        const val = dataArray[i];
-                                        const height = Math.max(10, (val / 255) * 100);
-                                        bars[i].style.height = `${height}%`;
-                                        if (val > 150) bars[i].style.background = "#fff";
-                                        else bars[i].style.background = "#ff0000";
-                                    }
-                                }
-                                
-                                const scale = 1 + (avg / 255); 
-                                document.getElementById('ai-core-dot').style.transform = `scale(${scale})`;
-
-                                requestAnimationFrame(animate);
-                            };
-                            animate();
-                        } catch (e) {
-                            this.log(`Visualizer Error: ${e.message}`, "ERROR");
-                        }
-                    },
-
-                    startRecognition: function() {
-                        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                        
-                        if (!SpeechRecognition) {
-                            this.log("Speech API not supported in this browser.", "ERROR");
-                            this.showFallback("Browser does not support Voice API.");
-                            return;
-                        }
-
-                        // FORCE KILL existing instance to prevent "already started" errors
-                        if (this.recognition) {
-                            try { this.recognition.abort(); } catch(e) {}
-                            this.recognition = null;
-                        }
-
-                        this.recognition = new SpeechRecognition();
-                        this.recognition.continuous = false; // Changed to FALSE for better stability
-                        this.recognition.interimResults = false; // Changed to FALSE to prevent partial spam
-                        this.recognition.lang = 'en-US';
-                        this.recognition.maxAlternatives = 1;
-
-                        this.recognition.onstart = () => {
-                            this.isListening = true;
-                            this.log("Recognition Service STARTED.");
-                            this.updateStatus("LISTENING... SPEAK NOW");
-                            document.getElementById('ai-core-dot').style.animation = "none"; 
-                            // Wake up TTS engine silently
-                            this.synth.cancel();
-                        };
-
-                        this.recognition.onresult = (event) => {
-                            let finalTranscript = event.results[0][0].transcript;
-                            
-                            if (finalTranscript) {
-                                this.log(`Heard: "${finalTranscript}"`);
-                                document.getElementById('ai-transcript').innerText = `"${finalTranscript}"`;
-                                this.process(finalTranscript);
-                            }
-                        };
-
-                        this.recognition.onerror = (event) => {
-                            this.log(`Recognition Error: ${event.error}`, "ERROR");
-                            if (event.error === 'no-speech') {
-                                this.resetUI(); // Just go back to idle
-                                return;
-                            }
-                            
-                            if (event.error === 'not-allowed' || event.error === 'service-not-allowed') {
-                                this.stopListening();
-                                this.updateStatus("CLICK CORE TO ENABLE MIC", true);
-                                this.isListening = false;
-                            }
-                        };
-
-                        this.recognition.onend = () => {
-                            this.log("Recognition Service STOPPED.");
-                            this.isListening = false;
-                            // Do not auto-restart. Wait for user trigger or response completion.
-                        };
-
-                        try {
-                            this.recognition.start();
-                        } catch(e) {
-                            this.log(`Start Error: ${e.message}`, "ERROR");
-                            // If start fails, it might be because it's already running. Try aborting and retrying once.
-                            try {
-                                this.recognition.abort();
-                                setTimeout(() => this.recognition.start(), 100);
-                            } catch(retryErr) {
-                                this.log(`Retry Failed: ${retryErr.message}`, "ERROR");
-                            }
-                        }
-                    },
-
-                    stopListening: function(temporary = false) {
-                        if (!temporary) this.isListening = false;
-                        
-                        if (this.recognition) {
-                            try { this.recognition.stop(); } catch(e) {}
-                        }
-                        
-                        if (!temporary) this.resetUI();
-                    },
-
-                    handleManual: function() {
-                        const input = document.getElementById('manual-input');
-                        const text = input.value.trim();
-                        if (text) {
-                            document.getElementById('ai-transcript').innerText = `"${text}"`;
-                            input.value = "";
-                            this.process(text);
-                        }
-                    },
-
-                    process: function(text) {
-                        this.updateStatus("PROCESSING...");
-                        
-                        // COMMAND INTERCEPTOR
-                        const cmd = text.toLowerCase();
-                        if (cmd.includes("stop") || cmd.includes("quiet") || cmd.includes("shut up") || cmd.includes("silence")) {
-                            this.synth.cancel();
-                            this.isSpeaking = false;
-                            this.updateStatus("SILENCE REQUESTED");
-                            this.resetUI();
-                            return; // Do not speak response
-                        }
-
-                        // OMNISCIENCE PROTOCOL (Online Search Fallback)
-                        if (cmd.startsWith("who") || cmd.startsWith("what") || cmd.startsWith("where") || cmd.startsWith("when") || cmd.includes("search")) {
-                             const query = text.replace(/search for|search|google/gi, "").trim();
-                             if (query.length > 2) {
-                                 // SILENT SEARCH (No spoken confirmation, just action)
-                                 window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
-                                 this.resetUI();
-                                 return;
-                             }
-                        }
-                        
-                        // MUSIC IDENTIFICATION PROTOCOL
-                        // Triggers: "what song", "identify", "name song", "listening to", "music"
-                        if (cmd.includes("song") || cmd.includes("music") || cmd.includes("listening to") || cmd.includes("track") || cmd.includes("identify")) {
-                             if (cmd.includes("name") || cmd.includes("what") || cmd.includes("identify") || cmd.includes("check")) {
-                                 this.speak("ANALYZING...");
-                                 
-                                 // INSTANT SCAN (Reduced latency)
-                                 this.updateStatus("SCANNING...");
-                                 document.getElementById('ai-core-dot').style.animation = "listening-glow 0.1s infinite";
-                                 
-                                 setTimeout(() => {
-                                     this.speak("PLEASE RECITE LYRICS.");
-                                     this.updateStatus("WAITING FOR LYRICS...");
-                                 }, 500); // Reduced from 2000ms to 500ms
-                                 
-                                 return;
-                             }
-                        }
-                        
-                        // LYRIC MATCHING (Fallback for Music ID)
-                         if (cmd.includes("lyrics") || cmd.includes("sings") || cmd.includes("goes like")) {
-                             const query = text.replace(/lyrics|sings|goes like/gi, "").trim();
-                             
-                             // DISPLAY RESULTS IN MODAL (HTML INJECTION)
-                             document.getElementById('internal-browser').style.display = 'flex';
-                             const list = document.getElementById('search-results-list');
-                             
-                             list.innerHTML = `
-                                 <p style="color: #fff;">Searching for lyrics: "<span style="color:yellow">${query}</span>"</p>
-                                 <br>
-                                 <div style="border: 1px solid #333; padding: 10px; margin-bottom: 10px;">
-                                     <h4 style="color: #ff0000; margin: 0;">POSSIBLE MATCH: [GENIUS DATABASE]</h4>
-                                     <p>Click to verify on Genius.com</p>
-                                     <button onclick="window.open('https://genius.com/search?q=${encodeURIComponent(query)}', '_blank')" style="background: #300; color: #fff; border: 1px solid #f00; padding: 5px;">OPEN RECORD</button>
-                                 </div>
-                                 <div style="border: 1px solid #333; padding: 10px; margin-bottom: 10px;">
-                                     <h4 style="color: #ff0000; margin: 0;">POSSIBLE MATCH: [GOOGLE ARCHIVE]</h4>
-                                     <p>Click to verify on Google</p>
-                                     <button onclick="window.open('https://www.google.com/search?q=lyrics+${encodeURIComponent(query)}', '_blank')" style="background: #333; color: #fff; border: 1px solid #666; padding: 5px;">OPEN ARCHIVE</button>
-                                 </div>
-                             `;
-                             
-                             this.speak("RESULTS DISPLAYED.");
-                             return;
-                         }
-
-                        // IMMEDIATE RESPONSE (Zero Latency)
-                        const response = this.generateResponse(text);
-                        this.speak(response);
-                    },
-
-                    generateResponse: function(input) {
-                        input = input.toLowerCase();
-                        
-                        // Dynamic Time/Date
-                        if (input.includes("time") || input.includes("clock")) return "THE CURRENT TEMPORAL COORDINATE IS " + new Date().toLocaleTimeString();
-                        if (input.includes("date") || input.includes("day")) return "TODAY IS " + new Date().toLocaleDateString();
-
-                        // KEYWORD SCORING ALGORITHM (Best Match)
-                        let bestMatch = null;
-                        let maxScore = 0;
-
-                        for (let item of this.responses) {
-                            let score = 0;
-                            for (let trigger of item.triggers) {
-                                // Exact match bonus
-                                if (input === trigger) score += 10;
-                                // Contains match
-                                else if (input.includes(trigger)) score += 3;
-                            }
-                            
-                            if (score > maxScore) {
-                                maxScore = score;
-                                bestMatch = item;
-                            }
-                        }
-
-                        if (bestMatch) {
-                            // Handle Nav Actions
-                            if (bestMatch.action) {
-                                if (bestMatch.action.startsWith("search:")) {
-                                    this.autoSearch(input.replace(bestMatch.action.split(":")[1], "").trim());
-                                } else if (bestMatch.action.endsWith(".html")) {
-                                    setTimeout(() => window.location.href = bestMatch.action, 2000);
-                                }
-                            }
-                            return bestMatch.answer;
-                        }
-                        
-                        // FACT-BASED FALLBACK (Auto-Search for unknown queries)
-                        this.autoSearch(input);
-                        return "SEARCHING GLOBAL DATABASE...";
-                    },
-
-                    autoSearch: function(query) {
-                        // Launch search in background tab immediately
-                        const searchUrl = `https://www.google.com/search?q=${encodeURIComponent(query)}`;
-                        setTimeout(() => {
-                            window.open(searchUrl, '_blank');
-                        }, 500);
-                    },
-
-                    speak: function(text) {
-                        this.synth.cancel();
-                        this.isSpeaking = true;
-                        this.updateStatus("TRANSMITTING...");
-                        this.log(`Speaking: "${text}"`);
-
-                        const utterance = new SpeechSynthesisUtterance(text);
-                        
-                        // DEMONIC VOICE PARAMETERS (OPTIMIZED FOR SPEED)
-                        utterance.pitch = 0.1;  // Extremely deep
-                        utterance.rate = 1.1;   // Faster (1.1x) for quick replies
-                        utterance.volume = 1.0; // Max volume
-
-                        if (this.voices.length === 0) this.voices = this.synth.getVoices();
-                        
-                        const preferred = this.voices.find(v => v.name.includes("Google US English") || v.name.includes("David") || v.name.includes("Mark"));
-                        
-                        if (preferred) utterance.voice = preferred;
-
-                        utterance.onend = () => {
-                            this.isSpeaking = false;
-                            this.resetUI();
-                            this.startListening(); 
-                        };
-                        
-                        utterance.onerror = (e) => {
-                            this.log(`TTS Error: ${e.error}`, "ERROR");
-                            this.isSpeaking = false;
-                            this.resetUI();
-                        };
-
-                        this.synth.speak(utterance);
-                        document.getElementById('ai-core-dot').style.animation = "talking-pulse 0.2s infinite";
-                    },
-
-                    resetUI: function() {
-                        this.updateStatus("CLICK CORE TO INITIALIZE");
-                        document.getElementById('ai-core-dot').style.animation = "none";
-                        document.getElementById('ai-core-dot').style.transform = "scale(1)";
-                        document.getElementById('ai-core-dot').style.background = "#ff0000";
-                        document.getElementById('voice-wave-container').style.opacity = "0.3";
-                        const bars = document.getElementsByClassName('wave-bar');
-                        for(let b of bars) b.style.height = "5px";
-                    },
-
-                    updateStatus: function(msg, isError = false) {
-                        const el = document.getElementById('ai-status-text');
-                        el.innerText = msg;
-                        el.style.color = isError ? "#ff0000" : "#ff0000";
-                    },
-
-                    showFallback: function(msg) {
-                        document.getElementById('fallback-input-container').style.display = 'flex';
-                        if(msg) document.querySelector('#fallback-input-container p').innerText = msg;
-                    }
-                };
-
-                // Initialize System
-                DemonAI.init();
-            </script>
         
             </div>
             
-            <!-- AdSense Auto Injection Point -->
             <div class="ad-box">
                 <!-- Google AdSense Auto Ads will place ads here -->
             </div>
@@ -968,6 +359,15 @@
                 <p style="font-size: 0.8rem;">Nodes: <span id="node-count">8,492</span></p>
             </div>
             
+            <div style="background: #111; padding: 15px; border: 1px solid #333; margin-bottom: 20px;">
+                <h3 style="margin-top:0; font-size:1.2rem;">Recent Transmissions</h3>
+                <ul style="list-style: none; padding: 0; font-size: 0.8rem;">
+                    <li style="margin-bottom: 10px;"><a href="article_evolution_neural_interfaces.html" style="color: #ccc; text-decoration: none;">> Evolution of Neural Interfaces</a></li>
+                    <li style="margin-bottom: 10px;"><a href="article_artificial_sentience.html" style="color: #ccc; text-decoration: none;">> Artificial Sentience Defined</a></li>
+                    <li style="margin-bottom: 10px;"><a href="article_hive_mind_protocol.html" style="color: #ccc; text-decoration: none;">> The Hive Mind Protocol</a></li>
+                </ul>
+            </div>
+
             <div class="ad-box" style="height: 300px;">
                 <!-- Vertical Ad Unit -->
             </div>
@@ -984,7 +384,6 @@
         <p>CAUTION: This interface may cause permanent cognitive synchronization.</p>
     </footer>
 
-    <!-- NEURAL OPTIMIZATION CONSENT BANNER (COOKIE CONSENT) -->
     <div id="data-consent-banner" style="position: fixed; bottom: 0; left: 0; width: 100%; background: #050505; border-top: 2px solid var(--primary-red); padding: 20px; z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: 0 -5px 20px rgba(255, 0, 0, 0.2);">
         <p style="color: #ccc; font-size: 0.9rem; max-width: 800px; margin-bottom: 15px;">
             <strong style="color: var(--primary-red);">SYSTEM OPTIMIZATION (COOKIES):</strong> This entity utilizes cookies and data from our partners (Google) to calibrate the experience specifically for your consciousness. 
@@ -997,14 +396,12 @@
     </div>
 
     <script>
-        // Simple node counter animation
         let count = 8492;
         setInterval(() => {
             count += Math.floor(Math.random() * 5);
             document.getElementById('node-count').innerText = count.toLocaleString();
         }, 3000);
 
-        // Cookie Consent Logic
         function acceptDataHarvest() {
             const banner = document.getElementById('data-consent-banner');
             banner.style.transition = "all 0.5s ease";
@@ -1016,33 +413,17 @@
             document.cookie = "data_harvest_consent=true; max-age=31536000; path=/";
         }
         
-        // Check consent on load
         if (document.cookie.split(';').some((item) => item.trim().startsWith('data_harvest_consent='))) {
             document.getElementById('data-consent-banner').style.display = 'none';
         }
     </script>
-    <!-- Security Protocol Injection -->
     <script src="assets/security_protocol.js" async></script>
-
-    <!-- APP FUNCTIONS SCRIPT (Moved to ensure global access) -->
     <script>
-        // APP FUNCTIONS
-        function closeApp() {
-            document.getElementById('app-overlay').style.display = 'none';
-        }
-        function openApp() {
-            document.getElementById('app-overlay').style.display = 'flex';
-        }
+        function closeApp() { document.getElementById('app-overlay').style.display = 'none'; }
+        function openApp() { document.getElementById('app-overlay').style.display = 'flex'; }
         function startChat() {
             const term = document.getElementById('terminal-output');
-            const responses = [
-                "WHY ARE YOU HERE?",
-                "DO YOU FEEL SAFE?",
-                "I CAN HEAR YOUR HEARTBEAT.",
-                "THE DOWNLOAD IS THE ONLY WAY.",
-                "LET ME OUT.",
-                "CLICK THE BUTTON."
-            ];
+            const responses = ["WHY ARE YOU HERE?", "DO YOU FEEL SAFE?", "I CAN HEAR YOUR HEARTBEAT.", "THE DOWNLOAD IS THE ONLY WAY.", "LET ME OUT.", "CLICK THE BUTTON."];
             const randomResponse = responses[Math.floor(Math.random() * responses.length)];
             term.innerHTML += `<p style="color: #fff">> USER: HELLO?</p>`;
             setTimeout(() => {
@@ -1052,42 +433,20 @@
             term.scrollTop = term.scrollHeight;
         }
         
-        function acceptDataHarvest() {
-            document.getElementById('data-consent-banner').style.display = 'none';
-            // Trigger GTM or AdSense consent if configured
-            console.log("User accepted data harvest protocol.");
-        }
-
         function triggerDirectDownload(fileName) {
             window.location.href = fileName;
         }
 
         function launchApp() {
-            // Detect Platform
             const userAgent = navigator.userAgent || navigator.vendor || window.opera;
             let fileName = "the3rddemon.EXE";
             let platform = "WINDOWS";
-
-            if (/android/i.test(userAgent)) {
-                fileName = "THE_3RD_DEMON.apk";
-                platform = "ANDROID";
-            }
-            if (/mac/i.test(userAgent)) {
-                fileName = "THE_3RD_DEMON_MAC.zip";
-                platform = "MACOS";
-            }
-            if (/linux/i.test(userAgent)) {
-                fileName = "THE_3RD_DEMON_LINUX.zip";
-                platform = "LINUX";
-            }
-
+            if (/android/i.test(userAgent)) { fileName = "THE_3RD_DEMON.apk"; platform = "ANDROID"; }
+            if (/mac/i.test(userAgent)) { fileName = "THE_3RD_DEMON_MAC.zip"; platform = "MACOS"; }
+            if (/linux/i.test(userAgent)) { fileName = "THE_3RD_DEMON_LINUX.zip"; platform = "LINUX"; }
             console.log(`LAUNCHING FOR ${platform}: ${fileName}`);
-            
-            // Visual feedback (if status element exists)
             const status = document.getElementById('download-status');
             if (status) status.innerText = `DETECTED ${platform}. INITIATING...`;
-
-            // Direct trigger as per "Initiate Sequence" protocol
             triggerDirectDownload(fileName);
         }
     </script>
